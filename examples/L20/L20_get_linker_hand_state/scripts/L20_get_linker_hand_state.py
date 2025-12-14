@@ -14,7 +14,7 @@ from utils.color_msg import ColorMsg
 '''
 class L20GetLinkerHandState():
     def __init__(self,loop=False):
-        self.loop = loop # 用于判断是否循环获取状态数据
+        self.loop = loop # Used to determine whether to loop to get status data
         if self.loop == True:
             self.left_hand_state_sub = rospy.Subscriber("/cb_left_hand_state",JointState,self.left_hand_state_cb,queue_size=1)
             self.left_hand_state_arc_sub = rospy.Subscriber("/cb_left_hand_state_src",JointState,self.left_hand_state_arc_cb,queue_size=1)
@@ -22,8 +22,8 @@ class L20GetLinkerHandState():
             self.right_hand_state_arc_sub = rospy.Subscriber("/cb_right_hand_state_arc",JointState,self.right_hand_state_arc_cb,queue_size=1)
             rospy.spin()
         else:
-            self.single_smg() # 单次获取状态数据
-    # 左手范围状态值
+            self.single_smg() # Get status data once
+    # Left hand range status value
     def left_hand_state_cb(self,msg):
         position = msg.position
         if len(list(position)) > 10:
@@ -34,12 +34,12 @@ class L20GetLinkerHandState():
         effort = msg.effort
         name = msg.name
         print("="*30)
-        ColorMsg(msg=f"{hand_type}左手当前状态position: {position}", color="yellow")
-        ColorMsg(msg=f"{hand_type}左手当前状态velocity: {velocity}", color="yellow")
-        ColorMsg(msg=f"{hand_type}左手当前状态effort: {effort}", color="yellow")
-        ColorMsg(msg=f"{hand_type}左手当前状态name: {name}", color="yellow")
+        ColorMsg(msg=f"{hand_type} left hand current state position: {position}", color="yellow")
+        ColorMsg(msg=f"{hand_type} left hand current state velocity: {velocity}", color="yellow")
+        ColorMsg(msg=f"{hand_type} left hand current state effort: {effort}", color="yellow")
+        ColorMsg(msg=f"{hand_type} left hand current state name: {name}", color="yellow")
         print("="*30)
-    # 左手弧度状态值
+    # Left hand radian status value
     def left_hand_state_arc_cb(self,msg):
         position = msg.position
         if len(list(position)) > 10:
@@ -50,12 +50,12 @@ class L20GetLinkerHandState():
         effort = msg.effort
         name = msg.name
         print("-"*30)
-        ColorMsg(msg=f"{hand_type}左手当前状态弧度position: {position}", color="yellow")
-        ColorMsg(msg=f"{hand_type}左手当前状态弧度velocity: {velocity}", color="yellow")
-        ColorMsg(msg=f"{hand_type}左手当前状态弧度effort: {effort}", color="yellow")
-        ColorMsg(msg=f"{hand_type}左手当前状态弧度name: {name}", color="yellow")
+        ColorMsg(msg=f"{hand_type} left hand current state radian position: {position}", color="yellow")
+        ColorMsg(msg=f"{hand_type} left hand current state radian velocity: {velocity}", color="yellow")
+        ColorMsg(msg=f"{hand_type} left hand current state radian effort: {effort}", color="yellow")
+        ColorMsg(msg=f"{hand_type} left hand current state radian name: {name}", color="yellow")
         print("-"*30)
-    # 右手范围状态值
+    # Right hand range status value
     def right_hand_state_cb(self,msg):
         position = msg.position
         if len(list(position)) > 10:
@@ -66,12 +66,12 @@ class L20GetLinkerHandState():
         effort = msg.effort
         name = msg.name
         print("="*30)
-        ColorMsg(msg=f"{hand_type}右手当前状态position: {position}", color="green")
-        ColorMsg(msg=f"{hand_type}右手当前状态velocity: {velocity}", color="green")
-        ColorMsg(msg=f"{hand_type}右手当前状态effort: {effort}", color="green")
-        ColorMsg(msg=f"{hand_type}右手当前状态name: {name}", color="green")
+        ColorMsg(msg=f"{hand_type} right hand current state position: {position}", color="green")
+        ColorMsg(msg=f"{hand_type} right hand current state velocity: {velocity}", color="green")
+        ColorMsg(msg=f"{hand_type} right hand current state effort: {effort}", color="green")
+        ColorMsg(msg=f"{hand_type} right hand current state name: {name}", color="green")
         print("="*30)
-    # 右手弧度状态值
+    # Right hand radian status value
     def right_hand_state_arc_cb(self,msg):
         position = msg.position
         if len(list(position)) > 10:
@@ -82,10 +82,10 @@ class L20GetLinkerHandState():
         effort = msg.effort
         name = msg.name
         print("-"*30)
-        ColorMsg(msg=f"{hand_type}右手当前状态弧度position: {position}", color="green")
-        ColorMsg(msg=f"{hand_type}右手当前状态弧度velocity: {velocity}", color="green")
-        ColorMsg(msg=f"{hand_type}右手当前状态弧度effort: {effort}", color="green")
-        ColorMsg(msg=f"{hand_type}右手当前状态弧度name: {name}", color="green")
+        ColorMsg(msg=f"{hand_type} right hand current state radian position: {position}", color="green")
+        ColorMsg(msg=f"{hand_type} right hand current state radian velocity: {velocity}", color="green")
+        ColorMsg(msg=f"{hand_type} right hand current state radian effort: {effort}", color="green")
+        ColorMsg(msg=f"{hand_type} right hand current state radian name: {name}", color="green")
         print("-"*30)
 
     def single_smg(self):
@@ -96,22 +96,22 @@ class L20GetLinkerHandState():
         try:
             left_hand_range_state = rospy.wait_for_message("/cb_left_hand_state", JointState, timeout=0.3)
         except rospy.ROSException as e:
-            #rospy.logerr("cb_left_hand_state话题已超时")
+            #rospy.logerr("cb_left_hand_state topic timed out")
             pass
         try:
             left_hand_arc_state = rospy.wait_for_message("/cb_left_hand_state_arc", JointState, timeout=0.3)
         except rospy.ROSException as e:
-            #rospy.logerr("cb_left_hand_state_arc话题已超时")
+            #rospy.logerr("cb_left_hand_state_arc topic timed out")
             pass
         try:
             right_hand_range_state = rospy.wait_for_message("/cb_right_hand_state", JointState, timeout=0.3)
         except rospy.ROSException as e:
-            #rospy.logerr("cb_right_hand_state话题已超时")
+            #rospy.logerr("cb_right_hand_state topic timed out")
             pass
         try:
             right_hand_arc_state = rospy.wait_for_message("/cb_right_hand_state_arc", JointState, timeout=0.3)
         except rospy.ROSException as e:
-            #rospy.logerr("cb_right_hand_state_arc话题已超时")
+            #rospy.logerr("cb_right_hand_state_arc topic timed out")
             pass
         if left_hand_range_state != None:
             position = left_hand_range_state.position
@@ -123,10 +123,10 @@ class L20GetLinkerHandState():
             effort = left_hand_range_state.effort
             name = left_hand_range_state.name
             print("="*30)
-            ColorMsg(msg=f"{hand_type}左手当前状态position: {position}", color="yellow")
-            ColorMsg(msg=f"{hand_type}左手当前状态velocity: {velocity}", color="yellow")
-            ColorMsg(msg=f"{hand_type}左手当前状态effort: {effort}", color="yellow")
-            ColorMsg(msg=f"{hand_type}左手当前状态name: {name}", color="yellow")
+            ColorMsg(msg=f"{hand_type} left hand current state position: {position}", color="yellow")
+            ColorMsg(msg=f"{hand_type} left hand current state velocity: {velocity}", color="yellow")
+            ColorMsg(msg=f"{hand_type} left hand current state effort: {effort}", color="yellow")
+            ColorMsg(msg=f"{hand_type} left hand current state name: {name}", color="yellow")
             print("="*30)
         if left_hand_arc_state !=None:
             position = left_hand_arc_state.position
@@ -138,10 +138,10 @@ class L20GetLinkerHandState():
             effort = left_hand_arc_state.effort
             name = left_hand_arc_state.name
             print("-"*30)
-            ColorMsg(msg=f"{hand_type}左手当前状态弧度position: {position}", color="yellow")
-            ColorMsg(msg=f"{hand_type}左手当前状态弧度velocity: {velocity}", color="yellow")
-            ColorMsg(msg=f"{hand_type}左手当前状态弧度effort: {effort}", color="yellow")
-            ColorMsg(msg=f"{hand_type}左手当前状态弧度name: {name}", color="yellow")
+            ColorMsg(msg=f"{hand_type} left hand current state radian position: {position}", color="yellow")
+            ColorMsg(msg=f"{hand_type} left hand current state radian velocity: {velocity}", color="yellow")
+            ColorMsg(msg=f"{hand_type} left hand current state radian effort: {effort}", color="yellow")
+            ColorMsg(msg=f"{hand_type} left hand current state radian name: {name}", color="yellow")
             print("-"*30)
         if right_hand_range_state != None:
             position = right_hand_range_state.position
@@ -153,10 +153,10 @@ class L20GetLinkerHandState():
             effort = right_hand_range_state.effort
             name = right_hand_range_state.name
             print("="*30)
-            ColorMsg(msg=f"{hand_type}右手当前状态position: {position}", color="green")
-            ColorMsg(msg=f"{hand_type}右手当前状态velocity: {velocity}", color="green")
-            ColorMsg(msg=f"{hand_type}右手当前状态effort: {effort}", color="green")
-            ColorMsg(msg=f"{hand_type}右手当前状态name: {name}", color="green")
+            ColorMsg(msg=f"{hand_type} right hand current state position: {position}", color="green")
+            ColorMsg(msg=f"{hand_type} right hand current state velocity: {velocity}", color="green")
+            ColorMsg(msg=f"{hand_type} right hand current state effort: {effort}", color="green")
+            ColorMsg(msg=f"{hand_type} right hand current state name: {name}", color="green")
             print("="*30)
         if right_hand_arc_state != None:
             position = right_hand_arc_state.position
@@ -168,15 +168,15 @@ class L20GetLinkerHandState():
             effort = right_hand_arc_state.effort
             name = right_hand_arc_state.name
             print("-"*30)
-            ColorMsg(msg=f"{hand_type}右手当前状态弧度position: {position}", color="green")
-            ColorMsg(msg=f"{hand_type}右手当前状态弧度velocity: {velocity}", color="green")
-            ColorMsg(msg=f"{hand_type}右手当前状态弧度effort: {effort}", color="green")
-            ColorMsg(msg=f"{hand_type}右手当前状态弧度name: {name}", color="green")
+            ColorMsg(msg=f"{hand_type} right hand current state radian position: {position}", color="green")
+            ColorMsg(msg=f"{hand_type} right hand current state radian velocity: {velocity}", color="green")
+            ColorMsg(msg=f"{hand_type} right hand current state radian effort: {effort}", color="green")
+            ColorMsg(msg=f"{hand_type} right hand current state radian name: {name}", color="green")
             print("-"*30)
 
 
 if __name__ == '__main__':
     rospy.init_node('L20_get_linker_hand_state', anonymous=True)
-    loop = rospy.get_param('~loop', default="False")  # 默认获取全局参数
+    loop = rospy.get_param('~loop', default="False")  # Get global parameter by default
     lh = L20GetLinkerHandState(loop=loop)
     

@@ -25,7 +25,7 @@ def send_messages():
 
     pub = rospy.Publisher('/cb_left_hand_control_cmd', JointState, queue_size=10)
 
-    rate = rospy.Rate(30)  # 设置频率为10Hz
+    rate = rospy.Rate(30)  # Set frequency to 30Hz
     joint_state.header = std_msgs.msg.Header()
     joint_state.header.seq=0
     joint_state.header.stamp = rospy.Time.now() 
@@ -37,10 +37,10 @@ def send_messages():
                         'joint13', 'joint14', 'joint15', 'joint16', 'joint17', 'joint18',
 
                         'joint19', 'joint20']
-    joint_state.velocity = [0] * len(joint_state.position)  # 与position数组长度相同，全部填充为0
+    joint_state.velocity = [0] * len(joint_state.position)  # Same length as the position array, all filled with 0
     joint_state.effort = [0] * len(joint_state.position)  
     pub.publish(joint_state)
-    while not rospy.is_shutdown():  # 持续1秒
+    while not rospy.is_shutdown():  # Loop for 1 second
         position =show_left()
         if(position is not None):
             joint_state.position = position
@@ -59,71 +59,71 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 50
             return[250, 250, 250, 250, 250, 250, 128, 128, 128, 128, 250, 0, 0, 0, 0, 250, 250, 250, 250, 250]
-        elif(show_step==1): #// 收小指与无名指
+        elif(show_step==1): #// Close little and ring fingers
             show_step=show_step+1
             show_count_obj = 10
             return[250,250,250, 0,  0, 250,128,128,128,128,250, 0, 0, 0, 0,250,250,250,  0, 0]
-        elif(show_step==2): #// 将拇指搭到小指与无名指上面
+        elif(show_step==2): #// Place thumb on top of little and ring fingers
             show_step=show_step+1
             show_count_obj = 30
             return[100,250,250, 0,  0, 180,128,128,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==3): #// 食指和中指向一侧倾斜
+        elif(show_step==3): #// Tilt index and middle fingers to one side
             show_step=show_step+1
             show_count_obj = 10
             return[100,250,250, 0,  0, 180,200,200,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==4): #// 另一侧
+        elif(show_step==4): #// Other side
             show_step=show_step+1
             show_count_obj = 10
             return[100,250,250, 0,  0, 180, 50, 50,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==5): #// 两支回中
+        elif(show_step==5): #// Return both to center
             show_step=show_step+1
             show_count_obj = 15
             return[100,250,250, 0,  0, 180,128,128,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==6): #// 食指和中指做Y
+        elif(show_step==6): #// Index and middle fingers make a Y shape
             show_step=show_step+1
             show_count_obj = 10
             return[100,250,250, 0,  0, 180, 58,200,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==7): #// 收Y
+        elif(show_step==7): #// Retract Y shape
             show_step=show_step+1
             show_count_obj = 10
             return[100,250,250, 0,  0, 180,128,128,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==8): #// 食指和中指做Y
+        elif(show_step==8): #// Index and middle fingers make a Y shape
             show_step=show_step+1
             show_count_obj = 10
             return[100,250,250, 0,  0, 180, 58,200,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==9): #// 收Y
+        elif(show_step==9): #// Retract Y shape
             show_step=show_step+1
             show_count_obj = 10
             return[100,250,250, 0,  0, 180,128,128,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==10): #// 中指和食指弯曲伸直交替两遍
+        elif(show_step==10): #// Bend and straighten middle and index fingers alternately twice
             show_step=show_step+1
             show_count_obj = 15
             return[100,100,100, 0,  0, 180,128,128,128,128,200, 0, 0, 0, 0,  0,100,100,  0, 0]
-        elif(show_step==11): #// 中指和食指弯曲伸直交替两遍
+        elif(show_step==11): #// Bend and straighten middle and index fingers alternately twice
             show_step=show_step+1
             show_count_obj = 15
             return[100,250,250, 0,  0, 180,128,128,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==12): #// 中指和食指弯曲伸直交替两遍
+        elif(show_step==12): #// Bend and straighten middle and index fingers alternately twice
             show_step=show_step+1
             show_count_obj = 15
             return[100,100,100, 0,  0, 180,128,128,128,128,200, 0, 0, 0, 0,  0,100,100,  0, 0]
-        elif(show_step==13): #// 中指和食指弯曲伸直交替两遍
+        elif(show_step==13): #// Bend and straighten middle and index fingers alternately twice
             show_step=show_step+1
             show_count_obj = 15
             return[100,250,250, 0,  0, 180,128,128,128,128,200, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==14): #// 蜷曲拇指
+        elif(show_step==14): #// Curl thumb
             show_step=show_step+1
             show_count_obj = 40
             return[250,250,250, 0,  0, 150,128,128,128,128,250, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==15): #// 拇指收于掌内
+        elif(show_step==15): #// Tuck thumb into palm
             show_step=show_step+1
             show_count_obj = 10
             return[250,250,250, 0,  0,  5 ,128,128,128,128,250, 0, 0, 0, 0,  0,250,250,  0, 0]
-        elif(show_step==16): #// 收4指
+        elif(show_step==16): #// Close 4 fingers
             show_step=show_step+1
             show_count_obj = 30
             return[250,100,100,100,100, 5 ,128,128,128,128,250, 0, 0, 0, 0,  0,10, 10,  10, 10]
-        elif(show_step==17): #// 依次放开4指和拇指
+        elif(show_step==17): #// Open 4 fingers and thumb sequentially
             show_step=show_step+1
             show_count_obj = 15
             return[250,100,100,100,250, 5 ,128,128,128,128,250, 0, 0, 0, 0,  0,10, 10,  10, 250]
@@ -143,15 +143,15 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 10
             return[250,250,250,250,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,250, 250,  250, 250]
-        elif(show_step==22): #// 并拢拇指
+        elif(show_step==22): #// Bring thumb closer
             show_step=show_step+1
             show_count_obj = 20
             return[250,250,250,250,250,250,128,128,128,128, 10, 0, 0, 0, 0, 250,250, 250,  250, 250]
-        elif(show_step==23): #// 反转拇指指掌心
+        elif(show_step==23): #// Rotate thumb towards palm
             show_step=show_step+1
             show_count_obj = 40
             return[  0,250,250,250,250,250,128,128,128,128, 10, 0, 0, 0, 0, 250,250, 250,  250, 250]
-        elif(show_step==24): #// 分两步回到初始位置
+        elif(show_step==24): #// Return to initial position in two steps
             show_step=show_step+1
             show_count_obj = 30
             return[  0,250,250,250,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,250, 250,  250, 250]
@@ -171,11 +171,11 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 20
             return[250,250,250,250,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,250, 250,  250, 250]
-        elif(show_step==29): #// 依次蜷曲4小指
+        elif(show_step==29): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             return [250,250,250,250,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,  0, 250,  250, 250]
-        elif(show_step==30): #// 蜷曲4指
+        elif(show_step==30): #// Curl 4 fingers
             show_step=show_step+1
             show_count_obj = 15
             return[250,250,250,250,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,  0,  0,  250, 250]
@@ -187,63 +187,63 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 15
             return[250,250,250,250,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,  0,  0,   0,  0]
-        elif(show_step==33): #// 依次蜷曲4小指
+        elif(show_step==33): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             return[250,  0,250,250,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,  0,  0,   0,  0]
-        elif(show_step==34): #// 依次蜷曲4小指
+        elif(show_step==34): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             return[250,  0,  0,250,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,  0,  0,   0,  0]
-        elif(show_step==35): #// 依次蜷曲4小指
+        elif(show_step==35): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             return[250,  0,  0,  0,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,  0,  0,   0,  0]
-        elif(show_step==36): #// 依次蜷曲4小指
+        elif(show_step==36): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             return[250,  0,  0,  0,  0,250,128,128,128,128,250, 0, 0, 0, 0, 250,  0,  0,   0,  0]
-        elif(show_step==37): #// 蜷曲拇指
+        elif(show_step==37): #// Curl thumb
             show_step=show_step+1
             show_count_obj = 40
             return [  0,  0,  0,  0,  0,250,128,128,128,128,250, 0, 0, 0, 0, 200,  0,  0,   0,  0]
-        elif(show_step==38): #// 打开食指和小指
+        elif(show_step==38): #// Open index and little fingers
             show_step=show_step+1
             show_count_obj = 40
             return[250,  0,  0,  0,  0,250,128,128,128,128,250, 0, 0, 0, 0, 250,  0,  0,   0,  0]
-        elif(show_step==39): #// 打开食指和小指
+        elif(show_step==39): #// Open index and little fingers
             show_step=show_step+1
             show_count_obj = 30
             return[250,250,  0,  0,250,250,128,128,128,128,250, 0, 0, 0, 0, 250,250,  0,   0,250]
-        elif(show_step==40): #// 将拇指搭上666
+        elif(show_step==40): #// Place thumb for '666' gesture
             show_step=show_step+1
             show_count_obj = 40
             return[100,250,  0,  0,250,200,128,128,128,128,100, 0, 0, 0, 0,100,250,  0,   0,250]
-        elif(show_step==41): #// 左右动手指
+        elif(show_step==41): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             return[100,250,  0,  0,250,200, 80,128,128,200,100, 0, 0, 0, 0,100,250,  0,   0,250]
-        elif(show_step==42): #// 左右动手指
+        elif(show_step==42): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             return[100,250,  0,  0,250,200,200,128,128, 80,100, 0, 0, 0, 0,100,250,  0,   0,250]
-        elif(show_step==43): #// 左右动手指
+        elif(show_step==43): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             return[100,250,  0,  0,250,200, 80,128,128,200,100, 0, 0, 0, 0,100,250,  0,   0,250]
-        elif(show_step==44): #// 左右动手指
+        elif(show_step==44): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             return[100,250,  0,  0,250,200,200,128,128, 80,100, 0, 0, 0, 0,100,250,  0,   0,250]
-        elif(show_step==45): #// 左右动手指
+        elif(show_step==45): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             return[100,250,  0,  0,250,200,128,128,128,128,100, 0, 0, 0, 0,100,250,  0,   0,250]
-        elif(show_step==46): #//  展开
+        elif(show_step==46): #//  Unfold
             show_step=show_step+1
             show_count_obj = 50
             return[250,250,250,250,250,250,128,128,128,128,250, 0, 0, 0, 0,250,250,250, 250,250]
-        elif(show_step==47): #// 拇指和食指捏
+        elif(show_step==47): #// Pinch with thumb and index finger
             show_step=show_step+1
             show_count_obj = 50
             return[ 55, 0,250,250,250,170,128,128,128,128,70, 0, 0, 0, 0,250,250,250, 250,250]
@@ -251,7 +251,7 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 20
             return[250,250, 20,250,250,220,128,128,128,128,100, 0, 0, 0, 0,250,250,250, 250,250]
-        elif(show_step==49): #// 拇指和中指捏
+        elif(show_step==49): #// Pinch with thumb and middle finger
             show_step=show_step+1
             show_count_obj = 35
             return[ 55,250, 0,250,250,140,128,128,128,128,60, 0, 0, 0, 0,250,250,250, 250,250]
@@ -259,7 +259,7 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 20
             return[250,250,250, 20,250,170,128,128,128,128,100, 0, 0, 0, 0,250,250,250, 250,250]
-        elif(show_step==51): #// 拇指和无名指捏
+        elif(show_step==51): #// Pinch with thumb and ring finger
             show_step=show_step+1
             show_count_obj = 35
             return[ 55,250,250, 0 ,250,110,128,128,128,128,50, 0, 0, 0, 0,250,250,250, 250,250]
@@ -267,7 +267,7 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 20
             return[250,250,250,250, 20,130,128,128,128,128,100, 0, 0, 0, 0,250,250,250, 250,250]
-        elif(show_step==53): #// 拇指和小指捏
+        elif(show_step==53): #// Pinch with thumb and little finger
             show_step=show_step+1
             show_count_obj = 40
             return[ 55,250,250,250,  0, 60,128,128,128,128,50, 0, 0, 0, 0,250,250,250, 250,250]
@@ -275,7 +275,7 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 20
             return[250,250,250,250, 20,130,128,128,128,128,100, 0, 0, 0, 0,250,250,250, 250,250]
-        elif(show_step==55): #// 拇指和小指掐
+        elif(show_step==55): #// Pinch tip with thumb and little finger
             show_step=show_step+1
             show_count_obj = 40
             return[160,250,250,250,160, 60,128,128,128,128,50, 0, 0, 0, 0,100,250,250, 250, 80]
@@ -283,7 +283,7 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 20
             return[250,250,250,250,250,130,128,128,128,128,100, 0, 0, 0, 0,250,250,250,  50, 250]
-        elif(show_step==57): #// 拇指和无名指掐
+        elif(show_step==57): #// Pinch tip with thumb and ring finger
             show_step=show_step+1
             show_count_obj = 35
             return[160,250,250,150,250,100,128,128,128,128,50, 0, 0, 0, 0,100,250,250, 80, 250]
@@ -291,7 +291,7 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 20
             return[250,250,250,250,250,180,128,128,128,128,100, 0, 0, 0, 0, 250,250, 50,  250, 250]
-        elif(show_step==59): #// 拇指和中指掐
+        elif(show_step==59): #// Pinch tip with thumb and middle finger
             show_step=show_step+1
             show_count_obj = 35
             return[160,250,150,250,250,135,128,128,128,128,70, 0, 0, 0, 0,100,250,85, 250, 250]
@@ -299,7 +299,7 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 20
             return[250,250,250,250,250,220,128,128,128,128,100, 0, 0, 0, 0, 250, 50,250,  250, 250]
-        elif(show_step==61): #// 拇指和食指掐
+        elif(show_step==61): #// Pinch tip with thumb and index finger
             show_step=show_step+1
             show_count_obj = 35
             return[165,150,250,250,250,170,128,128,128,128,70, 0, 0, 0, 0,100,80,250, 250, 250]
@@ -312,13 +312,13 @@ def signal_handler(sig, frame):
 
     print('You pressed Ctrl+C!')
 
-    sys.exit(0)  # 0表示正常退出
+    sys.exit(0)  # 0 means normal exit
 signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
 
     try:
-        print("测试中")
+        print("Testing")
         send_messages()
     except KeyboardInterrupt:
          print("Caught KeyboardInterrupt, exiting gracefully.")

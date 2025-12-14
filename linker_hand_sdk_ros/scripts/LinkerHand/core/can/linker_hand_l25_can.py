@@ -16,7 +16,7 @@ class FrameProperty(Enum):
     YAW_POS = 0x02  # Yaw joint position | The coordinate system is built at the root of each finger, and the rotation angle is defined according to the straightened state of the finger [5,6,7,8,9]
     ROOT1_POS = 0x03  # Root1 joint position | The root joint closest to the palm [0,1,2,3,4]
     ROOT2_POS = 0x04  # Root2 joint position | The root joint closest to the palm [15, 16,17,18,19]
-    ROOT3_POS = 0x05  # Root3 joint position | The root joint closest to the palm Not available
+    ROOT3_POS = 0x05  # Root3 joint position | The root joint closest to the palm (not used)
     TIP_POS = 0x06  # Fingertip joint position | The root joint closest to the palm [20,21,22,23,24]
 
     ROLL_SPEED = 0x09  # Roll joint speed | The coordinate system is built at the root of each finger, and the rotation angle is defined according to the straightened state of the finger
@@ -120,18 +120,18 @@ class LinkerHandL25Can:
         self.last_thumb_pos, self.last_index_pos,self.last_ring_pos,self.last_middle_pos, self.last_little_pos = None,None,None,None,None
         self.x01, self.x02, self.x03, self.x04,self.x05,self.x06,self.x07, self.x08,self.x09,self.x0A,self.x0B,self.x0C,self.x0D,self.x0E,self.speed = [],[],[],[],[],[],[],[],[],[],[],[],[],[],[]
         self.last_root1,self.last_yaw,self.last_roll,self.last_root2,self.last_tip = None,None,None,None,None
-        # 速度
+        # Speed
         self.x49, self.x4a, self.x4b, self.x4c, self.x4d,self.xc1 = [],[],[],[],[],[]
         self.x41,self.x42,self.x43,self.x44,self.x45 = [],[],[],[],[]
-        # 扭矩
+        # Torque
         self.x51, self.x52, self.x53, self.x54,self.x55 = [],[],[],[],[]
-        # 故障码
+        # Fault codes
         self.x59,self.x5a,self.x5b,self.x5c,self.x5d = [],[],[],[],[]
-        # 温度阈值
+        # Temperature thresholds
         self.x61,self.x62,self.x63,self.x64,self.x65 = [],[],[],[],[]
-        # 压感
+        # Pressure (scalar)
         self.x90,self.x91,self.x92,self.x93 = [],[],[],[]
-        # 新压感
+        # New pressure (matrix-type)
         self.xb0,self.xb1,self.xb2,self.xb3,self.xb4,self.xb5 = [-1] * 5,[-1] * 5,[-1] * 5,[-1] * 5,[-1] * 5,[-1] * 5
         self.thumb_matrix = np.full((12, 6), -1)
         self.index_matrix = np.full((12, 6), -1)
@@ -152,7 +152,7 @@ class LinkerHandL25Can:
             160: 10,
             176: 11,
         }
-        # 根据操作系统初始化 CAN 总线
+        # Initialize CAN bus depending on OS
         try:
             if sys.platform == "linux":
                 self.bus = can.interface.Bus(
@@ -169,23 +169,23 @@ class LinkerHandL25Can:
         except:
             print("Please insert CAN device")
 
-        # 启动接收线程
+        # Start receiver thread
         self.receive_thread = threading.Thread(target=self.receive_response)
         self.receive_thread.daemon = True
         self.receive_thread.start()
 
     def send_command(self, frame_property, data_list):
         """
-        Send command to CAN bus
-        :param frame_property: Data frame properties
-        :param data_list: Data payload
+        Send command to CAN bus.
+        :param frame_property: Frame property (either FrameProperty enum or raw int).
+        :param data_list: Payload data list.
         """
         frame_property_value = int(frame_property.value) if hasattr(frame_property, 'value') else frame_property
         data = [frame_property_value] + [int(val) for val in data_list]
         msg = can.Message(arbitration_id=self.can_id, data=data, is_extended_id=False)
         try:
             self.bus.send(msg)
-            #print(f"Message sent: ID={hex(self.can_id)}, Data={data}")
+            # print(f"Message sent: ID={hex(self.can_id)}, Data={data}")
         except can.CanError as e:
             print(f"Failed to send message: {e}")
             self.open_can.open_can(self.can_channel)
@@ -200,11 +200,11 @@ class LinkerHandL25Can:
 
     def receive_response(self):
         """
-        Receive and process response messages from CAN bus
+        Receive and process response messages from CAN bus.
         """
         while self.running:
             try:
-                msg = self.bus.recv(timeout=1.0)  # 阻塞接收，1 秒超时
+                msg = self.bus.recv(timeout=1.0)  # Blocking receive with 1-second timeout
                 if msg:
                     self.process_response(msg)
             except can.CanError as e:
@@ -214,36 +214,35 @@ class LinkerHandL25Can:
     def set_joint_positions(self, joint_ranges):
         if len(joint_ranges) == 25:
             l25_pose = self.joint_map(joint_ranges)
-            # 使用列表推导式将列表每6个元素切成一个子数组
+            # Slice into chunks of 6 elements
             chunks = [l25_pose[i:i+6] for i in range(0, 30, 6)]
             self.send_command(FrameProperty.THUMB_POS, chunks[0])
-            #time.sleep(0.001)
+            # time.sleep(0.001)
             self.send_command(FrameProperty.INDEX_POS, chunks[1])
-            #time.sleep(0.001)
+            # time.sleep(0.001)
             self.send_command(FrameProperty.MIDDLE_POS, chunks[2])
-            #time.sleep(0.001)
+            # time.sleep(0.001)
             self.send_command(FrameProperty.RING_POS, chunks[3])
-            #time.sleep(0.001)
+            # time.sleep(0.001)
             self.send_command(FrameProperty.LITTLE_POS, chunks[4])
-            #time.sleep(0.001)
+            # time.sleep(0.001)
 
     def set_joint_positions_by_topic(self, joint_ranges):
         if len(joint_ranges) == 25:
             # Finger Joint Position Constants
-            #ROLL_POS = 0x01  # Roll joint position | Coordinate system based on finger base, rotation angle defined when finger is straight [10,11,12,13,14]
-            #YAW_POS = 0x02   # Yaw joint position | Coordinate system based on finger base, rotation angle defined when finger is straight [5,6,7,8,9]
-            #ROOT1_POS = 0x03 # Root1 joint position | Joint closest to the palm [0,1,2,3,4]
-            #ROOT2_POS = 0x04 # Root2 joint position | Joint closest to the palm [15,16,17,18,19]
-            #ROOT3_POS = 0x05 # Root3 joint position | Joint closest to the palm (currently unused)
-            #TIP_POS = 0x06   # Tip joint position | Joint closest to the palm [20,21,22,23,24]
+            # ROLL_POS = 0x01  # Roll joint position | Coordinate system based on finger base, rotation angle defined when finger is straight [10,11,12,13,14]
+            # YAW_POS = 0x02   # Yaw joint position | Coordinate system based on finger base, rotation angle defined when finger is straight [5,6,7,8,9]
+            # ROOT1_POS = 0x03 # Root1 joint position | Joint closest to the palm [0,1,2,3,4]
+            # ROOT2_POS = 0x04 # Root2 joint position | Joint closest to the palm [15,16,17,18,19]
+            # ROOT3_POS = 0x05 # Root3 joint position | Joint closest to the palm (currently unused)
+            # TIP_POS = 0x06   # Tip joint position | Joint closest to the palm [20,21,22,23,24]
 
-            # Finger joint names mapping (Chinese to English translation):
+            # Finger joint names mapping:
             # ["Thumb root", "Index root", "Middle root", "Ring root", "Pinky root",
             #  "Thumb yaw", "Index yaw", "Middle yaw", "Ring yaw", "Pinky yaw",
             #  "Thumb roll", "Reserved", "Reserved", "Reserved", "Reserved",
             #  "Thumb middle", "Index middle", "Middle middle", "Ring middle", "Pinky middle",
             #  "Thumb tip", "Index tip", "Middle tip", "Ring tip", "Pinky tip"]
-
             
             l25_pose = self.slice_list(joint_ranges,5)
             if self._list_d_value(self.last_root1, l25_pose[0]):
@@ -267,14 +266,10 @@ class LinkerHandL25Can:
         """
         Split a list into chunks of specified size.
 
-        Parameters:
-            input_list (list): The list to be chunked.
-            slice_size (int): Number of elements in each chunk.
-
-        Returns:
-            list of lists: The chunked list.
+        :param input_list: Source list.
+        :param slice_size: Length of each chunk.
+        :return: List of chunks.
         """
-        # Implementation using list comprehension
         sliced_list = [input_list[i:i + slice_size] for i in range(0, len(input_list), slice_size)]
         return sliced_list
 
@@ -286,37 +281,48 @@ class LinkerHandL25Can:
                 return True
                 break
         return False
+
     # Set roll joint positions for all fingers
     def set_roll_positions(self, joint_ranges):
         self.send_command(FrameProperty.ROLL_POS, joint_ranges)
+
     # Set yaw joint positions for all fingers
     def set_yaw_positions(self, joint_ranges):
         print(joint_ranges)
         self.send_command(FrameProperty.YAW_POS, joint_ranges)
+
     # Set base joint 1 positions for all fingers
     def set_root1_positions(self, joint_ranges):
         self.send_command(FrameProperty.ROOT1_POS, joint_ranges)
+
     # Set base joint 2 positions for all fingers
     def set_root2_positions(self, joint_ranges):
         self.send_command(FrameProperty.ROOT2_POS, joint_ranges)
+
     # Set base joint 3 positions for all fingers
     def set_root3_positions(self, joint_ranges):
         self.send_command(FrameProperty.ROOT3_POS, joint_ranges)
+
     # Set fingertip joint positions for all fingers
     def set_tip_positions(self, joint_ranges=[80]*5):
         self.send_command(FrameProperty.TIP_POS, joint_ranges)
+
     # Set thumb torque parameters
     def set_thumb_torque(self, j=[]):
         self.send_command(FrameProperty.THUMB_TORQUE, j)
+
     # Set index finger torque
     def set_index_torque(self, j=[]):
         self.send_command(FrameProperty.INDEX_TORQUE, j)
+
     # Set middle finger torque
     def set_middle_torque(self, j=[]):
         self.send_command(FrameProperty.MIDDLE_TORQUE, j)
+
     # Set ring finger torque
     def set_ring_torque(self, j=[]):
         self.send_command(FrameProperty.RING_TORQUE, j)
+
     # Set little finger torque
     def set_little_torque(self, j=[]):
         self.send_command(FrameProperty.LITTLE_TORQUE, j)
@@ -324,45 +330,59 @@ class LinkerHandL25Can:
     # Get thumb joint position
     def get_thumb_positions(self,j=[0]):
         self.send_command(FrameProperty.THUMB_POS, j)
+
     # Get index finger joint positions
     def get_index_positions(self, j=[0]):
         self.send_command(FrameProperty.INDEX_POS,j)
+
     # Get middle finger joint position
     def get_middle_positions(self, j=[0]):
         self.send_command(FrameProperty.MIDDLE_POS,j)
+
     # Retrieve the position of the ring finger joint
     def get_ring_positions(self, j=[0]):
         self.send_command(FrameProperty.RING_POS,j)
+
     # Retrieve the position of the little finger joint
     def get_little_positions(self, j=[0]):
         self.send_command(FrameProperty.LITTLE_POS, j)
+
     # All fault codes of motors in the thumb
     def get_thumbn_fault(self,j=[]):
         self.send_command(FrameProperty.THUMB_FAULT,j)
+
     # All motor fault codes for the index finger
     def get_index_fault(self,j=[]):
         self.send_command(FrameProperty.INDEX_FAULT,j)
+
     # All motor fault codes for the middle finger
     def get_middle_fault(self,j=[]):
         self.send_command(FrameProperty.MIDDLE_FAULT,j)
+
     # All motor fault codes for the ring finger
     def get_ring_fault(self,j=[]):
         self.send_command(FrameProperty.RING_FAULT,j)
+
     # All motor fault codes for the little finger
     def get_little_fault(self,j=[]):
         self.send_command(FrameProperty.LITTLE_FAULT,j)
+
     # Temperature threshold for the thumb motors
     def get_thumb_threshold(self,j=[]):
         self.send_command(FrameProperty.THUMB_TEMPERATURE, '')
+
     # Temperature threshold for the index finger motors
     def get_index_threshold(self,j=[]):
         self.send_command(FrameProperty.INDEX_TEMPERATURE, j)
+
     # Temperature threshold for the middle finger motors
     def get_middle_threshold(self,j=[]):
         self.send_command(FrameProperty.MIDDLE_TEMPERATURE, j)
+
     # Temperature threshold for the ring finger motors
     def get_ring_threshold(self,j=[]):
         self.send_command(FrameProperty.RING_TEMPERATURE, j)
+
     # Little finger temperature threshold
     def get_little_threshold(self,j=[]):
         self.send_command(FrameProperty.LITTLE_TEMPERATURE, j)
@@ -417,6 +437,7 @@ class LinkerHandL25Can:
 
     def save_parameters(self):
         self.send_command(0xCF, [])
+
     def process_response(self, msg):
         if msg.arbitration_id == self.can_id:
             frame_type = msg.data[0]
@@ -460,12 +481,10 @@ class LinkerHandL25Can:
             elif frame_type == 0x41: 
                 self.x41 = list(response_data)
             elif frame_type == 0x42:
-
                 self.x42 = list(response_data)
             elif frame_type == 0x43: 
                 self.x43 = list(response_data)
             elif frame_type == 0x44: 
-                
                 self.x44 = list(response_data)
             elif frame_type == 0x45: 
                 self.x45 = list(response_data)
@@ -566,7 +585,7 @@ class LinkerHandL25Can:
     def joint_map(self, pose):
         l25_pose = [0.0] * 30
 
-        # 映射表，通过字典简化映射关系
+        # Mapping table between 25-DOF command and 30-element L25 CAN layout.
         mapping = {
             0: 10,  1: 5,   2: 0,   3: 15,  4: None,  5: 20,
             6: None, 7: 6,   8: 1,   9: 16,  10: None, 11: 21,
@@ -575,7 +594,6 @@ class LinkerHandL25Can:
             24: None, 25: 9,  26: 4,   27: 19, 28: None, 29: 24
         }
 
-        # 遍历映射字典，进行值的映射
         for l25_idx, pose_idx in mapping.items():
             if pose_idx is not None:
                 l25_pose[l25_idx] = pose[pose_idx]
@@ -584,7 +602,6 @@ class LinkerHandL25Can:
 
 
     def state_to_cmd(self, l25_state):
-        
         pose = [0.0] * 25
         mapping = {
             0: 10,  1: 5,   2: 0,   3: 15,  5: 20,  7: 6,
@@ -592,24 +609,24 @@ class LinkerHandL25Can:
             19: 8,  20: 3,  21: 18, 23: 23, 25: 9,   26: 4,
             27: 19, 29: 24
         }
-        # 遍历映射字典，更新pose的值
         for l25_idx, pose_idx in mapping.items():
             pose[pose_idx] = l25_state[l25_idx]
         return pose
+
     def action_play(self):
         self.send_command(0xA0,[])
 
     def get_current_status(self, j=''):
         self.send_command(FrameProperty.THUMB_POS, j)
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.send_command(FrameProperty.INDEX_POS,j)
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.send_command(FrameProperty.MIDDLE_POS,j)
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.send_command(FrameProperty.RING_POS,j)
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.send_command(FrameProperty.LITTLE_POS, j)
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         state= self.x41+ self.x42+ self.x43+ self.x44+ self.x45
         if len(state) == 30:
             l25_state = self.state_to_cmd(l25_state=state)
@@ -623,28 +640,29 @@ class LinkerHandL25Can:
         
     def get_current_state_topic(self):
         self.send_command(0x01,[])
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.send_command(0x02,[])
-       # time.sleep(0.001)
+        # time.sleep(0.001)
         self.send_command(0x03,[])
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.send_command(0x04,[])
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.send_command(0x06,[])
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         state = self.x03+self.x02+self.x01+self.x04+self.x06
         return state
+
     def get_speed(self,j=''):
         self.send_command(FrameProperty.THUMB_SPEED, j)
-        #time.sleep(0.01)
+        # time.sleep(0.01)
         self.send_command(FrameProperty.INDEX_SPEED, j)
-        #time.sleep(0.01)
+        # time.sleep(0.01)
         self.send_command(FrameProperty.MIDDLE_SPEED, j)
-        #time.sleep(0.01)
+        # time.sleep(0.01)
         self.send_command(FrameProperty.RING_SPEED, j)
-        #time.sleep(0.01)
+        # time.sleep(0.01)
         self.send_command(FrameProperty.LITTLE_SPEED, j)
-        #time.sleep(0.01)
+        # time.sleep(0.01)
         speed = self.x49+ self.x4a+ self.x4b+ self.x4c+ self.x4d
         if len(speed) == 30:
             l25_speed = self.state_to_cmd(l25_state=speed)
@@ -660,18 +678,20 @@ class LinkerHandL25Can:
     
     def get_torque(self):
         return self.get_finger_torque()
+
     def get_fault(self):
         self.get_thumbn_fault()
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.get_index_fault()
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.get_middle_fault()
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.get_ring_fault()
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         self.get_little_fault()
-        #time.sleep(0.001)
+        # time.sleep(0.001)
         return [self.x59]+[self.x5a]+[self.x5b]+[self.x5c]+[self.x5d]
+
     def get_threshold(self):
         self.get_thumb_threshold()
         self.get_index_threshold()
@@ -679,24 +699,30 @@ class LinkerHandL25Can:
         self.get_ring_threshold()
         self.get_little_threshold()
         return [self.x61]+[self.x62]+[self.x63]+[self.x64]+[self.x65]
+
     def get_version(self):
         if self.xc1 == []:
             self.send_command(FrameProperty.HAND_HARDWARE_VERSION,[])
         return self.xc1
+
     def get_normal_force(self):
         self.send_command(FrameProperty.HAND_NORMAL_FORCE,[])
         return self.x90
+
     def get_tangential_force(self):
         self.send_command(FrameProperty.HAND_TANGENTIAL_FORCE,[])
         return self.x91
+
     def get_tangential_force_dir(self):
         self.send_command(FrameProperty.HAND_TANGENTIAL_FORCE_DIR,[])
         return self.x92
+
     def get_approach_inc(self):
         self.send_command(FrameProperty.HAND_APPROACH_INC,[])
         return self.x93
+
     def get_force(self):
-        '''获取压感数据'''
+        """Get pressure sensor data (scalar type)."""
         return [self.x90,self.x91 , self.x92 , self.x93]
     
     def get_matrix_touch(self):
@@ -713,7 +739,7 @@ class LinkerHandL25Can:
         return self.thumb_matrix , self.index_matrix , self.middle_matrix , self.ring_matrix , self.little_matrix
     
     def get_touch_type(self):
-        '''Get touch type'''
+        """Get touch sensing type (2 = matrix type, -1 = unsupported)."""
         self.send_command(0xb1,[])
         time.sleep(0.03)
         if len(self.xb1) == 2:
@@ -722,12 +748,12 @@ class LinkerHandL25Can:
             return -1
     
     def get_touch(self):
-        '''Get touch data (not supported yet)'''
+        """Get touch data (not supported yet, returns placeholder)."""
         return [-1] * 6
-
 
     def get_current(self):
         return [0] * 21
+
     def get_temperature(self):
         self.get_thumb_threshold()
         self.get_index_threshold()
@@ -748,16 +774,27 @@ class LinkerHandL25Can:
             self.bus.shutdown()
     
     '''
-    这个方法只用于展示数据关系映射，使用的话最好使用上面的方法
+    This method is only used to demonstrate mapping relationships.
+    For actual control, prefer the methods defined above.
     '''
     def joint_map_2(self, pose):
-        l25_pose = [0.0]*30 #L25 CAN默认接收30个数据 pose控制L25发送的指令数据默认25个，这里进行映射
+        l25_pose = [0.0]*30  # L25 CAN receives 30 values; pose has 25 values. Here we map between them.
         '''
-        需要进行映射
-        # L25 CAN数据格式
-        #["拇指横摆0-10", "拇指侧摆1-5", "拇指根部2-0", "拇指中部3-15", "预留4-", "拇指指尖5-20", "预留6-", "食指侧摆7-6", "食指根部8-1", "食指中部9-16", "预留10-", "食指指尖11-21", "预留12-", "预留13-", "中指根部14-2", "中指中部15-17", "预留16-", "中指指尖17-22", "预留18-", "无名指侧摆19-8", "无名指根部20-3", "无名指中部21-18", "预留22-", "无名指指尖23-23", "预留24-", "小指侧摆25-9", "小指根部26-4", "小指中部27-19", "预留28-", "小指指尖29-24"]
-        # CMD 接收到的数据格式
-        #["拇指根部0", "食指根部1", "中指根部2", "无名指根部3","小指根部4","拇指侧摆5","食指侧摆6","中指侧摆","无名指侧摆8","小指侧摆9","拇指横摆10","预留","预留","预留","预留","拇指中部15","食指中部16","中指中部17","无名指中部18","小指中部19","拇指指尖20","食指指尖21","中指指尖22","无名指指尖23","小指指尖24"]
+        Mapping reference:
+
+        # L25 CAN data format:
+        # ["Thumb roll 0-10", "Thumb abduction 1-5", "Thumb root 2-0", "Thumb middle 3-15", "Reserved 4-", "Thumb tip 5-20", "Reserved 6-",
+        #  "Index abduction 7-6", "Index root 8-1", "Index middle 9-16", "Reserved 10-", "Index tip 11-21",
+        #  "Reserved 12-", "Reserved 13-", "Middle root 14-2", "Middle middle 15-17", "Reserved 16-", "Middle tip 17-22",
+        #  "Reserved 18-", "Ring abduction 19-8", "Ring root 20-3", "Ring middle 21-18", "Reserved 22-", "Ring tip 23-23",
+        #  "Reserved 24-", "Little abduction 25-9", "Little root 26-4", "Little middle 27-19", "Reserved 28-", "Little tip 29-24"]
+
+        # CMD-side data format:
+        # ["Thumb root 0", "Index root 1", "Middle root 2", "Ring root 3","Little root 4",
+        #  "Thumb abduction 5","Index abduction 6","Middle abduction 7","Ring abduction 8","Little abduction 9",
+        #  "Thumb roll 10","Reserved 11","Reserved 12","Reserved 13","Reserved 14",
+        #  "Thumb middle 15","Index middle 16","Middle middle 17","Ring middle 18","Little middle 19",
+        #  "Thumb tip 20","Index tip 21","Middle tip 22","Ring tip 23","Little tip 24"]
         '''
         l25_pose[0] = pose[10]
         l25_pose[1] = pose[5]
@@ -793,5 +830,6 @@ class LinkerHandL25Can:
     
     def get_serial_number(self):
         return [0] * 6
+
     def show_fun_table(self):
         pass

@@ -155,13 +155,13 @@ class LinkerHandApi:
             print("Set Torque The numerical range can only be positive integers or floating-point numbers between 0 and 255", flush=True)
             return
         if len(torque) < 5:
-            print("数据长度不够,至少5个元素", flush=True)
+            print("Data length is not enough, at least 5 elements", flush=True)
             return
         if self.hand_joint == "L7" and len(torque) < 7:
-            print("数据长度不够,至少7个元素", flush=True)
+            print("Data length is not enough, at least 7 elements", flush=True)
             return
         if (self.hand_joint == "L6" or self.hand_joint == "O6") and len(torque) != 6:
-            print("L6 or O6数据长度错误,至少6个元素", flush=True)
+            print("L6 or O6 data length error, requires 6 elements", flush=True)
             return
         ColorMsg(msg=f"{self.hand_type} {self.hand_joint} set maximum torque to {torque}", color="green")
         return self.hand.set_torque(torque=torque)

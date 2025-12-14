@@ -10,7 +10,6 @@ from utils.open_can import OpenCan
 from utils.color_msg import ColorMsg
 
 
-
 class FrameProperty(Enum):
     INVALID_FRAME_PROPERTY = 0x00
     JOINT_POSITION_RCO = 0x01
@@ -429,16 +428,16 @@ class LinkerHandL10Can:
     def get_serial_number(self):
         try:
             self.send_frame(0xC0,[],sleep=0.005)
-            # 1. 使用 bytes() 函数将整数列表转换为字节对象
-            #    bytes() 接收一个由 0-255 之间的整数组成的列表。
+            # 1. Use the bytes() function to convert the integer list to a bytes object
+            #    bytes() accepts a list of integers in the range 0–255.
             byte_data = bytes(self.serial_number)
-            # 2. 使用 .decode() 方法将字节对象解码为 ASCII 字符串
+            # 2. Use .decode() to decode the bytes object into an ASCII string
             result_string = byte_data.decode('ascii')
             if result_string == "":
                 return "-1"
             else:
-                # print(f"原始 ASCII 码列表: {self.serial_number}")
-                # print(f"解码后的字符串: {result_string}")
+                # print(f"Original ASCII code list: {self.serial_number}")
+                # print(f"Decoded string: {result_string}")
                 return result_string
         except:
             return "-1"
@@ -449,16 +448,16 @@ class LinkerHandL10Can:
 
     def show_fun_table(self):
         # if len(data) != 8 or data[0] != 0x64:
-        #     raise ValueError("数据格式不正确")
+        #     raise ValueError("Data format is incorrect")
         data = self.version
         result = {
-            "自由度": data[0],
-            "机械版本": data[1],
-            "版本序号": data[2],
-            "手方向": chr(data[3]),  # ASCII 转字符
-            "软件版本": f"V{data[4] >> 4}.{data[4] & 0x0F}",
-            "硬件版本": f"V{data[5] >> 4}.{data[5] & 0x0F}",
-            "修订标志": data[6],
+            "Degrees of freedom": data[0],
+            "Mechanical version": data[1],
+            "Version index": data[2],
+            "Hand orientation": chr(data[3]),  # ASCII to character
+            "Software version": f"V{data[4] >> 4}.{data[4] & 0x0F}",
+            "Hardware version": f"V{data[5] >> 4}.{data[5] & 0x0F}",
+            "Revision flag": data[6],
             "set_position": "Y",
             "set_torque": "Y",
             "set_speed": "Y",
@@ -477,11 +476,11 @@ class LinkerHandL10Can:
         #print(tabulate(table, tablefmt="grid"), flush=True)
 
 
-    # # 示例数据
+    # # Example data
     # data = [0x64, 0x15, 0x03, 0x0A, 0x4C, 0x11, 0x22, 0x01]
     # parsed = parse_version_data(data)
 
-    # # 打印结果
+    # # Print result
     # for k, v in parsed.items():
     #     print(f"{k}: {v}")
 

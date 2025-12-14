@@ -19,7 +19,7 @@ from LinkerHand.core.linker_hand_l20_can import LinkerHandL20Can
 from LinkerHand.utils.load_write_yaml import LoadWriteYaml
 from LinkerHand.utils.color_msg import ColorMsg
 '''
-示例测试命令
+Example test command
 rosrun set_linker_hand_current set_linker_hand_current.py _hand_type:=right _current:=80
 '''
 class SetLinkerHandCurrent():
@@ -32,26 +32,26 @@ class SetLinkerHandCurrent():
 
     def set_hand_current(self):
         if self.hand_type == "left" and self.config['LINKER_HAND']['LEFT_HAND']['EXISTS']== True:
-            # 设置左手速度
+            # Set left hand speed
             if self.config['LINKER_HAND']['LEFT_HAND']['JOINT'] == "L20":
                 self.left_hand_can = LinkerHandL20Can(can_channel="can0", baudrate=1000000, can_id=0x28)
-                # 设置手速
+                # Set hand speed
                 self.left_hand_can.set_electric_current(self.current)
                 self.left_hand_current = self.left_hand_can.get_current()
-                ColorMsg(msg=f"左手L20电流阈值设置成功{self.left_hand_current}", color="green")
+                ColorMsg(msg=f"Left hand L20 current threshold set successfully: {self.left_hand_current}", color="green")
             elif self.config['LINKER_HAND']['LEFT_HAND']['JOINT'] == "L10":
-                ColorMsg(msg=f"L10暂时不能设置电流阈值", color="red")
+                ColorMsg(msg=f"L10 cannot set current threshold for now", color="red")
             
         if self.hand_type == "right" and self.config['LINKER_HAND']['RIGHT_HAND']['EXISTS'] == True:
-            # 设置右手速度
+            # Set right hand speed
             if self.config['LINKER_HAND']['RIGHT_HAND']['JOINT'] == "L20":
                 self.right_hand_can = LinkerHandL20Can(can_channel="can0", baudrate=1000000, can_id=0x27)
-                # 设置手速
+                # Set hand speed
                 self.right_hand_can.set_electric_current(self.current)
                 self.right_hand_current = self.right_hand_can.get_current()
-                ColorMsg(msg=f"右手L20电流阈值设置成功{self.right_hand_current}", color="green")
+                ColorMsg(msg=f"Right hand L20 current threshold set successfully: {self.right_hand_current}", color="green")
             elif self.config['LINKER_HAND']['RIGHT_HAND']['JOINT'] == "L10":
-                ColorMsg(msg=f"L10暂时不能设置电流阈值", color="red")
+                ColorMsg(msg=f"L10 cannot set current threshold for now", color="red")
 
 
 if __name__ == '__main__':
@@ -59,8 +59,8 @@ if __name__ == '__main__':
     rosrun set_linker_hand_current set_linker_hand_current.py _current:=60
     '''
     rospy.init_node('get_linker_hand_current', anonymous=True)
-    ColorMsg(msg=f"请勿将电流阈值设置过大，避免损坏电机。默认值为:42", color="yellow")
-    hand_type = rospy.get_param("~hand_type",default="left") # 设置哪只手的速度
-    current = rospy.get_param('~current', default=42)  # 默认获取全局参数
+    ColorMsg(msg=f"Do not set the current threshold too high to avoid damaging the motor. Default value is: 42", color="yellow")
+    hand_type = rospy.get_param("~hand_type",default="left") # Set which hand's speed
+    current = rospy.get_param('~current', default=42)  # Get global parameter by default
 
     lhc = SetLinkerHandCurrent(hand_type=hand_type,current=current)

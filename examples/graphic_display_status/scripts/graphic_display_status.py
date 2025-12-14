@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import rospy,rospkg
+import rospy, rospkg
 import signal
 from sensor_msgs.msg import JointState
 from std_msgs.msg import String
@@ -11,9 +11,10 @@ import threading
 import sys
 import os
 import subprocess
-from PyQt5.QtWidgets import QMainWindow, QSplitter, QApplication,QMessageBox,QPushButton
+from PyQt5.QtWidgets import QMainWindow, QSplitter, QApplication, QMessageBox, QPushButton
 from PyQt5.QtCore import Qt, QTimer
 from std_msgs.msg import Header, Float32MultiArray
+
 rospack = rospkg.RosPack()
 ros_linker_hand_sdk_path = rospack.get_path('linker_hand_sdk_ros')
 sys.path.append(ros_linker_hand_sdk_path + '/scripts')
@@ -34,48 +35,47 @@ class GraphicDisplayStatus:
         self.right_hand = True
         self.right_touch_type = 0
         try:
-            self.left_hand_msg = rospy.wait_for_message("/cb_left_hand_info",String,timeout=1)
+            self.left_hand_msg = rospy.wait_for_message("/cb_left_hand_info", String, timeout=1)
         except rospy.exceptions.ROSException:
-            rospy.logwarn("未能接收到/cb_left_hand_info话题消息")
+            rospy.logwarn("Failed to receive /cb_left_hand_info topic message")
             self.left_hand = False
-        
+
         try:
-            self.right_hand_msg = self.r = rospy.wait_for_message("/cb_right_hand_info",String,timeout=1)
+            self.right_hand_msg = self.r = rospy.wait_for_message("/cb_right_hand_info", String, timeout=1)
         except rospy.exceptions.ROSException:
-            rospy.logwarn("未能接收到/cb_right_hand_info话题消息")
+            rospy.logwarn("Failed to receive /cb_right_hand_info topic message")
             self.right_hand = False
         self._init_left_hand_info()
         self._init_right_hand_info()
-        #rospy.spin() # 如果开启则会阻塞GUI线程
-
+        # rospy.spin()  # If enabled, it will block the GUI thread
 
     def _init_left_hand_info(self):
-        '''初始化左手'''
+        """Initialize left hand"""
         if self.left_hand == True:
             self.left_hand_info = json.loads(self.left_hand_msg.data)
             self.left_hand_joint = self.left_hand_info["hand_joint"]
             self.left_hand_force = self.left_hand_info["is_touch"]
-            self.left_info_sub = rospy.Subscriber("/cb_left_hand_info",String,self.get_left_info_data,queue_size=1)
+            self.left_info_sub = rospy.Subscriber("/cb_left_hand_info", String, self.get_left_info_data, queue_size=1)
             if self.left_hand_force == True:
                 time.sleep(0.1)
                 self._init_left_hand_temperature_plot(hand_type="left")
-                self._init_left_hand_normal_force_plot(hand_type="left") # 法向压力波形图
+                self._init_left_hand_normal_force_plot(hand_type="left")  # Normal force waveform plot
                 if self.left_touch_type != 2:
-                    self._init_left_hand_approach_inc_plot(hand_type="left") # 接近感应波形图
+                    self._init_left_hand_approach_inc_plot(hand_type="left")  # Proximity sensing waveform plot
 
     def _init_right_hand_info(self):
-        '''初始化右手'''
+        """Initialize right hand"""
         if self.right_hand == True:
             self.right_hand_info = json.loads(self.right_hand_msg.data)
             self.right_hand_joint = self.right_hand_info["hand_joint"]
             self.right_hand_force = self.right_hand_info["is_touch"]
-            self.right_info_sub = rospy.Subscriber("/cb_right_hand_info",String,self.get_right_info_data,queue_size=1)
+            self.right_info_sub = rospy.Subscriber("/cb_right_hand_info", String, self.get_right_info_data, queue_size=1)
             if self.right_hand_force == True:
                 time.sleep(0.1)
                 self._init_right_hand_temperature_plot(hand_type="right")
-                self._init_right_hand_normal_force_plot(hand_type="right") # 法向压力波形图
+                self._init_right_hand_normal_force_plot(hand_type="right")  # Normal force waveform plot
                 if self.right_touch_type != 2:
-                    self._init_right_hand_approach_inc_plot(hand_type="right") # 接近感应波形图
+                    self._init_right_hand_approach_inc_plot(hand_type="right")  # Proximity sensing waveform plot
 
     def _init_left_hand_temperature_plot(self, hand_type="left"):
         if self.left_hand_joint == "L7":
@@ -84,14 +84,19 @@ class GraphicDisplayStatus:
             num_lines = 25
         else:
             num_lines = 10
-        # 初始化温度波形图
-        self.left_temperature_plot = TemperaturePlot(num_lines=num_lines, labels=None, title=f"{hand_type}手电机温度波形图")
+        # Initialize temperature waveform plot
+        self.left_temperature_plot = TemperaturePlot(
+            num_lines=num_lines,
+            labels=None,
+            title=f"{hand_type} hand motor temperature waveform"
+        )
         self.left_temperature_plot.setGeometry(700, 1000, 800, 700)
         self.left_temperature_plot.show()
         self.left_timer_left_temperature = QTimer()
         self.left_timer_left_temperature.timeout.connect(lambda: self.update_temperature_plot(hand_type=hand_type))
         self.left_timer_left_temperature.start(50)
-    # 右手温度
+
+    # Right hand temperature
     def _init_right_hand_temperature_plot(self, hand_type="right"):
         if self.right_hand_joint == "L7":
             num_lines = 7
@@ -99,26 +104,32 @@ class GraphicDisplayStatus:
             num_lines = 25
         else:
             num_lines = 10
-        # 初始化温度波形图
-        self.right_temperature_plot = TemperaturePlot(num_lines=num_lines, labels=None, title=f"{hand_type}手电机温度波形图")
+        # Initialize temperature waveform plot
+        self.right_temperature_plot = TemperaturePlot(
+            num_lines=num_lines,
+            labels=None,
+            title=f"{hand_type} hand motor temperature waveform"
+        )
         self.right_temperature_plot.setGeometry(700, 1000, 800, 700)
         self.right_temperature_plot.show()
         self.right_timer_left_temperature = QTimer()
         self.right_timer_left_temperature.timeout.connect(lambda: self.update_temperature_plot(hand_type=hand_type))
         self.right_timer_left_temperature.start(50)
-    # 更新温度波形图
+
+    # Update temperature waveform plot
     def update_temperature_plot(self, hand_type="left"):
         if hand_type == "left":
             try:
                 self.left_temperature_plot.update_data(self.left_motor_temperature)
             except:
-                ColorMsg(msg=f"左手{self.left_hand_joint}没有温度数据", color="yellow")
+                ColorMsg(msg=f"Left hand {self.left_hand_joint} has no temperature data", color="yellow")
         elif hand_type == "right":
             try:
                 self.right_temperature_plot.update_data(self.right_motor_temperature)
             except:
-                ColorMsg(msg=f"右手{self.right_hand_joint}没有温度数据", color="yellow")
-    # 更新温度数据
+                ColorMsg(msg=f"Right hand {self.right_hand_joint} has no temperature data", color="yellow")
+
+    # Update temperature data
     def get_left_info_data(self, msg):
         data = json.loads(msg.data)
         self.left_motor_temperature = list(data["motor_temperature"])
@@ -129,7 +140,7 @@ class GraphicDisplayStatus:
             touch = list(data["touch"])
             self.last_left_normal_force = touch[:5]
             self.last_left_approach_inc = touch[15:20]
-        
+
     def get_right_info_data(self, msg):
         data = json.loads(msg.data)
         self.right_motor_temperature = list(data["motor_temperature"])
@@ -140,7 +151,8 @@ class GraphicDisplayStatus:
             touch = list(data["touch"])
             self.last_right_normal_force = touch[:5]
             self.last_right_approach_inc = touch[15:20]
-    # 获取压感数据
+
+    # Get pressure sensing data
     # def get_left_force_data(self,force_data):
     #     data = force_data.data
     #     self.last_left_normal_force = data[:5]
@@ -150,70 +162,86 @@ class GraphicDisplayStatus:
     #     self.last_right_normal_force = data[:5]
     #     self.last_right_approach_inc = data[15:20]
 
-    # 初始化压感图形
-    def _init_left_hand_normal_force_plot(self, hand_type="left"): 
-        # 初始化波形图
-        self.left_normal_force_plot = WaveformPlot(num_lines=5, labels=["thumb","index finger","middle finger","ring finger","little finger"],title=f"{hand_type}法向压力波形图")
-        # 设置波形图位置
+    # Initialize pressure-sensing (normal force) plots
+    def _init_left_hand_normal_force_plot(self, hand_type="left"):
+        # Initialize waveform plot
+        self.left_normal_force_plot = WaveformPlot(
+            num_lines=5,
+            labels=["thumb", "index finger", "middle finger", "ring finger", "little finger"],
+            title=f"{hand_type} normal force waveform"
+        )
+        # Set waveform plot position
         self.left_normal_force_plot.setGeometry(700, 100, 800, 400)
         self.left_normal_force_plot.show()
         self.left_timer = QTimer()
-        #self.timer.timeout.connect(self.update_normal_force_plot)
+        # self.timer.timeout.connect(self.update_normal_force_plot)
         self.left_timer.timeout.connect(lambda: self.update_normal_force_plot(hand_type=hand_type))
         self.left_timer.start(50)
 
-    def _init_right_hand_normal_force_plot(self, hand_type="right"): 
-        # 初始化波形图
-        self.right_normal_force_plot = WaveformPlot(num_lines=5, labels=["thumb","index finger","middle finger","ring finger","little finger"],title=f"{hand_type}法向压力波形图")
-        # 设置波形图位置
+    def _init_right_hand_normal_force_plot(self, hand_type="right"):
+        # Initialize waveform plot
+        self.right_normal_force_plot = WaveformPlot(
+            num_lines=5,
+            labels=["thumb", "index finger", "middle finger", "ring finger", "little finger"],
+            title=f"{hand_type} normal force waveform"
+        )
+        # Set waveform plot position
         self.right_normal_force_plot.setGeometry(700, 100, 800, 400)
         self.right_normal_force_plot.show()
         self.right_timer = QTimer()
-        #self.timer.timeout.connect(self.update_normal_force_plot)
+        # self.timer.timeout.connect(self.update_normal_force_plot)
         self.right_timer.timeout.connect(lambda: self.update_normal_force_plot(hand_type=hand_type))
         self.right_timer.start(50)
 
-    # 初始化接近感应波形图
+    # Initialize proximity sensing waveform plot
     def _init_left_hand_approach_inc_plot(self, hand_type="left"):
-        # 初始化接近感应波形图
-        self.left_approach_inc_plot = WaveformPlot(num_lines=5, labels=["thumb","index finger","middle finger","ring finger","little finger"],title=f"{hand_type}接近感应波形图")
-        # 设置波形图位置
+        # Initialize proximity sensing waveform plot
+        self.left_approach_inc_plot = WaveformPlot(
+            num_lines=5,
+            labels=["thumb", "index finger", "middle finger", "ring finger", "little finger"],
+            title=f"{hand_type} proximity sensing waveform"
+        )
+        # Set waveform plot position
         self.left_approach_inc_plot.setGeometry(700, 600, 800, 400)
         self.left_approach_inc_plot.show()
         self.left_timer2 = QTimer()
-        #self.timer2.timeout.connect(self.update_approach_inc_plot)
+        # self.timer2.timeout.connect(self.update_approach_inc_plot)
         self.left_timer2.timeout.connect(lambda: self.update_approach_inc_plot(hand_type=hand_type))
         self.left_timer2.start(50)
+
     def _init_right_hand_approach_inc_plot(self, hand_type="right"):
-        # 初始化接近感应波形图
-        self.right_approach_inc_plot = WaveformPlot(num_lines=5, labels=["thumb","index finger","middle finger","ring finger","little finger"],title=f"{hand_type}接近感应波形图")
-        # 设置波形图位置
+        # Initialize proximity sensing waveform plot
+        self.right_approach_inc_plot = WaveformPlot(
+            num_lines=5,
+            labels=["thumb", "index finger", "middle finger", "ring finger", "little finger"],
+            title=f"{hand_type} proximity sensing waveform"
+        )
+        # Set waveform plot position
         self.right_approach_inc_plot.setGeometry(700, 600, 800, 400)
         self.right_approach_inc_plot.show()
         self.right_timer2 = QTimer()
-        #self.timer2.timeout.connect(self.update_approach_inc_plot)
+        # self.timer2.timeout.connect(self.update_approach_inc_plot)
         self.right_timer2.timeout.connect(lambda: self.update_approach_inc_plot(hand_type=hand_type))
         self.right_timer2.start(50)
 
-
-
-    # 更新法向压力波形图
+    # Update normal force waveform plot
     def update_normal_force_plot(self, hand_type="left"):
-        if hand_type=="left":
+        if hand_type == "left":
             data = self.last_left_normal_force
             self.left_normal_force_plot.update_data(data)
         elif hand_type == "right":
             data = self.last_right_normal_force
             self.right_normal_force_plot.update_data(data)
-    # 更新接近感应波形图
+
+    # Update proximity sensing waveform plot
     def update_approach_inc_plot(self, hand_type="left"):
         # converted_list = []
-        # # 遍历原始列表并进行转换
+        # # Iterate over original list and convert
         # for value in self.last_approach_inc:
-        #     # 由于值是从 255 递减到 0，所以 255 - value 就能得到 0 到 255 的范围
+        #     # Since the value decreases from 255 to 0, 255 - value gives a range from 0 to 255
         #     new_value = 255 - value
         #     converted_list.append(new_value)
-        if hand_type=="left":
+        if hand_type == "left":
             data = self.last_left_approach_inc
             self.left_approach_inc_plot.update_data(data)
         elif hand_type == "right":
@@ -221,27 +249,27 @@ class GraphicDisplayStatus:
             self.right_approach_inc_plot.update_data(data)
 
     def closeEvent(self, event):
-        # 关闭波形图窗口
-        if self.left_hand_force == True :
-            self.left_normal_force_plot.close() # 法向压力波形图
+        # Close waveform windows
+        if self.left_hand_force == True:
+            self.left_normal_force_plot.close()      # Normal force waveform plot
             self.left_temperature_plot.close()
-            self.left_approach_inc_plot.close() # 接近感应波形图
-        if self.right_hand_force == True :
-            self.right_approach_inc_plot.close() # 接近感应波形图
+            self.left_approach_inc_plot.close()      # Proximity sensing waveform plot
+        if self.right_hand_force == True:
+            self.right_approach_inc_plot.close()     # Proximity sensing waveform plot
             self.right_temperature_plot.close()
-            self.right_normal_force_plot.close() # 法向压力波形图
+            self.right_normal_force_plot.close()     # Normal force waveform plot
         sys.exit(0)
 
 
 def signal_handler(sig, frame):
-
     sys.exit(0)  # Exit the program normally
 
+
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, signal_handler)  # Ctrl+C
+    signal.signal(signal.SIGINT, signal_handler)   # Ctrl+C
     signal.signal(signal.SIGTERM, signal_handler)  # kill command
     app = QApplication(sys.argv)
     window = GraphicDisplayStatus()
-    #window.show()
-    
+    # window.show()
+
     sys.exit(app.exec_())

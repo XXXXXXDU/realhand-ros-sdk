@@ -8,9 +8,8 @@ from utils.color_msg import ColorMsg
 
 
 '''
-/cb_left_hand_info # 左手topic
-/cb_right_hand_info # 右手topic
-
+/cb_left_hand_info # Left hand topic
+/cb_right_hand_info # Right hand topic
 '''
 
 class GetLinkerHandSpeed():
@@ -27,15 +26,15 @@ class GetLinkerHandSpeed():
         rospy.Subscriber("/cb_right_hand_info", String, self.right_hand_cb, queue_size=1)
     def left_hand_cb(self,msg):
        data = json.loads(msg.data)
-       # 五指当前速度 [大拇指, 食指, 中指, 无名指, 小拇指]->[180, 250, 250, 250, 250]
+       # Five-finger current speed [Thumb, Index, Middle, Ring, Little]->[180, 250, 250, 250, 250]
        left_speed = data["right_hand"]["speed"]
-       ColorMsg(msg=f"当前左手五指速度为: {left_speed}", color="green")
+       ColorMsg(msg=f"Current left hand five-finger speed is: {left_speed}", color="green")
     
     def right_hand_cb(self, msg):
        data = json.loads(msg.data)
-       # 五指当前速度 [大拇指, 食指, 中指, 无名指, 小拇指]->[180, 250, 250, 250, 250]
+       # Five-finger current speed [Thumb, Index, Middle, Ring, Little]->[180, 250, 250, 250, 250]
        right_speed = data["right_hand"]["speed"]
-       ColorMsg(msg=f"当前右手五指速度为: {right_speed}", color="green")
+       ColorMsg(msg=f"Current right hand five-finger speed is: {right_speed}", color="green")
        
 
 
@@ -45,26 +44,26 @@ class GetLinkerHandSpeed():
         try:
             left_hand = rospy.wait_for_message("/cb_left_hand_info",String,timeout=0.1)
         except:
-            ColorMsg(msg="左手没有数据", color="yellow")
+            ColorMsg(msg="No data for left hand", color="yellow")
         try:
             right_hand = rospy.wait_for_message("/cb_right_hand_info",String,timeout=0.1)
         except:
-            ColorMsg(msg="右手没有数据", color="yellow")
+            ColorMsg(msg="No data for right hand", color="yellow")
         if left_hand != None:
             data = json.loads(left_hand.data)
-            # 五指当前速度 [大拇指, 食指, 中指, 无名指, 小拇指]->[180, 250, 250, 250, 250]
+            # Five-finger current speed [Thumb, Index, Middle, Ring, Little]->[180, 250, 250, 250, 250]
             left_speed = data["right_hand"]["speed"]
-            ColorMsg(msg=f"当前左手五指速度为: {left_speed}", color="green")
+            ColorMsg(msg=f"Current left hand five-finger speed is: {left_speed}", color="green")
         if right_hand != None:
             data = json.loads(right_hand.data)
-            # 五指当前速度 [大拇指, 食指, 中指, 无名指, 小拇指]->[180, 250, 250, 250, 250]
+            # Five-finger current speed [Thumb, Index, Middle, Ring, Little]->[180, 250, 250, 250, 250]
             right_speed = data["right_hand"]["speed"]
-            ColorMsg(msg=f"当前右手五指速度为: {right_speed}", color="green")
+            ColorMsg(msg=f"Current right hand five-finger speed is: {right_speed}", color="green")
     
 
 
 if __name__ == '__main__':
     rospy.init_node('get_linker_hand_speed', anonymous=True)
-    loop = rospy.get_param('~loop', default=True)  # 默认获取全局参数
+    loop = rospy.get_param('~loop', default=True)  # Get global parameter by default
     gh = GetLinkerHandSpeed(loop=loop)
     

@@ -1,57 +1,57 @@
 release_3.0.1
-1、支持L6\L10灵巧手 RS485通讯
-2、重构ROS层逻辑。
+1. Support L6\L10 dexterous hand RS485 communication
+2. Refactor ROS layer logic.
 
 release_2.2.4
-1、支持G20灵巧手
+1. Support G20 dexterous hand
 
 release_2.2.3
-1、支持O6灵巧手 RS485通讯
-2、更新GUI控制界面
+1. Support O6 dexterous hand RS485 communication
+2. Update GUI control interface
 
 release_2.1.9
-1、支持O6灵巧手
+1. Support O6 dexterous hand
 
 release_2.1.8
-1、修复偶发撞帧问题
+1. Fix occasional frame collision issue
 
 release_2.1.7
-1、修复一些已知问题
-
-release_2.1.6
-1、支持L7最新版本
+1. Fix some known issues
+_2.1.6
+1. Support the latest version of L7
 
 
 release_2.1.4
-1、支持L7、L10、L20、L21矩阵压力传感器
-2、支持同型号双手控制
-3、GUI可同时控制双手
+1. Support L7, L10, L20, L21 matrix pressure sensors
+2. Support dual-hand control for the same model
+3. GUI can control both hands simultaneously
 
 release_2.1.2
-1、支持L10新传感器
+1. Support new L10 sensor
 
 
 release_2.1.0
-1、新增L21
-2、新增第二版压力传感器
-3、新增左右双手控制
+1. Add L21
+2. Add second version of pressure sensor
+3. Add left and right dual-hand control
 
 
 release_2.0.2
-1、支持L7/O7/L10/O10/L20/O20/L25/O25/T25版本灵巧手
-2、支持动捕手套发布的实时速度
-3、支持获取所有压感数据
-4、支持设置手指速度
-5、支持设置最大扭矩
-6、支持L20设置电流 L7/L10/L25暂不支持
-7、支持获取版本
-8、支持获取L20设置电流 L7/L10/L25暂不支持
-9、支持获取当前关节状态
-10、支持获取当前速度
-11、支持获取当前最大扭矩
-12、支持获取电机当前温度
-13、支持获取电机故障码
-14、支持L20清除电机故障码 L7/L10/L25暂不支持
-15、支持L25设置电机使能 L7/L10/L20暂不支持
-16、支持L25设置电机失能 L7/L10/L20暂不支持
-17、支持L10&L20范围转弧度和弧度topic带有控制速度
+1. Support L7/O7/L10/O10/L20/O20/L25/O25/T25 version dexterous hands
+2. Support real-time speed published by motion capture gloves
+3. Support getting all pressure-sensitive data
+4. Support setting finger speed
+5. Support setting maximum torque
+6. Support setting current for L20; L7/L10/L25 are not currently supported
+7. Support getting version
+8. Support getting L20 setting current; L7/L10/L25 are not currently supported
+9. Support getting current joint status
+10. Support getting current speed
+11. Support getting current maximum torque
+12. Support getting current motor temperature
+13. Support getting motor fault code
+14. Support clearing motor fault code for L20; L7/L_10/L25 are not currently supported
+15. Support setting motor enable for L25; L7/L10/L20 are not currently supported
+16. Support setting motor disable for L25; L7/L10/L20 are not currently supported
+17. Support L10 & L20 range-to-radian and radian topic with speed control
+

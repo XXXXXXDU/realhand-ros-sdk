@@ -11,16 +11,16 @@ if __name__ == '__main__':
     rosrun set_linker_hand_speed set_linker_hand_speed.py _hand_type:=right _speed:="[100,100,100,100,100]"
     '''
     rospy.init_node('get_linker_hand_speed', anonymous=True)
-    hand_type = rospy.get_param("~hand_type",default="left") # 设置哪只手的速度
-    speed = rospy.get_param('~speed', default=[255,255,255,255,255])  # 默认获取全局参数  O6为6个值，L7为7个值，其他为5个值
+    hand_type = rospy.get_param("~hand_type",default="left") # Set which hand's speed
+    speed = rospy.get_param('~speed', default=[255,255,255,255,255])  # Get global parameters by default. O6 has 6 values, L7 has 7 values, others have 5 values.
 
     pub = rospy.Publisher("/cb_hand_setting_cmd",String,queue_size=10)
-    msg = String()  #创建 msg 对象
-    count = 0  #计数器 
-    # 设置循环频率
+    msg = String()  # Create msg object
+    count = 0  # counter
+    # Set loop frequency
     rate = rospy.Rate(1)
     while not rospy.is_shutdown():
-        # 由于ROS1 单发topic有可能丢失，这里循环发3次避免丢失
+        # Since a single topic publish in ROS1 might be lost, loop 3 times to avoid loss
         dic = {
             "setting_cmd":"set_speed",
             "params":{
@@ -28,12 +28,12 @@ if __name__ == '__main__':
                 "speed":speed
             }
         }
-        #拼接字符串
+        # Concatenate string
         msg.data = json.dumps(dic)
 
         pub.publish(msg)
         rate.sleep()
-        rospy.loginfo("写出的数据:%s",msg.data)
+        rospy.loginfo("Data written: %s",msg.data)
         count += 1
         if count > 2:
             break

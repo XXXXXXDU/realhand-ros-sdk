@@ -9,9 +9,8 @@ from utils.color_msg import ColorMsg
 
 
 '''
-/cb_left_hand_info # 左手topic
-/cb_right_hand_info # 右手topic
-
+/cb_left_hand_info # Left hand topic
+/cb_right_hand_info # Right hand topic
 '''
 
 class GetLinkerHandCurrent():
@@ -28,15 +27,15 @@ class GetLinkerHandCurrent():
         rospy.Subscriber("/cb_right_hand_info", String, self.right_hand_cb, queue_size=1)
     def left_hand_cb(self,msg):
        data = json.loads(msg.data)
-       # 五指当前电流 [大拇指, 食指, 中指, 无名指, 小拇指]->[42, 42, 42, 42, 42]
+       # Five-finger current [Thumb, Index, Middle, Ring, Little]->[42, 42, 42, 42, 42]
        left_current = data["current"]
-       ColorMsg(msg=f"当前左手五指电流为: {left_current}", color="green")
+       ColorMsg(msg=f"Current left hand five-finger current is: {left_current}", color="green")
     
     def right_hand_cb(self, msg):
        data = json.loads(msg.data)
-       # 五指当前电流 [大拇指, 食指, 中指, 无名指, 小拇指]->[42, 42, 42, 42, 42]
+       # Five-finger current [Thumb, Index, Middle, Ring, Little]->[42, 42, 42, 42, 42]
        right_current = data["current"]
-       ColorMsg(msg=f"当前右手五指电流为: {right_current}", color="green")
+       ColorMsg(msg=f"Current right hand five-finger current is: {right_current}", color="green")
        
 
 
@@ -46,26 +45,26 @@ class GetLinkerHandCurrent():
         try:
             left_hand = rospy.wait_for_message("/cb_left_hand_info",String,timeout=0.1)
         except:
-            ColorMsg(msg="左手没有数据", color="yellow")
+            ColorMsg(msg="No data for left hand", color="yellow")
         try:
             right_hand = rospy.wait_for_message("/cb_right_hand_info",String,timeout=0.1)
         except:
-            ColorMsg(msg="右手没有数据", color="yellow")
+            ColorMsg(msg="No data for right hand", color="yellow")
         if left_hand != None:
             data = json.loads(left_hand.data)
-            # 五指当前电流 [大拇指, 食指, 中指, 无名指, 小拇指]->[42, 42, 42, 42, 42]
+            # Five-finger current [Thumb, Index, Middle, Ring, Little]->[42, 42, 42, 42, 42]
             left_current = data["current"]
-            ColorMsg(msg=f"当前左手五指电流为: {left_current}", color="green")
+            ColorMsg(msg=f"Current left hand five-finger current is: {left_current}", color="green")
         if right_hand != None:
             data = json.loads(right_hand.data)
-            # 五指当前电流 [大拇指, 食指, 中指, 无名指, 小拇指]->[42, 42, 42, 42, 42]
+            # Five-finger current [Thumb, Index, Middle, Ring, Little]->[42, 42, 42, 42, 42]
             right_current = data["current"]
-            ColorMsg(msg=f"当前右手五指电流为: {right_current}", color="green")
+            ColorMsg(msg=f"Current right hand five-finger current is: {right_current}", color="green")
     
 
 
 if __name__ == '__main__':
     rospy.init_node('get_linker_hand_current', anonymous=True)
-    loop = rospy.get_param('~loop', default=True)  # 默认获取全局参数
+    loop = rospy.get_param('~loop', default=True)  # Get global parameter by default
     gh = GetLinkerHandCurrent(loop=loop)
     

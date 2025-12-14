@@ -3,9 +3,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 
 global package_path
-# 创建 rospkg.RosPack 对象
+# Create rospkg.RosPack object
 rospack = rospkg.RosPack()
-# 获取指定包的路径
+# Get the path of the specified package
 package_sdk = "linker_hand_sdk_ros"
 package_gui = "gui_control"
 sdk_path = rospack.get_path(package_sdk)
@@ -55,7 +55,7 @@ class LoadWriteYaml():
                     self.action_yaml = yaml_data["RIGHT_HAND"]
         except Exception as e:
             self.action_yaml = None
-            print(f"yaml配置文件不存在: {e}")
+            print(f"yaml configuration file does not exist: {e}")
         return self.action_yaml 
 
     def write_to_yaml(self, action_name, action_pos,hand_joint="",hand_type=""):

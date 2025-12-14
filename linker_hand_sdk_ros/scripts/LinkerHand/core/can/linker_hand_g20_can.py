@@ -9,150 +9,150 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 target_dir = os.path.abspath(os.path.join(current_dir, ".."))
 sys.path.append(target_dir)
 """
-拇指41: [拇指侧摆, 拇指横摆, 拇指根部, 预留, 预留, 拇指尖部]
-食指42: [食指侧摆, 预留, 食指根部, 预留, 预留, 食指末端]
-中指43: [中指侧摆, 预留, 中指根部, 预留, 预留, 中指末端]
-无名指44: [无名指侧摆, 预留, 无名指根部, 预留, 预留, 无名指末端]
-小指45: [小指侧摆, 预留, 小指根部, 预留, 预留, 小指末端]
+Thumb 41:  [thumb_abduction, thumb_roll, thumb_root, reserved, reserved, thumb_tip]
+Index 42:  [index_abduction, reserved, index_root, reserved, reserved, index_tip]
+Middle 43: [middle_abduction, reserved, middle_root, reserved, reserved, middle_tip]
+Ring 44:   [ring_abduction, reserved, ring_root, reserved, reserved, ring_tip]
+Little 45: [little_abduction, reserved, little_root, reserved, reserved, little_tip]
 """
 CMD_MAP = [
-    "拇指根部", 
-    "食指根部", 
-    "中指根部", 
-    "无名指根部",
-    "小指根部",
-    "拇指侧摆",
-    "食指侧摆",
-    "中指侧摆",
-    "无名指侧摆",
-    "小指侧摆",
-    "拇指横摆",
-    "预留",
-    "预留",
-    "预留",
-    "预留",
-    "拇指尖部",
-    "食指末端",
-    "中指末端",
-    "无名指末端",
-    "小指末端"
+    "thumb_root",
+    "index_root",
+    "middle_root",
+    "ring_root",
+    "little_root",
+    "thumb_abduction",
+    "index_abduction",
+    "middle_abduction",
+    "ring_abduction",
+    "little_abduction",
+    "thumb_roll",
+    "reserved",
+    "reserved",
+    "reserved",
+    "reserved",
+    "thumb_tip",
+    "index_tip",
+    "middle_tip",
+    "ring_tip",
+    "little_tip"
 ]
 
 class FrameProperty(Enum):
-    # 手指运动控制 - 并联型控制指令（控制所有手指同一关节）
-    ROLL_POS = 0x01  # 横滚关节位置
-    YAW_POS = 0x02  # 航向关节位置
-    ROOT1_POS = 0x03  # 指根1关节位置
-    ROOT2_POS = 0x04  # 指根2关节位置
-    ROOT3_POS = 0x05  # 指根3关节位置
-    TIP_POS = 0x06  # 指尖关节位置
+    # Finger motion control - parallel control commands (control the same joint of all fingers)
+    ROLL_POS = 0x01  # Roll joint position
+    YAW_POS = 0x02  # Yaw joint position
+    ROOT1_POS = 0x03  # Root joint 1 position
+    ROOT2_POS = 0x04  # Root joint 2 position
+    ROOT3_POS = 0x05  # Root joint 3 position
+    TIP_POS = 0x06  # Fingertip joint position
     
-    # 关节速度指令
-    ROLL_SPEED = 0x09  # 横滚关节速度
-    YAW_SPEED = 0x0A  # 航向关节速度
-    ROOT1_SPEED = 0x0B  # 指根1关节速度
-    ROOT2_SPEED = 0x0C  # 指根2关节速度
-    ROOT3_SPEED = 0x0D  # 指根3关节速度
-    TIP_SPEED = 0x0E  # 指尖关节速度
+    # Joint speed commands
+    ROLL_SPEED = 0x09  # Roll joint speed
+    YAW_SPEED = 0x0A  # Yaw joint speed
+    ROOT1_SPEED = 0x0B  # Root joint 1 speed
+    ROOT2_SPEED = 0x0C  # Root joint 2 speed
+    ROOT3_SPEED = 0x0D  # Root joint 3 speed
+    TIP_SPEED = 0x0E  # Fingertip joint speed
     
-    # 关节扭矩指令
-    ROLL_TORQUE = 0x11  # 横滚关节扭矩
-    YAW_TORQUE = 0x12  # 航向关节扭矩
-    ROOT1_TORQUE = 0x13  # 指根1关节扭矩
-    ROOT2_TORQUE = 0x14  # 指根2关节扭矩
-    ROOT3_TORQUE = 0x15  # 指根3关节扭矩
-    TIP_TORQUE = 0x16  # 指尖关节扭矩
+    # Joint torque commands
+    ROLL_TORQUE = 0x11  # Roll joint torque
+    YAW_TORQUE = 0x12  # Yaw joint torque
+    ROOT1_TORQUE = 0x13  # Root joint 1 torque
+    ROOT2_TORQUE = 0x14  # Root joint 2 torque
+    ROOT3_TORQUE = 0x15  # Root joint 3 torque
+    TIP_TORQUE = 0x16  # Fingertip joint torque
     
-    # 关节故障码
-    ROLL_FAULT = 0x19  # 横滚关节故障码
-    YAW_FAULT = 0x1A  # 航向关节故障码
-    ROOT1_FAULT = 0x1B  # 指根1关节故障码
-    ROOT2_FAULT = 0x1C  # 指根2关节故障码
-    ROOT3_FAULT = 0x1D  # 指根3关节故障码
-    TIP_FAULT = 0x1E  # 指尖关节故障码
+    # Joint fault codes
+    ROLL_FAULT = 0x19  # Roll joint fault code
+    YAW_FAULT = 0x1A  # Yaw joint fault code
+    ROOT1_FAULT = 0x1B  # Root joint 1 fault code
+    ROOT2_FAULT = 0x1C  # Root joint 2 fault code
+    ROOT3_FAULT = 0x1D  # Root joint 3 fault code
+    TIP_FAULT = 0x1E  # Fingertip joint fault code
     
-    # 关节温度
-    ROLL_TEMPERATURE = 0x21  # 横滚关节过温保护阈值
-    YAW_TEMPERATURE = 0x22  # 航向关节过温保护阈值
-    ROOT1_TEMPERATURE = 0x23  # 指根1关节过温保护阈值
-    ROOT2_TEMPERATURE = 0x24  # 指根2关节过温保护阈值
-    ROOT3_TEMPERATURE = 0x25  # 指根3关节过温保护阈值
-    TIP_TEMPERATURE = 0x26  # 指尖关节过温保护阈值
+    # Joint temperature
+    ROLL_TEMPERATURE = 0x21  # Roll joint over-temperature protection threshold
+    YAW_TEMPERATURE = 0x22  # Yaw joint over-temperature protection threshold
+    ROOT1_TEMPERATURE = 0x23  # Root joint 1 over-temperature protection threshold
+    ROOT2_TEMPERATURE = 0x24  # Root joint 2 over-temperature protection threshold
+    ROOT3_TEMPERATURE = 0x25  # Root joint 3 over-temperature protection threshold
+    TIP_TEMPERATURE = 0x26  # Fingertip joint over-temperature protection threshold
     
-    # 手指运动控制 - 串联型控制指令（控制同一手指所有关节）
-    THUMB_POS = 0x41  # 大拇指指关节位置
-    INDEX_POS = 0x42  # 食指关节位置
-    MIDDLE_POS = 0x43  # 中指关节位置
-    RING_POS = 0x44  # 无名指关节位置
-    LITTLE_POS = 0x45  # 小拇指关节位置
+    # Finger motion control - serial control commands (control all joints of the same finger)
+    THUMB_POS = 0x41  # Thumb joint position
+    INDEX_POS = 0x42  # Index finger joint position
+    MIDDLE_POS = 0x43  # Middle finger joint position
+    RING_POS = 0x44  # Ring finger joint position
+    LITTLE_POS = 0x45  # Little finger joint position
     
-    # 手指速度
-    THUMB_SPEED = 0x49  # 大拇指速度
-    INDEX_SPEED = 0x4A  # 食指速度
-    MIDDLE_SPEED = 0x4B  # 中指速度
-    RING_SPEED = 0x4C  # 无名指速度
-    LITTLE_SPEED = 0x4D  # 小拇指速度
+    # Finger speed
+    THUMB_SPEED = 0x49  # Thumb speed
+    INDEX_SPEED = 0x4A  # Index finger speed
+    MIDDLE_SPEED = 0x4B  # Middle finger speed
+    RING_SPEED = 0x4C  # Ring finger speed
+    LITTLE_SPEED = 0x4D  # Little finger speed
     
-    # 手指扭矩
-    THUMB_TORQUE = 0x51  # 大拇指扭矩
-    INDEX_TORQUE = 0x52  # 食指扭矩
-    MIDDLE_TORQUE = 0x53  # 中指扭矩
-    RING_TORQUE = 0x54  # 无名指扭矩
-    LITTLE_TORQUE = 0x55  # 小拇指扭矩
+    # Finger torque
+    THUMB_TORQUE = 0x51  # Thumb torque
+    INDEX_TORQUE = 0x52  # Index finger torque
+    MIDDLE_TORQUE = 0x53  # Middle finger torque
+    RING_TORQUE = 0x54  # Ring finger torque
+    LITTLE_TORQUE = 0x55  # Little finger torque
     
-    # 手指故障码
-    THUMB_FAULT = 0x59  # 大拇指故障码
-    INDEX_FAULT = 0x5A  # 食指故障码
-    MIDDLE_FAULT = 0x5B  # 中指故障码
-    RING_FAULT = 0x5C  # 无名指故障码
-    LITTLE_FAULT = 0x5D  # 小拇指故障码
+    # Finger fault codes
+    THUMB_FAULT = 0x59  # Thumb fault code
+    INDEX_FAULT = 0x5A  # Index finger fault code
+    MIDDLE_FAULT = 0x5B  # Middle finger fault code
+    RING_FAULT = 0x5C  # Ring finger fault code
+    LITTLE_FAULT = 0x5D  # Little finger fault code
     
-    # 手指温度
-    THUMB_TEMPERATURE = 0x61  # 大拇指过温保护阈值
-    INDEX_TEMPERATURE = 0x62  # 食指过温保护阈值
-    MIDDLE_TEMPERATURE = 0x63  # 中指过温保护阈值
-    RING_TEMPERATURE = 0x64  # 无名指过温保护阈值
-    LITTLE_TEMPERATURE = 0x65  # 小拇指过温保护阈值
+    # Finger temperature
+    THUMB_TEMPERATURE = 0x61  # Thumb over-temperature protection threshold
+    INDEX_TEMPERATURE = 0x62  # Index finger over-temperature protection threshold
+    MIDDLE_TEMPERATURE = 0x63  # Middle finger over-temperature protection threshold
+    RING_TEMPERATURE = 0x64  # Ring finger over-temperature protection threshold
+    LITTLE_TEMPERATURE = 0x65  # Little finger over-temperature protection threshold
     
-    # 手指运动控制 - 合并指令区域
-    FINGER_SPEED = 0x81  # 设置手指速度
-    FINGER_TORQUE = 0x82  # 设置手指输出扭矩
-    FINGER_FAULT = 0x83  # 清除手指故障及故障码
-    FINGER_TEMPERATURE = 0x84  # 手指各关节温度
+    # Finger motion control - combined command area
+    FINGER_SPEED = 0x81  # Set finger speed
+    FINGER_TORQUE = 0x82  # Set finger output torque
+    FINGER_FAULT = 0x83  # Clear finger faults and fault codes
+    FINGER_TEMPERATURE = 0x84  # Finger joint temperatures
     
-    # 指尖传感器数据
-    HAND_NORMAL_FORCE = 0x90  # 五指法向压力
-    HAND_TANGENTIAL_FORCE = 0x91  # 五指切向压力
-    HAND_TANGENTIAL_FORCE_DIR = 0x92  # 五指切向方向
-    HAND_APPROACH_INC = 0x93  # 五指接近感应
+    # Fingertip sensor data
+    HAND_NORMAL_FORCE = 0x90  # Normal force of five fingers
+    HAND_TANGENTIAL_FORCE = 0x91  # Tangential force of five fingers
+    HAND_TANGENTIAL_FORCE_DIR = 0x92  # Tangential direction of five fingers
+    HAND_APPROACH_INC = 0x93  # Approach sensing of five fingers
     
-    # 手指所有数据
-    THUMB_ALL_DATA = 0x98  # 大拇指所有数据
-    INDEX_ALL_DATA = 0x99  # 食指所有数据
-    MIDDLE_ALL_DATA = 0x9A  # 中指所有数据
-    RING_ALL_DATA = 0x9B  # 无名指所有数据
-    LITTLE_ALL_DATA = 0x9C  # 小拇指所有数据
+    # All finger data
+    THUMB_ALL_DATA = 0x98  # Thumb all data
+    INDEX_ALL_DATA = 0x99  # Index finger all data
+    MIDDLE_ALL_DATA = 0x9A  # Middle finger all data
+    RING_ALL_DATA = 0x9B  # Ring finger all data
+    LITTLE_ALL_DATA = 0x9C  # Little finger all data
     
-    # 触觉传感器
-    TOUCH_SENSOR_TYPE = 0xB0  # 触觉传感器类型
-    THUMB_TOUCH = 0xB1  # 大拇指触觉传感
-    INDEX_TOUCH = 0xB2  # 食指触觉传感
-    MIDDLE_TOUCH = 0xB3  # 中指触觉传感
-    RING_TOUCH = 0xB4  # 无名指触觉传感
-    LITTLE_TOUCH = 0xB5  # 小拇指触觉传感
-    PALM_TOUCH = 0xB6  # 手掌指触觉传感
+    # Tactile sensors
+    TOUCH_SENSOR_TYPE = 0xB0  # Tactile sensor type
+    THUMB_TOUCH = 0xB1  # Thumb tactile sensing
+    INDEX_TOUCH = 0xB2  # Index finger tactile sensing
+    MIDDLE_TOUCH = 0xB3  # Middle finger tactile sensing
+    RING_TOUCH = 0xB4  # Ring finger tactile sensing
+    LITTLE_TOUCH = 0xB5  # Little finger tactile sensing
+    PALM_TOUCH = 0xB6  # Palm tactile sensing
     
-    # 查询指令
-    HAND_UID_GET = 0xC0  # 唯一标识码查询
-    HAND_HARDWARE_VERSION_GET = 0xC1  # 硬件版本查询
-    HAND_SOFTWARE_VERSION_GET = 0xC2  # 软件版本查询
-    HAND_COMM_ID_GET = 0xC3  # 设备id查询
-    HAND_STRUCT_VERSION_GET = 0xC4  # 结构版本号查询
+    # Query commands
+    HAND_UID_GET = 0xC0  # Unique identifier query
+    HAND_HARDWARE_VERSION_GET = 0xC1  # Hardware version query
+    HAND_SOFTWARE_VERSION_GET = 0xC2  # Software version query
+    HAND_COMM_ID_GET = 0xC3  # Device ID query
+    HAND_STRUCT_VERSION_GET = 0xC4  # Structure version query
     
-    # 出厂指令
-    HOST_CMD_HAND_ERASE_POS_CALI = 0xCD  # 擦除位置校准值
-    HAND_COMM_ID_SET = 0xD1  # 通信ID设置
-    HAND_UID_SET = 0xF0  # 唯一标识码设置
+    # Factory commands
+    HOST_CMD_HAND_ERASE_POS_CALI = 0xCD  # Erase position calibration values
+    HAND_COMM_ID_SET = 0xD1  # Communication ID setting
+    HAND_UID_SET = 0xF0  # Unique identifier setting
 
 class LinkerHandG20Can:
     def __init__(self, can_channel='can0', baudrate=1000000, can_id=0x28, yaml=""):
@@ -163,37 +163,37 @@ class LinkerHandG20Can:
 
         self.running = True
         
-        # 初始化数据存储变量
+        # Last command cache
         self.last_thumb_pos, self.last_index_pos, self.last_ring_pos, self.last_middle_pos, self.last_little_pos = None, None, None, None, None
         self.last_root1, self.last_yaw, self.last_roll, self.last_root2, self.last_tip = None, None, None, None, None
         
-        # 并联控制数据存储
+        # Parallel control data storage
         self.x01, self.x02, self.x03, self.x04, self.x05, self.x06 = [], [], [], [], [], []
         self.x09, self.x0A, self.x0B, self.x0C, self.x0D, self.x0E = [], [], [], [], [], []
         self.x11, self.x12, self.x13, self.x14, self.x15, self.x16 = [], [], [], [], [], []
         self.x19, self.x1A, self.x1B, self.x1C, self.x1D, self.x1E = [], [], [], [], [], []
         self.x21, self.x22, self.x23, self.x24, self.x25, self.x26 = [], [], [], [], [], []
         
-        # 串联控制数据存储
+        # Serial control data storage
         self.x41, self.x42, self.x43, self.x44, self.x45 = [], [], [], [], []
         self.x49, self.x4A, self.x4B, self.x4C, self.x4D = [0] * 6, [0] * 6, [0] * 6, [0] * 6, [0] * 6
         self.x51, self.x52, self.x53, self.x54, self.x55 = [], [], [], [], []
         self.x59, self.x5A, self.x5B, self.x5C, self.x5D = [], [], [], [], []
         self.x61, self.x62, self.x63, self.x64, self.x65 = [], [], [], [], []
         
-        # 合并指令区域数据存储
+        # Combined command area data storage
         self.x81, self.x82, self.x83, self.x84 = [], [], [], []
         
-        # 传感器数据存储
+        # Sensor data storage
         self.x90, self.x91, self.x92, self.x93 = [], [], [], []
         self.x98, self.x99, self.x9A, self.x9B, self.x9C = [], [], [], [], []
         self.xB0, self.xB1, self.xB2, self.xB3, self.xB4, self.xB5, self.xB6 = [], [], [], [], [], [], []
         self.normal_force, self.tangential_force, self.tangential_force_dir, self.approach_inc = [[-1] * 5 for _ in range(4)]
         
-        # 查询指令数据存储
+        # Query command data storage
         self.xC0, self.xC1, self.xC2, self.xC3, self.xC4 = [], [], [], [], []
         
-        # 触觉传感器矩阵数据
+        # Tactile sensor matrix data
         self.thumb_matrix = np.full((12, 6), -1)
         self.index_matrix = np.full((12, 6), -1)
         self.middle_matrix = np.full((12, 6), -1)
@@ -204,7 +204,7 @@ class LinkerHandG20Can:
             96: 6, 112: 7, 128: 8, 144: 9, 160: 10, 176: 11,
         }
         
-        # 初始化 CAN 总线
+        # Initialize CAN bus
         try:
             if sys.platform == "linux":
                 self.bus = can.interface.Bus(
@@ -221,16 +221,16 @@ class LinkerHandG20Can:
         except:
             print("Please insert CAN device")
 
-        # 启动接收线程
+        # Start receive thread
         self.receive_thread = threading.Thread(target=self.receive_response)
         self.receive_thread.daemon = True
         self.receive_thread.start()
 
     def send_command(self, frame_property, data_list, sleep_time=0.003):
         """
-        发送指令到CAN总线
-        :param frame_property: 数据帧属性
-        :param data_list: 数据载荷
+        Send command to CAN bus
+        :param frame_property: Data frame property
+        :param data_list: Data payload
         """
         frame_property_value = int(frame_property.value) if hasattr(frame_property, 'value') else frame_property
         data = [frame_property_value] + [int(val) for val in data_list]
@@ -251,7 +251,7 @@ class LinkerHandG20Can:
 
     def receive_response(self):
         """
-        接收并处理CAN总线响应消息
+        Receive and process CAN bus response messages
         """
         while self.running:
             try:
@@ -263,13 +263,13 @@ class LinkerHandG20Can:
 
     def process_response(self, msg):
         """
-        处理CAN响应消息
+        Process CAN response messages
         """
         if msg.arbitration_id == self.can_id:
             frame_type = msg.data[0]
             response_data = msg.data[1:]
             
-            # 并联控制指令响应
+            # Parallel control command responses
             if frame_type == 0x01: self.x01 = list(response_data)
             elif frame_type == 0x02: self.x02 = list(response_data)
             elif frame_type == 0x03: self.x03 = list(response_data)
@@ -301,7 +301,7 @@ class LinkerHandG20Can:
             elif frame_type == 0x25: self.x25 = list(response_data)
             elif frame_type == 0x26: self.x26 = list(response_data)
             
-            # 串联控制指令响应
+            # Serial control command responses
             elif frame_type == 0x41: self.x41 = list(response_data)
             elif frame_type == 0x42: self.x42 = list(response_data)
             elif frame_type == 0x43: self.x43 = list(response_data)
@@ -328,13 +328,13 @@ class LinkerHandG20Can:
             elif frame_type == 0x64: self.x64 = list(response_data)
             elif frame_type == 0x65: self.x65 = list(response_data)
             
-            # 合并指令区域响应
+            # Combined command area responses
             elif frame_type == 0x81: self.x81 = list(response_data)
             elif frame_type == 0x82: self.x82 = list(response_data)
             elif frame_type == 0x83: self.x83 = list(response_data)
             elif frame_type == 0x84: self.x84 = list(response_data)
             
-            # 传感器数据响应
+            # Sensor data responses
             elif frame_type == 0x90: self.x90 = list(response_data)
             elif frame_type == 0x91: self.x91 = list(response_data)
             elif frame_type == 0x92: self.x92 = list(response_data)
@@ -345,7 +345,7 @@ class LinkerHandG20Can:
             elif frame_type == 0x9B: self.x9B = list(response_data)
             elif frame_type == 0x9C: self.x9C = list(response_data)
             
-            # 触觉传感器响应
+            # Tactile sensor responses
             elif frame_type == 0xB0: self.xB0 = list(response_data)
             elif frame_type == 0xB1:
                 d = list(response_data)
@@ -390,342 +390,346 @@ class LinkerHandG20Can:
                         self.little_matrix[index] = d[1:]
             elif frame_type == 0xB6: self.xB6 = list(response_data)
             
-            # 查询指令响应
+            # Query command responses
             elif frame_type == 0xC0: self.xC0 = list(response_data)
             elif frame_type == 0xC1: self.xC1 = list(response_data)
             elif frame_type == 0xC2: self.xC2 = list(response_data)
             elif frame_type == 0xC3: self.xC3 = list(response_data)
             elif frame_type == 0xC4: self.xC4 = list(response_data)
 
-    # 并联控制指令方法
+    # Parallel control methods
     def set_roll_positions(self, joint_ranges):
-        """设置所有手指横滚关节位置"""
+        """Set roll joint positions of all fingers"""
         self.send_command(FrameProperty.ROLL_POS, joint_ranges)
     
     def set_yaw_positions(self, joint_ranges):
-        """设置所有手指航向关节位置"""
+        """Set yaw joint positions of all fingers"""
         self.send_command(FrameProperty.YAW_POS, joint_ranges)
     
     def set_root1_positions(self, joint_ranges):
-        """设置所有手指指根1关节位置"""
+        """Set root joint 1 positions of all fingers"""
         self.send_command(FrameProperty.ROOT1_POS, joint_ranges)
     
     def set_root2_positions(self, joint_ranges):
-        """设置所有手指指根2关节位置"""
+        """Set root joint 2 positions of all fingers"""
         self.send_command(FrameProperty.ROOT2_POS, joint_ranges)
     
     def set_root3_positions(self, joint_ranges):
-        """设置所有手指指根3关节位置"""
+        """Set root joint 3 positions of all fingers"""
         self.send_command(FrameProperty.ROOT3_POS, joint_ranges)
     
     def set_tip_positions(self, joint_ranges=[80]*5):
-        """设置所有手指指尖关节位置"""
+        """Set fingertip joint positions of all fingers"""
         self.send_command(FrameProperty.TIP_POS, joint_ranges)
 
-    # 串联控制指令方法
+    # Serial control methods
     def set_thumb_positions(self, joint_ranges):
-        """设置大拇指所有关节位置"""
+        """Set all thumb joint positions"""
         self.send_command(FrameProperty.THUMB_POS, joint_ranges)
     
     def set_index_positions(self, joint_ranges):
-        """设置食指所有关节位置"""
+        """Set all index finger joint positions"""
         self.send_command(FrameProperty.INDEX_POS, joint_ranges)
     
     def set_middle_positions(self, joint_ranges):
-        """设置中指所有关节位置"""
+        """Set all middle finger joint positions"""
         self.send_command(FrameProperty.MIDDLE_POS, joint_ranges)
     
     def set_ring_positions(self, joint_ranges):
-        """设置无名指所有关节位置"""
+        """Set all ring finger joint positions"""
         self.send_command(FrameProperty.RING_POS, joint_ranges)
     
     def set_little_positions(self, joint_ranges):
-        """设置小拇指所有关节位置"""
+        """Set all little finger joint positions"""
         self.send_command(FrameProperty.LITTLE_POS, joint_ranges)
 
-    # 扭矩设置方法
+    # Torque setters
     def set_thumb_torque(self, torque_values):
-        """设置大拇指扭矩"""
+        """Set thumb torque"""
         self.send_command(FrameProperty.THUMB_TORQUE, torque_values)
     
     def set_index_torque(self, torque_values):
-        """设置食指扭矩"""
+        """Set index finger torque"""
         self.send_command(FrameProperty.INDEX_TORQUE, torque_values)
     
     def set_middle_torque(self, torque_values):
-        """设置中指扭矩"""
+        """Set middle finger torque"""
         self.send_command(FrameProperty.MIDDLE_TORQUE, torque_values)
     
     def set_ring_torque(self, torque_values):
-        """设置无名指扭矩"""
+        """Set ring finger torque"""
         self.send_command(FrameProperty.RING_TORQUE, torque_values)
     
     def set_little_torque(self, torque_values):
-        """设置小拇指扭矩"""
+        """Set little finger torque"""
         self.send_command(FrameProperty.LITTLE_TORQUE, torque_values)
 
-    # 速度设置方法
+    # Speed setters
     def set_thumb_speed(self, speed_values):
-        """设置大拇指速度"""
+        """Set thumb speed"""
         self.send_command(FrameProperty.THUMB_SPEED, speed_values)
     
     def set_index_speed(self, speed_values):
-        """设置食指速度"""
+        """Set index finger speed"""
         self.send_command(FrameProperty.INDEX_SPEED, speed_values)
     
     def set_middle_speed(self, speed_values):
-        """设置中指速度"""
+        """Set middle finger speed"""
         self.send_command(FrameProperty.MIDDLE_SPEED, speed_values)
     
     def set_ring_speed(self, speed_values):
-        """设置无名指速度"""
+        """Set ring finger speed"""
         self.send_command(FrameProperty.RING_SPEED, speed_values)
     
     def set_little_speed(self, speed_values):
-        """设置小拇指速度"""
+        """Set little finger speed"""
         self.send_command(FrameProperty.LITTLE_SPEED, speed_values)
 
-    # 查询方法
+    # Position query
     def get_thumb_positions(self):
-        """获取大拇指所有关节当前位置"""
+        """Get current thumb joint positions"""
         self.send_command(FrameProperty.THUMB_POS, [])
         return self.x41
     
     def get_index_positions(self):
-        """获取食指所有关节当前位置"""
+        """Get current index finger joint positions"""
         self.send_command(FrameProperty.INDEX_POS, [])
         return self.x42
     
     def get_middle_positions(self):
-        """获取中指所有关节当前位置"""
+        """Get current middle finger joint positions"""
         self.send_command(FrameProperty.MIDDLE_POS, [])
         return self.x43
     
     def get_ring_positions(self):
-        """获取无名指所有关节当前位置"""
+        """Get current ring finger joint positions"""
         self.send_command(FrameProperty.RING_POS, [])
         return self.x44
     
     def get_little_positions(self):
-        """获取小拇指所有关节当前位置"""
+        """Get current little finger joint positions"""
         self.send_command(FrameProperty.LITTLE_POS, [])
         return self.x45
 
-
+    # Speed query
     def get_thumb_speed(self):
-        """获取大拇指速度"""
+        """Get thumb speed"""
         self.send_command(FrameProperty.THUMB_SPEED, [])
     
     def get_index_speed(self):
-        """获取食指速度"""
+        """Get index finger speed"""
         self.send_command(FrameProperty.INDEX_SPEED, [])
     
     def get_middle_speed(self):
-        """获取中指速度"""
+        """Get middle finger speed"""
         self.send_command(FrameProperty.MIDDLE_SPEED, [])
     
     def get_ring_speed(self):
-        """获取无名指速度"""
+        """Get ring finger speed"""
         self.send_command(FrameProperty.RING_SPEED, [])
     
     def get_little_speed(self):
-        """获取小拇指速度"""
+        """Get little finger speed"""
         self.send_command(FrameProperty.LITTLE_SPEED, [])
 
+    # Torque query
     def get_thumb_torque(self):
-        """获取大拇指扭矩"""
+        """Get thumb torque"""
         self.send_command(FrameProperty.THUMB_TORQUE, [])
     
     def get_index_torque(self):
-        """获取食指扭矩"""
+        """Get index finger torque"""
         self.send_command(FrameProperty.INDEX_TORQUE, [])
     
     def get_middle_torque(self):
-        """获取中指扭矩"""
+        """Get middle finger torque"""
         self.send_command(FrameProperty.MIDDLE_TORQUE, [])
     
     def get_ring_torque(self):
-        """获取无名指扭矩"""
+        """Get ring finger torque"""
         self.send_command(FrameProperty.RING_TORQUE, [])
     
     def get_little_torque(self):
-        """获取小拇指扭矩"""
+        """Get little finger torque"""
         self.send_command(FrameProperty.LITTLE_TORQUE, [])
 
+    # Fault query
     def get_thumb_fault(self):
-        """获取大拇指所有关节故障码"""
+        """Get thumb joint fault codes"""
         self.send_command(FrameProperty.THUMB_FAULT, [])
         return self.x59
     
     def get_index_fault(self):
-        """获取食指所有关节故障码"""
+        """Get index finger joint fault codes"""
         self.send_command(FrameProperty.INDEX_FAULT, [])
         return self.x5A
     
     def get_middle_fault(self):
-        """获取中指所有关节故障码"""
+        """Get middle finger joint fault codes"""
         self.send_command(FrameProperty.MIDDLE_FAULT, [])
         return self.x5B
     
     def get_ring_fault(self):
-        """获取无名指所有关节故障码"""
+        """Get ring finger joint fault codes"""
         self.send_command(FrameProperty.RING_FAULT, [])
         return self.x5C
     
     def get_little_fault(self):
-        """获取小拇指所有关节故障码"""
+        """Get little finger joint fault codes"""
         self.send_command(FrameProperty.LITTLE_FAULT, [])
         return self.x5D
 
+    # Temperature query
     def get_thumb_temperature(self):
-        """获取大拇指所有关节当前温度"""
+        """Get current thumb joint temperatures"""
         self.send_command(FrameProperty.THUMB_TEMPERATURE, [])
         return self.x61
     
     def get_index_temperature(self):
-        """获取食指所有关节当前温度"""
+        """Get current index finger joint temperatures"""
         self.send_command(FrameProperty.INDEX_TEMPERATURE, [])
         return self.x62
     
     def get_middle_temperature(self):
-        """获取中指所有关节当前温度"""
+        """Get current middle finger joint temperatures"""
         self.send_command(FrameProperty.MIDDLE_TEMPERATURE, [])
         return self.x63
     
     def get_ring_temperature(self):
-        """获取无名指所有关节当前温度"""
+        """Get current ring finger joint temperatures"""
         self.send_command(FrameProperty.RING_TEMPERATURE, [])
         return self.x64
     
     def get_little_temperature(self):
-        """获取小拇指所有关节当前温度"""
+        """Get current little finger joint temperatures"""
         self.send_command(FrameProperty.LITTLE_TEMPERATURE, [])
         return self.x65
 
-    # 合并指令区域方法    
+    # Combined command area
     def set_finger_speed(self, speed_values):
-        """设置手指速度"""
+        """Set finger speed"""
         self.send_command(FrameProperty.FINGER_SPEED, speed_values)
     
     def set_finger_torque(self, torque_values):
-        """设置手指输出扭矩"""
+        """Set finger output torque"""
         self.send_command(FrameProperty.FINGER_TORQUE, torque_values)
     
     def clear_finger_faults(self, finger_mask=[1, 1, 1, 1, 1]):
-        """清除手指故障及故障码"""
+        """Clear finger faults and fault codes"""
         self.send_command(FrameProperty.FINGER_FAULT, finger_mask)
         return self.x83
     
     def get_finger_temperature(self):
-        """获取手指各关节温度"""
+        """Get temperatures of all finger joints"""
         self.send_command(FrameProperty.FINGER_TEMPERATURE, [])
         return self.x84
 
-    # 传感器数据获取方法
+    # Sensor data
     def get_normal_force(self):
-        """获取五指法向力"""
+        """Get normal force of five fingers"""
         self.send_command(FrameProperty.HAND_NORMAL_FORCE, [])
         return self.x90
     
     def get_tangential_force(self):
-        """获取五指切向力"""
+        """Get tangential force of five fingers"""
         self.send_command(FrameProperty.HAND_TANGENTIAL_FORCE, [])
         return self.x91
     
     def get_tangential_force_dir(self):
-        """获取五指切向力方向"""
+        """Get tangential direction of five fingers"""
         self.send_command(FrameProperty.HAND_TANGENTIAL_FORCE_DIR, [])
         return self.x92
     
     def get_approach_sensing(self):
-        """获取五指接近感应"""
+        """Get approach sensing of five fingers"""
         self.send_command(FrameProperty.HAND_APPROACH_INC, [])
         return self.x93
 
-    # 触觉传感器方法
+    # Tactile sensor
     def get_touch_sensor_type(self):
-        """获取触觉传感器类型"""
+        """Get tactile sensor type"""
         self.send_command(FrameProperty.TOUCH_SENSOR_TYPE, [])
         return self.xB0
     
     def get_thumb_touch(self):
-        """获取大拇指触觉传感数据"""
+        """Get thumb tactile sensor data"""
         self.send_command(FrameProperty.THUMB_TOUCH, [0xC6], sleep_time=0.007)
         #return self.thumb_matrix
     
     def get_index_touch(self):
-        """获取食指触觉传感数据"""
+        """Get index finger tactile sensor data"""
         self.send_command(FrameProperty.INDEX_TOUCH, [0xC6], sleep_time=0.007)
         #return self.xB2
     
     def get_middle_touch(self):
-        """获取中指触觉传感数据"""
+        """Get middle finger tactile sensor data"""
         self.send_command(FrameProperty.MIDDLE_TOUCH, [0xC6], sleep_time=0.007)
-        #33333return self.xB3
+        #return self.xB3
     
     def get_ring_touch(self):
-        """获取无名指触觉传感数据"""
+        """Get ring finger tactile sensor data"""
         self.send_command(FrameProperty.RING_TOUCH, [0xC6], sleep_time=0.007)
         #return self.xB4
     
     def get_little_touch(self):
-        """获取小拇指触觉传感数据"""
+        """Get little finger tactile sensor data"""
         self.send_command(FrameProperty.LITTLE_TOUCH, [0xC6], sleep_time=0.007)
         #return self.xB5
     
     def get_palm_touch(self):
-        """获取手掌触觉传感数据"""
+        """Get palm tactile sensor data"""
         self.send_command(FrameProperty.PALM_TOUCH, [], sleep_time=0.015)
         #return self.xB6
 
-    # 查询指令方法
+    # Query commands
     def get_uid(self):
-        """获取设备唯一标识码"""
+        """Get device unique identifier"""
         self.send_command(FrameProperty.HAND_UID_GET, [])
         return self.xC0
     
     def get_hardware_version(self):
-        """获取硬件版本"""
+        """Get hardware version"""
         self.send_command(FrameProperty.HAND_HARDWARE_VERSION_GET, [])
         return self.xC1
     
     def get_software_version(self):
-        """获取软件版本"""
+        """Get software version"""
         self.send_command(FrameProperty.HAND_SOFTWARE_VERSION_GET, [])
         return self.xC2
     
     def get_comm_id(self):
-        """获取设备通信ID"""
+        """Get device communication ID"""
         self.send_command(FrameProperty.HAND_COMM_ID_GET, [])
         return self.xC3
     
     def get_struct_version(self):
-        """获取结构版本号"""
+        """Get structure version number"""
         self.send_command(FrameProperty.HAND_STRUCT_VERSION_GET, [])
         return self.xC4
 
-    # 出厂指令方法
+    # Factory commands
     def erase_position_calibration(self):
-        """擦除位置校准值"""
+        """Erase position calibration values"""
         self.send_command(FrameProperty.HOST_CMD_HAND_ERASE_POS_CALI, [])
     
     def set_comm_id(self, new_id):
-        """设置通信ID"""
+        """Set communication ID"""
         self.send_command(FrameProperty.HAND_COMM_ID_SET, [new_id])
     
     def set_uid(self, uid_data):
-        """设置唯一标识码（内部出厂使用）"""
+        """Set unique identifier (factory use)"""
         self.send_command(FrameProperty.HAND_UID_SET, uid_data)
 
-    # 辅助方法
+    # Helper
     def slice_list(self, input_list, slice_size):
-        """将列表按指定大小切片"""
+        """Slice list into pieces of specified size"""
         return [input_list[i:i + slice_size] for i in range(0, len(input_list), slice_size)]
+
     # -----------------------------------------------------
-    # API指令区域
+    # API region
     #------------------------------------------------------
     def set_joint_positions(self, joint_ranges):
-        """API接口:设置手指所有关节位置"""
+        """API: set all finger joint positions"""
         j = self.cmd_range_to_joint_range(cmd_list=joint_ranges)
         self.set_thumb_positions(j[0])
         self.set_index_positions(j[1])
@@ -734,7 +738,7 @@ class LinkerHandG20Can:
         self.set_little_positions(j[4])
 
     def set_speed(self, speed=[250] * 5):
-        """API接口:设置手指速度"""
+        """API: set finger speed"""
         self.set_thumb_speed(speed_values=[speed[0]] * 6)
         self.set_index_speed(speed_values=[speed[1]] * 6)
         self.set_middle_speed(speed_values=[speed[2]] * 6)
@@ -742,20 +746,19 @@ class LinkerHandG20Can:
         self.set_little_speed(speed_values=[speed[4]] * 6)
 
     def set_torque(self, torque=[250] * 5):
-        """API接口:设置手指最大扭矩"""
+        """API: set maximum finger torque"""
         self.set_thumb_torque(torque_values=[torque[0]] * 6)
         self.set_index_torque(torque_values=[torque[1]] * 6)
         self.set_middle_torque(torque_values=[torque[2]] * 6)
         self.set_ring_torque(torque_values=[torque[3]] * 6)
         self.set_little_torque(torque_values=[torque[4]] * 6)
 
-
     def get_version(self):
-        """API接口:获取手指嵌入式版本信息"""
+        """API: get embedded version information"""
         return self.get_software_version()
     
     def get_current_status(self):
-        """API接口:获取手指当前状态"""
+        """API: get current finger state"""
         self.get_thumb_positions()
         self.get_index_positions()
         self.get_middle_positions()
@@ -767,11 +770,11 @@ class LinkerHandG20Can:
         return cmd_state
 
     def get_current_pub_status(self):
-        """API接口:获取手指当前状态"""
+        """API: get current finger state"""
         self.get_current_status()
 
     def get_speed(self):
-        """API接口:获取手指速度"""
+        """API: get finger speed"""
         self.get_thumb_speed()
         self.get_index_speed()
         self.get_middle_speed()
@@ -784,7 +787,7 @@ class LinkerHandG20Can:
         return state_speed
 
     def get_touch_type(self):
-        """API接口:获取手指触觉传感器类型"""
+        """API: get tactile sensor type"""
         self.send_command(0xb0,[],sleep_time=0.03)
         self.send_command(0xb1,[],sleep_time=0.03)
         t = []
@@ -802,7 +805,7 @@ class LinkerHandG20Can:
                 return 1
     
     def get_matrix_touch(self):
-        """API接口:获取手指触摸传感器数据"""
+        """API: get all finger matrix tactile sensor data"""
         self.get_thumb_touch()
         self.get_index_touch()
         self.get_middle_touch()
@@ -811,36 +814,36 @@ class LinkerHandG20Can:
         return self.thumb_matrix , self.index_matrix , self.middle_matrix , self.ring_matrix , self.little_matrix
 
     def get_matrix_touch_v2(self):
-        """API接口:获取手指触摸传感器数据"""
+        """API: get all finger matrix tactile sensor data"""
         return self.get_matrix_touch()
 
     def get_thumb_matrix_touch(self,sleep_time=0):
-        """API接口:获取[大拇指]指触摸传感器数据"""
+        """API: get [thumb] matrix tactile sensor data"""
         self.get_thumb_touch()
         return self.thumb_matrix
     
     def get_index_matrix_touch(self,sleep_time=0):
-        """API接口:获取[食指]指触摸传感器数据"""
+        """API: get [index finger] matrix tactile sensor data"""
         self.get_index_touch()
         return self.index_matrix
     
     def get_middle_matrix_touch(self,sleep_time=0):
-        """API接口:获取[中指]指触摸传感器数据"""
+        """API: get [middle finger] matrix tactile sensor data"""
         self.get_middle_touch()
         return self.middle_matrix
     
     def get_ring_matrix_touch(self,sleep_time=0):
-        """API接口:获取[无名指]指触摸传感器数据"""
+        """API: get [ring finger] matrix tactile sensor data"""
         self.get_ring_touch()
         return self.ring_matrix
     
     def get_little_matrix_touch(self,sleep_time=0):
-        """API接口:获取[小指]指触摸传感器数据"""
+        """API: get [little finger] matrix tactile sensor data"""
         self.get_little_touch()
         return self.little_matrix
 
     def get_torque(self):
-        """API接口:获取手指最大扭矩"""
+        """API: get maximum finger torque"""
         self.get_thumb_torque()
         self.get_index_torque()
         self.get_middle_torque()
@@ -852,35 +855,33 @@ class LinkerHandG20Can:
         return cmd_torque
 
     def get_current(self):
-        """API接口:获取手指电流"""
+        """API: get finger current"""
         return [-1] * 20
 
     def get_temperature(self):
-        """API接口:获取手指温度"""
+        """API: get finger temperature"""
         joint_temperature = [self.get_thumb_temperature(), self.get_index_temperature(), self.get_middle_temperature(), self.get_ring_temperature(), self.get_little_temperature()]
         cmd_temperature = self.joint_state_to_cmd_state(list=joint_temperature)
         return cmd_temperature
 
-
     def get_fault(self):
-        """API接口:获取手指故障代码"""
+        """API: get finger fault codes"""
         joint_fault = [self.get_thumb_fault(), self.get_index_fault(), self.get_middle_fault(), self.get_ring_fault(), self.get_little_fault()]
         cmd_fault = self.joint_state_to_cmd_state(list=joint_fault)
         return cmd_fault
 
     def clear_faults(self):
-        """API接口:清除手指故障代码"""
+        """API: clear finger fault codes"""
         pass
 
     def cmd_range_to_joint_range(self,cmd_list):
-        """根据手指映射关系，将手指控制命令列表转换为手指分组数据形式"""
-        # 定义手指映射规则
+        """Convert command list to per-finger joint list according to mapping"""
         finger_mapping = {
-            '拇指': [5, 10, 0, 11, 12, 15],
-            '食指': [6, 11, 1, 13, 14, 16],
-            '中指': [7, 12, 2, 13, 14, 17],
-            '无名指': [8, 13, 3, 14, 15, 18],
-            '小指': [9, 14, 4, 15, 16, 19]
+            'thumb': [5, 10, 0, 11, 12, 15],
+            'index': [6, 11, 1, 13, 14, 16],
+            'middle': [7, 12, 2, 13, 14, 17],
+            'ring': [8, 13, 3, 14, 15, 18],
+            'little': [9, 14, 4, 15, 16, 19]
         }
         
         result = []
@@ -893,36 +894,36 @@ class LinkerHandG20Can:
 
     def joint_state_to_cmd_state(self,list):
         """
-        将手指序列状态列表转换为控制命令序列状态列表
+        Convert per-finger state list to command sequence state list
         """
         original = [""] * 20
         try:        
             for i, finger_data in enumerate(list):
-                # 基本位置映射
-                original[i] = finger_data[2]        # 根部
-                original[i + 5] = finger_data[0]    # 侧摆
-                original[i + 15] = finger_data[5]   # 末端
+                # Basic position mapping
+                original[i] = finger_data[2]        # root
+                original[i + 5] = finger_data[0]    # abduction
+                original[i + 15] = finger_data[5]   # tip
                 
-                # 特殊位置处理
-                if i == 0:  # 拇指
-                    original[10] = finger_data[1]   # 横摆
-                    original[11] = finger_data[3]   # 预留
-                    original[12] = finger_data[4]   # 预留
-                else:  # 其他手指
-                    original[10 + i] = finger_data[1]  # 预留位置
-                    if i <= 2:  # 食指、中指
-                        original[12 + i] = finger_data[3]  # 预留
-                        original[13 + i] = finger_data[4]  # 预留
-                    else:  # 无名指、小指
-                        original[11 + i] = finger_data[3]  # 预留
-                        original[12 + i] = finger_data[4]  # 预留
+                # Special positions
+                if i == 0:  # thumb
+                    original[10] = finger_data[1]   # roll
+                    original[11] = finger_data[3]   # reserved
+                    original[12] = finger_data[4]   # reserved
+                else:  # other fingers
+                    original[10 + i] = finger_data[1]  # reserved
+                    if i <= 2:  # index, middle
+                        original[12 + i] = finger_data[3]  # reserved
+                        original[13 + i] = finger_data[4]  # reserved
+                    else:  # ring, little
+                        original[11 + i] = finger_data[3]  # reserved
+                        original[12 + i] = finger_data[4]  # reserved
             
             return original
         except:
             return [-1] * 20
 
     def _list_d_value(self, list1, list2):
-        """检查两个列表的值是否有显著差异"""
+        """Check whether two lists differ significantly"""
         if list1 is None:
             return True
         for a, b in zip(list1, list2):
@@ -931,12 +932,18 @@ class LinkerHandG20Can:
         return False
 
     def close_can_interface(self):
-        """关闭CAN接口"""
+        """Close CAN interface"""
         if self.bus:
             self.bus.shutdown()
             self.running = False
     
     def get_serial_number(self):
         return [0] * 6
+
     def get_finger_order(self):
-        return ["Thumb Base", "Index Finger Base", "Middle Finger Base", "Ring Finger Base", "Pinky Finger Base", "Thumb Abduction", "Index Finger Abduction", "Middle Finger Abduction", "Ring Finger Abduction", "Pinky Finger Abduction", "Thumb Horizontal Abduction", "Reserved", "Reserved", "Reserved", "Reserved", "Thumb Tip", "Index Finger Tip", "Middle Finger Tip", "Ring Finger Tip", "Pinky Finger Tip"]
+        return [
+            "Thumb Base", "Index Finger Base", "Middle Finger Base", "Ring Finger Base", "Pinky Finger Base",
+            "Thumb Abduction", "Index Finger Abduction", "Middle Finger Abduction", "Ring Finger Abduction",
+            "Pinky Finger Abduction", "Thumb Horizontal Abduction", "Reserved", "Reserved", "Reserved", "Reserved",
+            "Thumb Tip", "Index Finger Tip", "Middle Finger Tip", "Ring Finger Tip", "Pinky Finger Tip"
+        ]

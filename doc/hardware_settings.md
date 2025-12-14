@@ -1,66 +1,66 @@
-# LinkerHand灵巧手ROS SDK在台式机(笔记本)树莓派或Jetson等设备上使用
+# Using the LinkerHand Dexterous Hand ROS SDK on Desktop (Laptop), Raspberry Pi, or Jetson Devices
 
-## 说明
-LinkerHand灵巧手硬件和ROS SDK软件可使用在x86和arm64的大部分设备上。
-- __硬件设备系统必须为Ubuntu20.04 ROS Noetic Python3.8__
-- __硬件设备必须拥有5v标准USB接口__ 
+## Description
+The LinkerHand dexterous hand hardware and ROS SDK software can be used on most x86 and arm64 devices.
 
+- __The device must be running Ubuntu 20.04 with ROS Noetic and Python 3.8__
+- __The device must have a standard 5V USB port__
 
-## 使用方法
-&ensp;&ensp; __使用前请先将 [setting.yaml](../linker_hand_sdk_ros/config/setting.yaml) 配置文件根据实际需求进行相应修改该.__
+## Usage
 
-&ensp;&ensp;__将linker_hand灵巧手的USB转CAN设备插入Ubuntu设备上__
+  __Before use, please modify the [setting.yaml](../linker_hand_sdk_ros/config/setting.yaml) configuration file according to your actual needs.__  
 
-&ensp;&ensp;确保当前系统环境为Ubuntu20.04 ROS为Noetic Python3.8.10版本
-- 下载
-  ```bash
-  $ mkdir -p Linker_Hand_SDK_ROS/src
-  $ cd Linker_Hand_SDK_ROS/src
-  $ git clone https://github.com/linkerbotai/linker_hand_sdk.git
-  ```
+  __Insert the LinkerHand dexterous hand USB-to-CAN device into the Ubuntu machine.__  
 
-- 编译
+  Make sure the current system environment is Ubuntu 20.04, ROS Noetic, Python 3.8.10.
 
-  ```bash
-  $ cd Linker_Hand_SDK_ROS
-  $ pip install -r requirements.txt
-  $ catkin_make
-  ```
-- 将ip命令改为NOPASSWORD模式
-    ```bash
-    $ sudo visudo
-    #添加以下内容
-    你的用户名 ALL=(ALL) NOPASSWD: /sbin/ip
-    你的用户名 ALL=(ALL) NOPASSWD: /usr/sbin/ip link set can0 up type $ $ can bitrate 1000000
-    # 保存退出
-    ```
-- 配置ROS主从，只在本终端生效。如不需要ROS主从通讯则忽略
-    ```bash
-    $ source /opt/ros/noetic/setup.bash
+- Download
 
-    $ export ROS_MASTER_URI=http://<ROS Master IP>:11311
+    $ mkdir -p Linker_Hand_SDK_ROS/src  
+    $ cd Linker_Hand_SDK_ROS/src  
+    $ git clone https://github.com/linkerbotai/linker_hand_sdk.git  
 
-    $ export ROS_IP=<本机IP>
+- Build
 
-    $ export ROS_HOSTNAME=<本机IP>
-    ```
-- 启动SDK
-    ```bash
-    # 开启CAN端口
-    $ sudo /usr/sbin/ip link set can0 up type can bitrate 1000000 #USB转CAN设备蓝色灯常亮状态
-    $ cd ~/Linker_Hand_SDK_ROS/
-    $ source ./devel/setup.bash
-    $ roslaunch linker_hand_sdk_ros linker_hand.launch
-    ```
-## 动捕手套遥操方法
-- 首先在本机启动ROS2 to ROS1桥接
-    ```bash
-    # 本机安装好ros2 foxy后，新开终端输入以下命令
-    $ source /opt/ros/foxy/setup.bash
-    $ export ROS_DOMAIN_ID=11
-    $ ros2 run ros1_bridge dynamic_bridge --bridge-all-topics
-    ```
-- 以上开启后即可收到动捕手套遥操数据 miniPC有接路由器标签网口ip:192.168.11.222  没有标签网口ip:192.168.11.221
+    $ cd Linker_Hand_SDK_ROS  
+    $ pip install -r requirements.txt  
+    $ catkin_make  
 
+- Set the `ip` command to NOPASSWORD mode
 
+    $ sudo visudo  
+    # Add the following lines  
+    your_username ALL=(ALL) NOPASSWD: /sbin/ip  
+    your_username ALL=(ALL) NOPASSWD: /usr/sbin/ip link set can0 up type $ $ can bitrate 1000000  
+    # Save and exit  
 
+- Configure ROS master/slave (only effective in this terminal; ignore if you do not need ROS master/slave communication)
+
+    $ source /opt/ros/noetic/setup.bash  
+
+    $ export ROS_MASTER_URI=http://<ROS Master IP>:11311  
+
+    $ export ROS_IP=<local IP>  
+
+    $ export ROS_HOSTNAME=<local IP>  
+
+- Start the SDK
+
+    # Enable CAN port  
+    $ sudo /usr/sbin/ip link set can0 up type can bitrate 1000000  # USB-to-CAN device blue LED stays on  
+    $ cd ~/Linker_Hand_SDK_ROS/  
+    $ source ./devel/setup.bash  
+    $ roslaunch linker_hand_sdk_ros linker_hand.launch  
+
+## Motion Capture Glove Teleoperation
+
+- First start the ROS2 to ROS1 bridge on this machine
+
+    # After installing ROS2 Foxy on this machine, run the following commands in a new terminal  
+    $ source /opt/ros/foxy/setup.bash  
+    $ export ROS_DOMAIN_ID=11  
+    $ ros2 run ros1_bridge dynamic_bridge --bridge-all-topics  
+
+- After starting the above, you can receive motion capture glove teleoperation data.  
+  On the mini PC, the Ethernet port **with a router label** has IP: `192.168.11.222`,  
+  and the Ethernet port **without a label** has IP: `192.168.11.221`.

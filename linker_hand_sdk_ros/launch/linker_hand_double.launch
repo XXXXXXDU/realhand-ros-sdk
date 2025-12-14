@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <launch>
-    <!-- 公共参数定义（可传入） -->
+    <!-- Common parameter definition (can be passed in) -->
     <arg name="left_hand_joint" default="L10"/> <!--  O6\L6\L6P\L7\L10\L20\L21  -->
     <arg name="right_hand_joint" default="L10"/> <!--  O6\L6\L6P\L7\L10\L20\L21  -->
     <arg name="left_touch" default="true"/>
@@ -8,7 +8,7 @@
     <arg name="left_can" default="can0"/>
     <arg name="right_can" default="can0"/>
 
-    <!-- 左手 -->
+    <!-- Left hand -->
     <group ns="left_hand">
         <node pkg="linker_hand_sdk_ros" type="linker_hand.py" name="linker_hand_sdk" output="screen">
             <param name="hand_type" type="string" value="left"/>
@@ -18,7 +18,7 @@
         </node>
     </group>
 
-    <!-- 右手 -->
+    <!-- Right hand -->
     <group ns="right_hand">
         <node pkg="linker_hand_sdk_ros" type="linker_hand.py" name="linker_hand_sdk" output="screen">
             <param name="hand_type" type="string" value="right"/>
@@ -28,4 +28,3 @@
         </node>
     </group>
 </launch>
-

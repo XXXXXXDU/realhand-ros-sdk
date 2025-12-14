@@ -13,13 +13,13 @@ class LinkerHandO6Can:
         self.baudrate = baudrate
         self.open_can = OpenCan(load_yaml=yaml)
 
-        self.x01 = [0] * 6 # 关节位置
-        self.x02 = [-1] * 6 # 转矩限制
-        self.x05 = [0] * 6 # 速度
-        self.x07 = [-1] * 6 # 加速度
-        self.x33 = [0] * 6 # 温度
-        self.x35 = [0] * 6 # 关节错误码
-        self.x36 = [-1] * 6 # 电流
+        self.x01 = [0] * 6  # Joint positions
+        self.x02 = [-1] * 6  # Torque limits
+        self.x05 = [0] * 6  # Speed
+        self.x07 = [-1] * 6  # Acceleration
+        self.x33 = [0] * 6  # Temperature
+        self.x35 = [0] * 6  # Joint error codes
+        self.x36 = [-1] * 6  # Current
         self.xb0,self.xb1,self.xb2,self.xb3,self.xb4,self.xb5 = [-1] * 5,[-1] * 5,[-1] * 5,[-1] * 5,[-1] * 5,[-1] * 5
 
         self.thumb_matrix = np.full((12, 6), -1)
@@ -184,7 +184,7 @@ class LinkerHandO6Can:
                 self.x33 = list(response_data)
             elif frame_type == 0x35: # O6 fault codes
                 self.x35 = list(response_data)
-            elif frame_type == 0x36: # O6 电流
+            elif frame_type == 0x36: # O6 current
                 self.x36 = list(response_data)
             elif frame_type == 0xb0:
                 self.xb0 = list(response_data)
@@ -259,7 +259,7 @@ class LinkerHandO6Can:
 
     def get_speed(self):
         #self.send_frame(0x05, [],sleep=0.003)
-        #print("L6暂不支持读取实时速度")
+        #print("L6 does not yet support reading real-time speed")
         return [0] * 6
 
     def get_current(self):
@@ -361,16 +361,16 @@ class LinkerHandO6Can:
     def get_serial_number(self):
         try:
             self.send_frame(0xC0,[],sleep=0.005)
-            # 1. 使用 bytes() 函数将整数列表转换为字节对象
-            #    bytes() 接收一个由 0-255 之间的整数组成的列表。
+            # 1. Use bytes() to convert the integer list to a bytes object.
+            #    bytes() takes a list of integers in the range 0-255.
             byte_data = bytes(self.serial_number)
-            # 2. 使用 .decode() 方法将字节对象解码为 ASCII 字符串
+            # 2. Use .decode() to decode the bytes object into an ASCII string.
             result_string = byte_data.decode('ascii')
             if result_string == "":
                 return "-1"
             else:
-                # print(f"原始 ASCII 码列表: {self.serial_number}")
-                # print(f"解码后的字符串: {result_string}")
+                # print(f"Original ASCII code list: {self.serial_number}")
+                # print(f"Decoded string: {result_string}")
                 return result_string
         except:
             return "-1"

@@ -52,18 +52,18 @@ def send_messages():
 
     pub = rospy.Publisher('/cb_left_hand_control_cmd', JointState, queue_size=10)
 
-    rate = rospy.Rate(30)  # 设置频率为10Hz
+    rate = rospy.Rate(30)  # Set frequency to 30Hz
     joint_state.header = std_msgs.msg.Header()
     joint_state.header.seq=0
-    joint_state.header.stamp = rospy.Time.now() # 或者使用rospy.Time(secs=0, nsecs=0)来获取特定时间
+    joint_state.header.stamp = rospy.Time.now() # Or use rospy.Time(secs=0, nsecs=0) to get a specific time
     joint_state.header.frame_id = ''
     # position_values = [250, 250, 250, 250, 250, 250, 128, 128, 128, 128, 250, 0, 0, 0, 0, 250, 250, 250, 250, 250]
     # joint_state.position = position_values
     joint_state.name=list(hand.keys())
-    joint_state.velocity = [0] * len(joint_state.position)  # 与position数组长度相同，全部填充为0
-    joint_state.effort = [0] * len(joint_state.position)  # 为每个关节设置努力为零
+    joint_state.velocity = [0] * len(joint_state.position)  # Same length as the position array, all filled with 0
+    joint_state.effort = [0] * len(joint_state.position)  # Set effort to zero for each joint
     pub.publish(joint_state)
-    while not rospy.is_shutdown():  # 持续1秒
+    while not rospy.is_shutdown():
         position =show_left()
         if(position is not None):
             joint_state.position = position
@@ -79,7 +79,7 @@ def show_left():
     show_count= show_count+1
     if(show_count>=show_count_obj):
         show_count=0
-        if(show_step==0): #张开手掌
+        if(show_step==0): # Open palm
             show_step=show_step+1
             show_count_obj = 50
             hand['joint1'] = 75
@@ -108,7 +108,7 @@ def show_left():
             hand['joint24'] = 255
             hand['joint25'] = 255
             return list(hand.values())
-        elif(show_step==1): #// 收小指与无名指
+        elif(show_step==1): #// Close little and ring fingers
             show_step=show_step+1
             show_count_obj = 10
             hand['joint4'] = 0
@@ -129,7 +129,7 @@ def show_left():
             hand['joint24'] = 0
             hand['joint25'] = 0
             return list(hand.values())
-        elif(show_step==2): #// 将拇指搭到小指与无名指上面
+        elif(show_step==2): #// Place thumb on top of little and ring fingers
             show_step=show_step+1
             show_count_obj = 30
             hand['joint1'] = 100
@@ -137,50 +137,50 @@ def show_left():
             hand['joint16'] = 0
             hand['joint21'] = 0
             return list(hand.values())
-        elif(show_step==3): #// 食指和中指向一侧倾斜
+        elif(show_step==3): #// Tilt index and middle fingers to one side
             show_step=show_step+1
             show_count_obj = 10
             hand['joint7'] = 200
             hand['joint8'] = 200
             hand['joint11'] = 200
             return list(hand.values())
-        elif(show_step==4): #// 另一侧
+        elif(show_step==4): #// Other side
             show_step=show_step+1
             show_count_obj = 13
             hand['joint7'] = 50
             hand['joint8'] = 50
             return list(hand.values())
-        elif(show_step==5): #//  两支回中
+        elif(show_step==5): #//  Return both to center
             show_step=show_step+1
             show_count_obj = 13
             hand['joint7'] = 128
             hand['joint8'] = 128
             return list(hand.values())
-        elif(show_step==6): #// 食指和中指做Y
+        elif(show_step==6): #// Index and middle fingers make a Y shape
             show_step=show_step+1
             show_count_obj = 2  
             hand['joint7'] = 50
             hand['joint8'] = 200
             return list(hand.values())
-        elif(show_step==7): #// 收Y
+        elif(show_step==7): #// Retract Y shape
             show_step=show_step+1
             show_count_obj = 10
             hand['joint7'] = 128
             hand['joint8'] = 128
             return list(hand.values())
-        elif(show_step==8): #// 食指和中指做Y
+        elif(show_step==8): #// Index and middle fingers make a Y shape
             show_step=show_step+1
             show_count_obj = 10
             hand['joint7'] = 50
             hand['joint8'] = 200
             return list(hand.values())
-        elif(show_step==9): #// 收Y
+        elif(show_step==9): #// Retract Y shape
             show_step=show_step+1
             show_count_obj = 10
             hand['joint7'] = 128
             hand['joint8'] = 128
             return list(hand.values())
-        elif(show_step==10): #// 中指和食指弯曲伸直交替两遍
+        elif(show_step==10): #// Bend and straighten middle and index fingers alternately twice
             show_step=show_step+1
             show_count_obj = 15
             hand['joint2'] = 100
@@ -190,7 +190,7 @@ def show_left():
             hand['joint22'] = 100
             hand['joint23'] = 100
             return list(hand.values())
-        elif(show_step==11): #// 中指和食指弯曲伸直交替两遍
+        elif(show_step==11): #// Bend and straighten middle and index fingers alternately twice
             show_step=show_step+1
             show_count_obj = 15
             hand['joint2'] = 250
@@ -200,7 +200,7 @@ def show_left():
             hand['joint22'] = 250
             hand['joint23'] = 250
             return list(hand.values())
-        elif(show_step==12): #// 中指和食指弯曲伸直交替两遍
+        elif(show_step==12): #// Bend and straighten middle and index fingers alternately twice
             show_step=show_step+1
             show_count_obj = 15
             hand['joint2'] = 100
@@ -210,7 +210,7 @@ def show_left():
             hand['joint22'] = 100
             hand['joint23'] = 100
             return list(hand.values())
-        elif(show_step==13): #// 中指和食指弯曲伸直交替两遍
+        elif(show_step==13): #// Bend and straighten middle and index fingers alternately twice
             show_step=show_step+1
             show_count_obj = 15
             hand['joint2'] = 250
@@ -220,7 +220,7 @@ def show_left():
             hand['joint22'] = 250
             hand['joint23'] = 250
             return list(hand.values())
-        elif(show_step==14): #// 蜷曲拇指
+        elif(show_step==14): #// Curl thumb
             show_step=show_step+1
             show_count_obj = 40
             hand['joint1'] = 250
@@ -228,12 +228,12 @@ def show_left():
             hand['joint11'] = 250
             hand['joint23'] = 250
             return list(hand.values())
-        elif(show_step==15): #// 拇指收于掌内
+        elif(show_step==15): #// Tuck thumb into palm
             show_step=show_step+1
             show_count_obj = 10
             hand['joint6'] = 5
             return list(hand.values())
-        elif(show_step==16): #// 收4指
+        elif(show_step==16): #// Close 4 fingers
             show_step=show_step+1
             show_count_obj = 30
             hand['joint2'] = 100
@@ -249,7 +249,7 @@ def show_left():
             hand['joint24'] = 100
             hand['joint25'] = 100
             return list(hand.values())
-        elif(show_step==17): #// 依次放开4指和拇指
+        elif(show_step==17): #// Open 4 fingers and thumb sequentially
             show_step=show_step+1
             show_count_obj = 15
             hand['joint5'] = 250
@@ -277,24 +277,24 @@ def show_left():
             hand['joint17'] = 250
             hand['joint22'] = 250
             return list(hand.values())
-        elif(show_step==21): #// 40
+        elif(show_step==21): #// 4
             show_step=show_step+1
             show_count_obj = 10
             hand['joint6'] = 250
             hand['joint16'] = 250
             hand['joint21'] = 250
             return list(hand.values())
-        elif(show_step==22): #// 并拢拇指
+        elif(show_step==22): #// Bring thumb closer
             show_step=show_step+1
             show_count_obj = 20
             hand['joint11'] = 10
             return list(hand.values())
-        elif(show_step==23): #// 反转拇指指掌心
+        elif(show_step==23): #// Rotate thumb towards palm
             show_step=show_step+1
             show_count_obj = 40
             hand['joint1'] = 0
             return list(hand.values())
-        elif(show_step==24): #// 分两步回到初始位置
+        elif(show_step==24): #// Return to initial position in two steps
             show_step=show_step+1
             show_count_obj = 30
             hand['joint11'] = 250
@@ -328,13 +328,13 @@ def show_left():
             hand['joint9'] = 128
             hand['joint10'] = 128
             return list(hand.values())
-        elif(show_step==29): #// 依次蜷曲4小指
+        elif(show_step==29): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             hand['joint17'] = 0
             hand['joint22'] = 0
             return list(hand.values())
-        elif(show_step==30): #// 蜷曲4指
+        elif(show_step==30): #// Curl 4 fingers
             show_step=show_step+1
             show_count_obj = 15
             hand['joint18'] = 0
@@ -352,39 +352,39 @@ def show_left():
             hand['joint20'] = 0
             hand['joint25'] = 0
             return list(hand.values())
-        elif(show_step==33): #// 依次蜷曲4小指
+        elif(show_step==33): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             hand['joint2'] = 0
             return list(hand.values())
-        elif(show_step==34): #// 依次蜷曲4小指
+        elif(show_step==34): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             hand['joint3'] = 0
             return list(hand.values())
-        elif(show_step==35): #// 依次蜷曲4小指
+        elif(show_step==35): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             hand['joint4'] = 0
             return list(hand.values())
-        elif(show_step==36): #// 依次蜷曲4小指
+        elif(show_step==36): #// Sequentially curl 4 small fingers
             show_step=show_step+1
             show_count_obj = 15
             hand['joint5'] = 0
             return list(hand.values())
-        elif(show_step==37): #// 蜷曲拇指
+        elif(show_step==37): #// Curl thumb
             show_step=show_step+1
             show_count_obj = 40
             hand['joint1'] = 0
             hand['joint16'] = 200
             return list(hand.values())
-        elif(show_step==38): #// 打开食指和小指
+        elif(show_step==38): #// Open index and little fingers
             show_step=show_step+1
             show_count_obj = 40
             hand['joint1'] = 250
             hand['joint16'] = 250
             return list(hand.values())
-        elif(show_step==39): #// 打开食指和小指
+        elif(show_step==39): #// Open index and little fingers
             show_step=show_step+1
             show_count_obj = 30
             hand['joint2'] = 250
@@ -394,7 +394,7 @@ def show_left():
             hand['joint22'] = 250
             hand['joint25'] = 250
             return list(hand.values())
-        elif(show_step==40): #// 将拇指搭上666
+        elif(show_step==40): #// Place thumb for '666' gesture
             show_step=show_step+1
             show_count_obj = 40
             hand['joint1'] = 100
@@ -402,37 +402,37 @@ def show_left():
             hand['joint11'] = 100
             hand['joint16'] = 100
             return list(hand.values())
-        elif(show_step==41): #// 左右动手指
+        elif(show_step==41): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             hand['joint7'] = 80
             hand['joint10'] = 200
             return list(hand.values())
-        elif(show_step==42): #// 左右动手指
+        elif(show_step==42): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             hand['joint7'] = 200
             hand['joint10'] = 80
             return list(hand.values())
-        elif(show_step==43): #// 左右动手指
+        elif(show_step==43): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             hand['joint7'] = 80
             hand['joint10'] = 200
             return list(hand.values())
-        elif(show_step==44): #// 左右动手指
+        elif(show_step==44): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             hand['joint7'] = 200
             hand['joint10'] = 80
             return list(hand.values())
-        elif(show_step==45): #// 左右动手指
+        elif(show_step==45): #// Move fingers left and right
             show_step=show_step+1
             show_count_obj = 15
             hand['joint7'] = 128
             hand['joint10'] = 128
             return list(hand.values())
-        elif(show_step==46): #//  展开
+        elif(show_step==46): #//  Unfold
             show_step=show_step+1
             show_count_obj = 50
             hand['joint1'] = 250
@@ -447,7 +447,7 @@ def show_left():
             hand['joint23'] = 250
             hand['joint24'] = 250
             return list(hand.values())
-        elif(show_step==47): #// 拇指和食指捏
+        elif(show_step==47): #// Pinch with thumb and index finger
             show_step=show_step+1
             show_count_obj = 50
             hand['joint1'] = 40
@@ -466,7 +466,7 @@ def show_left():
             hand['joint17'] = 250
             hand['joint22'] = 250
             return list(hand.values())
-        elif(show_step==49): #// 拇指和中指捏
+        elif(show_step==49): #// Pinch with thumb and middle finger
             show_step=show_step+1
             show_count_obj = 35
             hand['joint3'] = 0
@@ -484,7 +484,7 @@ def show_left():
             hand['joint18'] = 250
             hand['joint23'] = 250
             return list(hand.values())
-        elif(show_step==51): #// 拇指和无名指捏
+        elif(show_step==51): #// Pinch with thumb and ring finger
             show_step=show_step+1
             show_count_obj = 35
             hand['joint4'] = 0
@@ -502,7 +502,7 @@ def show_left():
             hand['joint19'] = 250
             hand['joint24'] = 250
             return list(hand.values())
-        elif(show_step==53): #// 拇指和小指捏
+        elif(show_step==53): #// Pinch with thumb and little finger
             show_step=show_step+1
             show_count_obj = 40
             hand['joint5'] = 0
@@ -520,7 +520,7 @@ def show_left():
             hand['joint20'] = 250
             hand['joint25'] = 250
             return list(hand.values())
-        elif(show_step==55): #// 拇指和小指掐
+        elif(show_step==55): #// Pinch tip with thumb and little finger
             show_step=show_step+1
             show_count_obj = 40
             hand['joint1'] = 175
@@ -544,7 +544,7 @@ def show_left():
             hand['joint21'] = 250
             hand['joint25'] = 250
             return list(hand.values())
-        elif(show_step==57): #// 拇指和无名指掐
+        elif(show_step==57): #// Pinch tip with thumb and ring finger
             show_step=show_step+1
             show_count_obj = 35
             hand['joint1'] = 170
@@ -568,7 +568,7 @@ def show_left():
             hand['joint21'] = 250
             hand['joint24'] = 250
             return list(hand.values())
-        elif(show_step==59): #// 拇指和中指掐
+        elif(show_step==59): #// Pinch tip with thumb and middle finger
             show_step=show_step+1
             show_count_obj = 35
             hand['joint1'] = 155
@@ -592,7 +592,7 @@ def show_left():
             hand['joint21'] = 250
             hand['joint24'] = 250
             return list(hand.values())
-        elif(show_step==61): #// 拇指和食指掐
+        elif(show_step==61): #// Pinch tip with thumb and index finger
             show_step=show_step+1
             show_count_obj = 35
             hand['joint1'] = 165
@@ -611,13 +611,13 @@ def signal_handler(sig, frame):
 
     print('You pressed Ctrl+C!')
 
-    sys.exit(0)  # 0表示正常退出
+    sys.exit(0)  # 0 means normal exit
 signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
 
     try:
-        print("测试中")
+        print("Testing")
         send_messages()
     except KeyboardInterrupt:
          print("Caught KeyboardInterrupt, exiting gracefully.")

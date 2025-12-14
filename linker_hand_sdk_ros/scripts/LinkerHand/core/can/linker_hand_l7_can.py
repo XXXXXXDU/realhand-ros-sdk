@@ -352,16 +352,16 @@ class LinkerHandL7Can:
     def get_serial_number(self):
         try:
             self.send_frame(0xC0,[],sleep=0.005)
-            # 1. 使用 bytes() 函数将整数列表转换为字节对象
-            #    bytes() 接收一个由 0-255 之间的整数组成的列表。
+            # 1. Use the bytes() function to convert the integer list to a bytes object
+            #    bytes() accepts a list of integers in the range 0–255.
             byte_data = bytes(self.serial_number)
-            # 2. 使用 .decode() 方法将字节对象解码为 ASCII 字符串
+            # 2. Use the .decode() method to decode the bytes object into an ASCII string
             result_string = byte_data.decode('ascii')
             if result_string == "":
                 return "-1"
             else:
-                # print(f"原始 ASCII 码列表: {self.serial_number}")
-                # print(f"解码后的字符串: {result_string}")
+                # print(f"Original ASCII code list: {self.serial_number}")
+                # print(f"Decoded string: {result_string}")
                 return result_string
         except:
             return "-1"

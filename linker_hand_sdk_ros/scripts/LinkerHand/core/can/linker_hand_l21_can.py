@@ -272,7 +272,7 @@ class LinkerHandL21Can:
         self.send_command(FrameProperty.ROLL_POS, joint_ranges)
     # Set all finger yaw joint positions
     def set_yaw_positions(self, joint_ranges):
-        self.send_command(FrameProperty.YAW_POS, joint_ranges)
+        self.send_command(FrameProperty.YAWPOS, joint_ranges)
     # Set all finger root1 joint positions
     def set_root1_positions(self, joint_ranges):
         self.send_command(FrameProperty.ROOT1_POS, joint_ranges)

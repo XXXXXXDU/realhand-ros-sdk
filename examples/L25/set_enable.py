@@ -12,7 +12,7 @@ import argparse
 def send_messages(hand_type="right"):
     rospy.init_node('set_enable', anonymous=True)
     pub = rospy.Publisher('/cb_hand_setting_cmd', String, queue_size=10)
-    rate = rospy.Rate(30)  # 设置频率为30Hz
+    rate = rospy.Rate(30)  # Set frequency to 30Hz
     msg = String()
     cmd = {
         "setting_cmd":"set_enable",
@@ -32,7 +32,7 @@ def signal_handler(sig, frame):
 
     print('You pressed Ctrl+C!')
 
-    sys.exit(0)  # 0表示正常退出
+    sys.exit(0)  # 0 means normal exit
 signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':

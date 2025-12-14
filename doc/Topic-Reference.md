@@ -1,4 +1,3 @@
-
 ---
 
 # Linker Hand ROS SDK Topic Documentation
@@ -9,99 +8,100 @@ This document provides a detailed overview of the ROS Topic for the Linker Hand,
 
 ## Topic List
 ```bash
-/cb_hand_setting_cmd # 设置linkerhand命令话题
-/cb_left_hand_control_cmd # 控制左手运动话题 by range 0~255 (范围)
-/cb_left_hand_control_cmd_arc # 控制左手运动话题 by arc -3.14~3.14 (弧度) 
-/cb_left_hand_force # 左手压感数据显示话题
-/cb_left_hand_matrix_touch # 左手矩阵压感数据显示话题 list(6x12) String格式 带时间戳
-/cb_left_hand_matrix_touch_pc # 左手矩阵压感数据显示话题 list(6x12) 点云PointCloud2格式
-/cb_left_hand_info  # 左手配置信息显示话题
-/cb_left_hand_state # 左手状态显示话题 范围
-/cb_left_hand_state_arc # 左手状态显示话题 弧度
-/cb_right_hand_control_cmd # 控制右手运动话题 by range 0~255 (范围)
-/cb_right_hand_control_cmd_arc # 控制右手运动话题 by arc -3.14~3.14 (弧度)
-/cb_right_hand_force # 右手压感数据显示话题
-/cb_right_hand_matrix_touch # 右手矩阵压感数据显示话题 list(6x12)
-/cb_right_hand_info # 右手配置信息显示话题
-/cb_right_hand_state # 右手状态显示话题 范围
-/cb_right_hand_state_arc # 右手状态显示话题 弧度
+/cb_hand_setting_cmd # Topic for setting Linker Hand commands
+/cb_left_hand_control_cmd # Topic for controlling left hand motion by range 0~255
+/cb_left_hand_control_cmd_arc # Topic for controlling left hand motion by arc -3.14~3.14 (radians)
+/cb_left_hand_force # Topic for left hand pressure data display
+/cb_left_hand_matrix_touch # Topic for left hand matrix pressure data display list(6x12), String format with timestamp
+/cb_left_hand_matrix_touch_pc # Topic for left hand matrix pressure data display list(6x12), PointCloud2 format
+/cb_left_hand_info  # Topic for left hand configuration information display
+/cb_left_hand_state # Topic for left hand state display (range)
+/cb_left_hand_state_arc # Topic for left hand state display (radians)
+/cb_right_hand_control_cmd # Topic for controlling right hand motion by range 0~255
+/cb_right_hand_control_cmd_arc # Topic for controlling right hand motion by arc -3.14~3.14 (radians)
+/cb_right_hand_force # Topic for right hand pressure data display
+/cb_right_hand_matrix_touch # Topic for right hand matrix pressure data display list(6x12)
+/cb_right_hand_info # Topic for right hand configuration information display
+/cb_right_hand_state # Topic for right hand state display (range)
+/cb_right_hand_state_arc # Topic for right hand state display (radians)
 ```
 
-### 设置Topic /cb_hand_setting_cmd
+### Set Topic /cb_hand_setting_cmd
 
-### 设置最大扭矩
+### Set Maximum Torque
 ```bash
 rostopic pub /cb_hand_setting_cmd std_msgs/String '{data: "{\"setting_cmd\":\"set_max_torque_limits\",\"params\":{\"hand_type\":\"right\",\"torque\":180}}"}'
 ```
-**Description**: 
-设置机械手最大扭矩 数据格式 std_msgs/msg/String
+**Description**:  
+Set the maximum torque of the manipulator. Data format: std_msgs/msg/String  
 **Parameters**:
 - `hand_type`: left or right 
-- `torque`: int or list(int) 长度5  值范围0~255
+- `torque`: int or list(int), length 5, value range 0~255
 
 ---
 
-### 设置速度
+### Set Speed
 ```bash
 rostopic pub /cb_hand_setting_cmd std_msgs/String '{data: "{\"setting_cmd\":\"set_speed\",\"params\":{\"hand_type\":\"right\",\"speed\":200}}"}'
 ```
-**Description**: 
-设置机械手最大速度 数据格式 std_msgs/msg/String
+**Description**:  
+Set the maximum speed of the manipulator. Data format: std_msgs/msg/String  
 **Parameters**:
 - `hand_type`: left or right 
-- `speed`: int or list(int) 长度5  值范围0~255
+- `speed`: int or list(int), length 5, value range 0~255
 
 ---
 
-### 设置电流
+### Set Current
 ```bash
 rostopic pub /cb_hand_setting_cmd std_msgs/String '{data: "{\"setting_cmd\":\"set_electric_current\",\"params\":{\"hand_type\":\"left\",\"electric_current\":250}}"}'
 ```
-**Description**: 
-设置机械手最大电流 数据格式 std_msgs/msg/String
+**Description**:  
+Set the maximum current of the manipulator. Data format: std_msgs/msg/String  
 **Parameters**:
 - `hand_type`: left or right 
-- `electric_current`: int or list(int) 长度5  值范围0~255
+- `electric_current`: int or list(int), length 5, value range 0~255
 
 ---
 
-### 清除故障
+### Clear Faults
 ```bash
 rostopic pub /cb_hand_setting_cmd std_msgs/String '{data: "{\"setting_cmd\":\"clear_faults\",\"params\":{\"hand_type\":\"left\"}}"}'
 ```
-**Description**: 
-清除故障 数据格式 std_msgs/msg/String 当前只支持L20
+**Description**:  
+Clear faults. Data format: std_msgs/msg/String. Currently only supported for L20.  
 **Parameters**:
 - `hand_type`: left or right 
 
 ---
 
-### 控制LinkerHand Topic /cb_left_hand_control_cmd or /cb_right_hand_control_cmd
+### Control LinkerHand Topic /cb_left_hand_control_cmd or /cb_right_hand_control_cmd
 
-### LinkerHand手指运动指定位置
+### LinkerHand finger motion to specified position
 
 # L10
 ```bash
-# 左手
+# Left hand
 rostopic pub /cb_left_hand_control_cmd sensor_msgs/JointState "{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: ''}, name: [], position: [80,80,80,80,80,80,80,80,80,80], velocity: [], effort: []}"
-# 右手
+# Right hand
 rostopic pub /cb_right_hand_control_cmd sensor_msgs/JointState "{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: ''}, name: [], position: [80,80,80,80,80,80,80,80,80,80], velocity: [], effort: []}"
 ```
 # L20
 ```bash
-# 左手
+# Left hand
 rostopic pub /cb_left_hand_control_cmd sensor_msgs/JointState "{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: ''}, name: [], position: [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10], velocity: [], effort: []}"
-# 右手
+# Right hand
 rostopic pub /cb_right_hand_control_cmd sensor_msgs/JointState "{header: {seq: 0, stamp: {secs: 0, nsecs: 0}, frame_id: ''}, name: [], position: [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10], velocity: [], effort: []}"
 ```
-**Description**: 
-手指运动指定位置 数据格式 sensor_msgs/JointState 
+**Description**:  
+Command finger motion to specified positions. Data format: sensor_msgs/JointState  
 **Parameters**:
-- `position`: 手指运动数值 list(float) L7长度:7 L10长度:10 L20长度:20 L25长度:25 每个元素范围0~255 
+- `position`: finger motion values list(float)  
+  L7 length: 7, L10 length: 10, L20 length: 20, L25 length: 25, each element range 0~255 
 
 ---
 
-### 获取手状态 Topic /cb_left_hand_state or /cb_right_hand_state
+### Get Hand State Topic /cb_left_hand_state or /cb_right_hand_state
 ```bash
 
 header: 
@@ -135,65 +135,68 @@ position: [255.0, 132.0, 255.0, 255.0, 255.0, 255.0, 131.0, 127.0, 129.0, 127.0]
 velocity: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 effort: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 ```
-**Description**: 
-手指运动指定位置 数据格式 sensor_msgs/JointState 
+**Description**:  
+Current finger joint state. Data format: sensor_msgs/JointState  
 **Parameters**:
-- `position`: 手指joint当前状态 list(float) L7长度:7 L10长度:10 L20长度:20 L25长度:25 每个元素范围0~255 
+- `position`: current finger joint state list(float)  
+  L7 length: 7, L10 length: 10, L20 length: 20, L25 length: 25, each element range 0~255 
+
 ---
 
-### 获取压感数据 Topic /cb_left_hand_force or /cb_right_hand_force
+### Get Pressure Data Topic /cb_left_hand_force or /cb_right_hand_force
 ```bash
 rostopic echo /cb_left_hand_touch
 data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 255.0, 255.0, 255.0, 255.0, 255.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 ```
-**Description**: 
-获取手指压感数据 数据格式 std_msgs/Float32MultiArray
+**Description**:  
+Get finger pressure sensing data. Data format: std_msgs/Float32MultiArray  
 **Parameters**:
 - `data`:
 ```bash
-索引0：大拇指法相压力值 0~255
-索引1：食指法相压力值 0~255
-索引2：中指法相压力值 0~255
-索引3：无名指法相压力值 0~255
-索引4：小拇指法相压力值 0~255
+Index 0: thumb normal pressure value 0~255
+Index 1: index finger normal pressure value 0~255
+Index 2: middle finger normal pressure value 0~255
+Index 3: ring finger normal pressure value 0~255
+Index 4: little finger normal pressure value 0~255
 
-索引5：大拇指切向压力值 0~255
-索引6：食指切向压力值 0~255
-索引7：中指切向压力值 0~255
-索引8：无名指切向压力值 0~255
-索引9：小拇指切向压力值 0~255
+Index 5: thumb tangential pressure value 0~255
+Index 6: index finger tangential pressure value 0~255
+Index 7: middle finger tangential pressure value 0~255
+Index 8: ring finger tangential pressure value 0~255
+Index 9: little finger tangential pressure value 0~255
 
-索引10：大拇指切向压力方向值 0~255 # 无压力方向则为255
-索引11：食指切向压力方向值 0~255
-索引12：中指切向压力方向值 0~255
-索引13：无名指切向压力方向值 0~255
-索引14：小拇指切向压力方向值 0~255
+Index 10: thumb tangential pressure direction value 0~255 # 255 means no pressure direction
+Index 11: index finger tangential pressure direction value 0~255
+Index 12: middle finger tangential pressure direction value 0~255
+Index 13: ring finger tangential pressure direction value 0~255
+Index 14: little finger tangential pressure direction value 0~255
 
-索引15：大拇指接近感应值 0~255
-索引16：食指切接近感应值 0~255
-索引17：中指切接近感应值 0~255
-索引18：无名指接近感应值 0~255
-索引19：小拇指接近感应值 0~255
+Index 15: thumb proximity sensing value 0~255
+Index 16: index finger proximity sensing value 0~255
+Index 17: middle finger proximity sensing value 0~255
+Index 18: ring finger proximity sensing value 0~255
+Index 19: little finger proximity sensing value 0~255
 ```
 ---
 
-### 获取矩阵式压感数据 Topic /cb_left_hand_matrix_touch or /cb_right_hand_matrix_touch 注：只第二代压力传感器
+### Get Matrix Pressure Data Topic /cb_left_hand_matrix_touch or /cb_right_hand_matrix_touch (Note: only second-generation pressure sensors)
 ```bash
 rostopic echo /cb_left_hand_matrix_touch
 data: "{"thumb_matrix": [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0,0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0,0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0,0, 0, 0, 0, 0]], "index_matrix": [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0,  0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]], "middle_matrix": [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]], "ring_matrix": [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]], "little_matrix": [[0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]}"
 ```
-**Description**: 
-获取手指矩阵压感数据 数据格式 std_msgs/String Json
+**Description**:  
+Get finger matrix pressure data. Data format: std_msgs/String JSON  
 **Parameters**:
 - `data`:
 ```bash
-thumb_matrix：大拇指矩阵压力值 0~255
-index_matrix：食指矩阵压力值 0~255
-middle_matrix：中指矩阵压力值 0~255
-ring_matrix：无名指矩阵压力值 0~255
-little_matrix：小拇指矩阵压力值 0~255
+thumb_matrix: thumb matrix pressure values 0~255
+index_matrix: index finger matrix pressure values 0~255
+middle_matrix: middle finger matrix pressure values 0~255
+ring_matrix: ring finger matrix pressure values 0~255
+little_matrix: little finger matrix pressure values 0~255
 ```
-### 获取矩阵式压感数据 Topic /cb_left_hand_matrix_touch_pc or /cb_right_hand_matrix_touch_pc 注：只第二代压力传感器
+
+### Get Matrix Pressure Data Topic /cb_left_hand_matrix_touch_pc or /cb_right_hand_matrix_touch_pc (Note: only second-generation pressure sensors)
 ```bash
 rostopic echo /cb_left_hand_matrix_touch_pc
 ---
@@ -214,22 +217,23 @@ fields:
 is_bigendian: False
 point_step: 4
 row_step: 1440
-data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 64, 0, 0, 64, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 48, 65, 0, 0, 248, 65, 0, 0, 36, 66, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 200, 65, 0, 0, 28, 66, 0, 0, 128, 66, 0, 0, 116, 66, 0, 0, 128, 65, 0, 0, 0, 0, 0, 0, 224, 65, 0, 0, 52, 66, 0, 0, 100, 66, 0, 0, 136, 66, 0, 0, 232, 65, 0, 0, 0, 0, 0, 0, 80, 66, 0, 0, 116, 66, 0, 0, 130, 66, 0, 0, 128, 66, 0, 0, 56, 66, 0, 0, 0, 0, 0, 0, 44, 66, 0, 0, 56, 66, 0, 0, 64, 66, 0, 0, 40, 66, 0, 0, 184, 65, 0, 0, 0, 0, 0, 0, 128, 65, 0, 0, 32, 66, 0, 0, 224, 65, 0, 0, 168, 65, 0, 0, 216, 65, 0, 0, 0, 0, 0, 0, 64, 64, 0, 0, 160, 65, 0, 0, 240, 65, 0, 0, 240, 65, 0, 0, 200, 65, 0, 0, 0, 0, 0, 0, 64, 64, 0, 0, 208, 65, 0, 0, 28, 66, 0, 0, 160, 65, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 192, 64, 0, 0, 192, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 64, 0, 0, 192, 64, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 64, 0, 0, 192, 65, 0, 0, 44, 66, 0, 0, 28, 66, 0, 0, 64, 64, 0, 0, 0, 0, 0, 0, 248, 65, 0, 0, 92, 66, 0, 0, 136, 66, 0, 0, 104, 66, 0, 0, 136, 65, 0, 0, 0, 0, 0, 0, 8, 66, 0, 0, 128, 66, 0, 0, 138, 66, 0, 0, 120, 66, 0, 0, 176, 65, 0, 0, 0, 0, 0, 0, 48, 66, 0, 0, 132, 66, 0, 0, 148, 66, 0, 0, 100, 66, 0, 0, 160, 65, 0, 0, 0, 0, 0, 0, 76, 66, 0, 0, 140, 66, 0, 0, 146, 66, 0, 0, 128, 66, 0, 0, 232, 65, 0, 0, 0, 0, 0, 0, 32, 66, 0, 0, 136, 66, 0, 0, 150, 66, 0, 0, 120, 66, 0, 0, 144, 65, 0, 0, 0, 0, 0, 0, 224, 65, 0, 0, 92, 66, 0, 0, 112, 66, 0, 0, 40, 66, 0, 0, 160, 64, 0, 0, 0, 0, 0, 0, 160, 64, 0, 0, 80, 65, 0, 0, 184, 65, 0, 0, 184, 65, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 64, 0, 0, 64, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 48, 65, 0, 0, 248, 65, 0, 0, 36, 66, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 200, 65, 0, 0, 28, 66, 0, 0, 128, 66, 0, 0, 116, 66, 0, 0, 128, 65, 0, 0, 0, 0, 0, 0, 224, 65, 0, 0, 52, 66, 0, 0, 100, 66, 0, 0, 136, 66, 0, 0, 232, 65, 0, 0, 0, 0, 0, 0, 80, 66, 0, 0, 116, 66, 0, 0, 130, 66, 0, 0, 128, 66, 0, 0, 56, 66, 0, 0, 0, 0, 0, 0, 44, 66, 0, 0, 56, 66, 0, 0, 64, 66, 0, 0, 40, 66, 0, 0, 184, 65, 0, 0, 0, 0, 0, 0, 128, 65, 0, 0, 32, 66, 0, 0, 224, 65, 0, 0, 168, 65, 0, 0, 216, 65, 0, 0, 0, 0, 0, 0, 64, 64, 0, 0, 160, 65, 0, 0, 240, 65, 0, 0, 240, 65, 0, 0, 200, 65, 0, 0, 0, 0, 0, 0, 64, 64, 0, 0, 208, 65, 0, 0, 28, 66, 0, 0, 160, 65, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 192, 64, 0, 0, 192, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 64, 0, 0, 192, 64, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 160, 64, 0, 0, 192, 65, 0, 0, 44, 66, 0, 0, 28, 66, 0, 0, 64, 64, 0, 0, 0, 0, 0, 0, 248, 65, 0, 0, 92, 66, 0, 0, 136, 66, 0, 0, 104, 66, 0, 0, 136, 65, 0, 0, 0, 0, 0, 0, 8, 66, 0, 0, 128, 66, 0, 0, 138, 66, 0, 0, 120, 66, 0, 0, 176, 65, 0, 0, 0, 0, 0, 0, 48, 66, 0, 0, 132, 66, 0, 0, 148, 66, 0, 0, 100, 66, 0, 0, 160, 65, 0, 0, 0, 0, 0, 0, 76, 66, 0, 0, 140, 66, 0, 0, 146, 66, 0, 0, 128, 66, 0, 0, 232, 65, 0, 0, 0, 0, 0, 0, 32, 66, 0, 0, 136, 66, 0, 0, 150, 66, 0, 0, 120, 66, 0, 0, 144, 65, 0, 0, 0, 0, 0, 0, 224, 65, 0, 0, 92, 66, 0, 0, 112, 66, 0, 0, 40, 66, 0, 0, 160, 64, 0, 0, 0, 0, 0, 0, 160, 64, 0, 0, 80, 65, 0, 0, 184, 65, 0, 0, 184, 65, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 is_dense: False
 ---
 ```
-**Description**: 
-获取手指矩阵压感数据 数据格式 PointCloud2
+**Description**:  
+Get finger matrix pressure data. Data format: PointCloud2  
 
- - 接收端处理示例
+- Example processing on receiver side
 ```python
 def pc2_to_6x12x5(msg):
     arr = np.frombuffer(msg.data, np.float16)  # 360
-    return arr.reshape(5, 6, 12)  # 原始数据为5组6*12的矩阵
+    return arr.reshape(5, 6, 12)  # Original data is 5 sets of 6*12 matrices
 ```
 
 ---
-### 获取LinkerHand配置信息 Topic /cb_left_hand_info or /cb_right_hand_info
+
+### Get LinkerHand Configuration Info Topic /cb_left_hand_info or /cb_right_hand_info
 ```bash
 rostopic echo /cb_right_hand_info
 data: "{\"version\": [7, 0, 0, 0], \"hand_joint\": \"L21\", \"speed\": [1, 0, 0, 0, 0, 0,\
@@ -247,52 +251,56 @@ data: "{\"version\": [7, 0, 0, 0], \"hand_joint\": \"L21\", \"speed\": [1, 0, 0,
   , \"reserved\", \"reserved\", \"reserved\", \"reserved\", \"thumb_tip\", \"index_finger_tip\"\
   , \"middle_finger_tip\", \"ring_finger_tip\", \"little_finger_tip\"]}"
 ```
-**Description**: 
-获取LinkerHand配置信息 数据格式 std_msgs/String for Json
+**Description**:  
+Get LinkerHand configuration information. Data format: std_msgs/String containing JSON  
 **Parameters**:
-- `version`: 手版本号 version[0]:表示L10 version[1]:表示版本 version[2]:表示批号 version[3]:76为左手82为右手 其他未内部编号
-- `hand_joint`: L10 or L20 or L25等
-- `speed`: 手指速度
-- `current`: 手指当前电压 (若支持)
-- `torque`: 手指扭矩 (若支持)
-- `is_touch`: 是否有压力传感器
-- `touch_type`: 传感器类型 (若支持)
-- `touch`: 传感器数据 (若支持)
-- `max_press_rco`: 最大电流
-- `fault`: 电机故障 0 为正常 1、过压/欠压  2、磁编码异常  4、电机过温  8、电流过流  32、负载过载
-- `motor_temperature`: 当前电机温度
-- `finger_order`: 当前灵巧手手指电机顺序
+- `version`: hand version info.  
+  - version[0]: hand type (e.g. L10)  
+  - version[1]: version  
+  - version[2]: batch number  
+  - version[3]: 76 for left hand, 82 for right hand, others are internal codes
+- `hand_joint`: L10 or L20 or L25, etc.
+- `speed`: finger speed
+- `current`: current finger voltage (if supported)
+- `torque`: finger torque (if supported)
+- `is_touch`: whether there is a pressure sensor
+- `touch_type`: sensor type (if supported)
+- `touch`: sensor data (if supported)
+- `max_press_rco`: maximum current
+- `fault`: motor fault. 0 = normal, 1 = over-/under-voltage, 2 = magnetic encoder error, 4 = motor over-temperature, 8 = over-current, 32 = overload
+- `motor_temperature`: current motor temperature
+- `finger_order`: current motor order of the dexterous hand fingers
 
 ---
 
 
 
-## range_to_arc 弧度角度对照表
+## range_to_arc Radian–Range Conversion Table
 
-获取和发送L10、L20的弧度值
+Obtain and send radian values for L10 and L20.
 
-topic:/cb_left_hand_state_arc and /cb_right_hand_state_arc 获取LinkerHand状态position为弧度值
+topic: /cb_left_hand_state_arc and /cb_right_hand_state_arc get LinkerHand state with position in radians.
 
-topic:/cb_left_hand_control_cmd_arc 和 /cb_right_hand_control_cmd_arc 发布position弧度值控制LinkerHand手指运动
+topic: /cb_left_hand_control_cmd_arc and /cb_right_hand_control_cmd_arc publish position in radians to control LinkerHand finger motion.
 
-## 弧度与范围对照表
+## Radian and Range Correspondence Table
 
 
 
 #---------------------------------------------------------------------------------------------------
 
-L7灵巧手关节顺序 = ["大拇指弯曲", "大拇指横摆","食指弯曲", "中指弯曲", "无名指弯曲","小拇指弯曲","拇指旋转"]
+L7 dexterous hand joint order = ["thumb flexion", "thumb abduction","index flexion", "middle flexion", "ring flexion","little finger flexion","thumb rotation"]
 # L7 L OK
 l7_l_min = [0, 0, 0, 0, 0, 0, -0.52]
 l7_l_max = [0.44, 1.43, 1.62, 1.62, 1.62, 1.62, 1.01]
 l7_l_derict = [-1, -1, -1, -1, -1, -1, -1]
-# L7 R OK (urdf后续会更改！！！)
+# L7 R OK (URDF will be changed later!!!)
 l7_r_min = [0, -1.43, 0, 0, 0, 0, 0]
 l7_r_max = [0.75, 0, 1.62, 1.62, 1.62, 1.62, 1.54]
 l7_r_derict = [-1, 0, -1, -1, -1, -1, -1]
 #---------------------------------------------------------------------------------------------------
 
-L10灵巧手关节顺序 = ["拇指根部", "拇指侧摆","食指根部", "中指根部", "无名指根部","小指根部","食指侧摆","无名指侧摆","小指侧摆","拇指旋转"]
+L10 dexterous hand joint order = ["thumb base", "thumb abduction","index base", "middle base", "ring base","little finger base","index abduction","ring abduction","little finger abduction","thumb rotation"]
 # L10 L OK
 l10_l_min = [0, 0, 0, 0, 0, 0, 0, -0.26, -0.26, -0.52]
 l10_l_max = [1.45, 1.43, 1.62, 1.62, 1.62, 1.62, 0.26, 0, 0, 1.01]
@@ -303,7 +311,7 @@ l10_r_max = [0.75, 1.43, 1.62, 1.62, 1.62, 1.62, 0, 0.13, 0.26, 1.01]
 l10_r_derict = [-1, -1, -1, -1, -1, -1, -1, 0, 0, -1]
 #---------------------------------------------------------------------------------------------------
 
-L20灵巧手关节顺序 = ["拇指根部", "食指根部", "中指根部", "无名指根部","小指根部","拇指侧摆","食指侧摆","中指侧摆","无名指侧摆","小指侧摆","拇指横摆","预留","预留","预留","预留","拇指尖部","食指末端","中指末端","无名指末端","小指末端"]
+L20 dexterous hand joint order = ["thumb base", "index base", "middle base", "ring base","little finger base","thumb abduction","index abduction","middle abduction","ring abduction","little finger abduction","thumb horizontal abduction","reserved","reserved","reserved","reserved","thumb tip","index tip","middle tip","ring tip","little finger tip"]
 # L20 L OK
 l20_l_min = [0, 0, 0, 0, 0, -0.297, -0.26, -0.26, -0.26, -0.26, 0.122, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 l20_l_max = [0.87, 1.4, 1.4, 1.4, 1.4, 0.683, 0.26, 0.26, 0.26, 0.26, 1.78, 0, 0, 0, 0, 1.29, 1.08, 1.08, 1.08, 1.08]
@@ -314,7 +322,7 @@ l20_r_max = [0.87, 1.4, 1.4, 1.4, 1.4, 0.683, 0.26, 0.26, 0.26, 0.26, 1.78, 0, 0
 l20_r_derict = [-1, -1, -1, -1, -1, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, -1, -1, -1, -1]
 #---------------------------------------------------------------------------------------------------
 
-L21灵巧手关节顺序 = ["大拇指根部","食指根部","中指根部","无名指根部","小拇指根部","大拇指侧摆","食指侧摆","中指侧摆","无名指侧摆","小拇指侧摆","大拇指横滚","预留","预留","预留","预留","大拇指中部","预留","预留","预留","预留","大拇指指尖","食指指尖","中指指尖","无名指指尖","小拇指指尖"]
+L21 dexterous hand joint order = ["thumb base","index base","middle base","ring base","little finger base","thumb abduction","index abduction","middle abduction","ring abduction","little finger abduction","thumb roll","reserved","reserved","reserved","reserved","thumb middle joint","reserved","reserved","reserved","reserved","thumb tip","index tip","middle tip","ring tip","little finger tip"]
 # L21 L OK
 l21_l_min = [0, 0, 0, 0, 0, 0, 0, -0.18, -0.18, 0, -0.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 l21_l_max = [1, 1.57, 1.57, 1.57, 1.57, 1.6, 0.18, 0.18, 0.18, 0.18, 0.6, 0, 0, 0, 0, 1.57, 0, 0, 0, 0, 1.57, 1.57, 1.57, 1.57, 1.57]
@@ -341,144 +349,144 @@ l21_r_derict = [-1, -1, -1, -1, -1, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0,
 
 
 
-### 设置关节位置
+### Set Joint Positions
 ```python
 def finger_move(self,pose=[])
 ```
 **Description**:  
-设置关节的目标位置，用于控制手指的运动。  
+Set target joint positions to control finger motion.  
 **Parameters**:  
-- `pose`: 一个包含目标位置数据的 float类型的list，L7长度为7个元素，L10长度为10个元素，L20长度为20个元素，L25长度为25个元素。
+- `pose`: a list of floats containing target position data; L7 length 7 elements, L10 length 10 elements, L20 length 20 elements, L25 length 25 elements.
 
 ---
 
-### 设置电机电流值
+### Set Motor Current Values
 ```python
 def set_current(self, current=[])
 ```
 **Description**:  
-设置电机的电流值。  
+Set the motor current values.  
 **Parameters**:  
-- `current`: 一个包含目标电流数据的 int类型list，长度为5个元素，当前只支持L20版本。
+- `current`: a list of ints containing target current values, length 5 elements. Currently only supported for the L20 version.
 
 ---
 
-### 获取速度
+### Get Speed
 ```python
 def get_speed(self)
 return [180, 200, 200, 200, 200]
 ```
 **Description**:  
-获取当前设置的速度值。提示：需设置关节位置后才能获取到速度值。
+Get the currently configured speed values. Note: joint positions must be set before speed can be obtained.
 
 **Returns**:  
-- 返回一个 list，包含当前的手指速度设置值。
+- Returns a list containing the current speed settings for the fingers.
 
 ---
 
-### 获取当前关节状态
+### Get Current Joint State
 ```python
 def get_state(self)
 return [81, 79, 79, 79, 79, 79, 83, 76, 80, 78]
 ```
 **Description**:  
-获取当前关节的状态float类型的list信息。提示：需要设置关节位置后才能获取到状态信息，L7长度为7个元素，L10长度为10个元素，L20长度为20个元素，L25长度为25个元素。
+Get the current joint state as a list of floats. Note: joint positions must be set before state information can be obtained. L7 length 7 elements, L10 length 10 elements, L20 length 20 elements, L25 length 25 elements.
 
 **Returns**:  
-- 返回一个 float类型的list，包含当前关节的状态数据。
+- Returns a list of floats containing the current joint state data.
 
 ---
 
-### 获取法向压力、切向压力、切向方向、接近感应
+### Get Normal Force, Tangential Force, Tangential Direction, Proximity Sensing
 ```python
 def get_force(self)
 return [[255.0, 0.0, 0.0, 77.0, 192.0], [82.0, 0.0, 0.0, 230.0, 223.0], [107.0, 255.0, 255.0, 31.0, 110.0], [255.0, 0.0, 20.0, 255.0, 255.0]]
 ```
 **Description**:  
-获取手部传感器的综合数据，包括法向压力、切向压力、切向方向和接近感应。  
+Get combined hand sensor data, including normal force, tangential force, tangential direction, and proximity sensing.  
 **Returns**:  
-- 返回一个二维list，其中每个子list包含不同类别的list压力数据[[法向压力],[切向压力],[切向压力方向],[接近感应]]。类别每一个元素对应拇指、食指、中指、无名指、小拇指
+- Returns a 2D list; each sublist contains a different category of pressure data [[normal_force], [tangential_force], [tangential_direction], [proximity]]. Within each category, each element corresponds to thumb, index, middle, ring, and little finger.
 
 ---
 
-### 获取版本号
+### Get Version
 ```python
 def get_version(self)
 return [10, 6, 22, 82, 20, 17, 0]
 ```
 **Description**:  
-获取当前软件或硬件的版本号。  
+Get the current software or hardware version information.  
 **Returns**:  
-- 返回一个字符串，表示当前的版本号。list元素依次表示:自由度\版本号\序号\左手76右手82\内部序列号
+- Returns a list whose elements, in order, represent: degrees of freedom, version number, index, 76 for left hand / 82 for right hand, and internal serial numbers.
 
 ---
 --------------------------------------------------------------
-### 获取扭矩
+### Get Torque
 ```python
 def get_torque(self)
 return [200, 200, 200, 200, 200]
 ```
 **Description**:  
-获取当前手指扭矩list信息。表示每根手指当前电机扭矩，支持L20、L25。
+Get the current finger torque list information. Each value represents the current motor torque for each finger. Supported for L20 and L25.
 
 **Returns**:  
-- 返回一个 float类型的list。
+- Returns a list of floats.
 
 ---
 
-### 获取电机温度
+### Get Motor Temperature
 ```python
 def get_temperature(self)
 return [41, 71, 45, 40, 50, 47, 58, 50, 63, 70]
 ```
 **Description**:  
-获取当前关节的电机温度。
+Get the current motor temperature of each joint.
 
 **Returns**:  
-- 返回一个 list数据，包含当前关节的电机温度。
+- Returns a list containing the current motor temperatures of each joint.
 
 ---
 
-### 获取电机故障码
+### Get Motor Fault Codes
 ```python
 def get_fault(self)
 return [0, 4, 0, 0, 0, 0, 0, 0, 0, 0]
 ```
 **Description**:  
-获取当前关节电机故障，0表示正常 数字1电流过载 数字2温度过高 数字3编码错误 数字4过压/欠压。
+Get the current motor fault codes for each joint. 0 means normal; 1 means current overload; 2 means temperature too high; 3 means encoder error; 4 means over-/under-voltage.
 
 **Returns**:  
-- 返回一个 float类型的list，包含当前关节电机故障。
+- Returns a list of floats containing the motor fault codes for each joint.
 
 ---
 
-### 清除电机故障码
+### Clear Motor Fault Codes
 ```python
 def clear_faults(self)
 ```
 **Description**:  
-尝试清除电机故障，无返回值。只支持L20
+Attempt to clear motor faults. No return value. Only supported for L20.  
 **Returns**:  
 
 ---
 
 ## Example Usage
 
-以下是一个完整的示例代码，展示如何使用上述 API：
+The following is a complete example showing how to use the above APIs:
 
 ```python
 
 from LinkerHand.linker_hand_api import LinkerHandApi
 def main():
-    # 初始化API hand_type:left or right   hand_joint:L7 or L10 or L20 or L25
+    # Initialize API hand_type: left or right   hand_joint: L7 or L10 or L20 or L25
     linker_hand = LinkerHandApi(hand_type="left", hand_joint="L10")
-    # 设置手指速度
+    # Set finger speed
     linker_hand.set_speed(speed=[120,200,200,200,200])
-    # 设置手扭矩
+    # Set finger torque
     linker_hand.set_torque(torque=[200,200,200,200,200])
-    # 获取手当前状态
+    # Get current hand state
     hand_state = linker_hand.get_state()
-    # 打印状态值
+    # Print state values
     print(hand_state)
 
 ```
@@ -486,12 +494,12 @@ def main():
 ---
 
 ## Notes
-- 在使用 API 之前，请确保手部设备已正确连接并初始化。
-- 参数值（如速度、力度等）的具体范围和含义请参考设备的技术手册。
+- Before using the API, please ensure the hand device is properly connected and initialized.
+- For the specific ranges and meanings of parameter values (such as speed, force, etc.), please refer to the device technical manual.
 
 ---
 
 ## Contact
-- 如果有任何问题或需要进一步支持，请联系 [support@linkerhand.com](mailto:support@linkerhand.com)。
+- If you have any questions or need further support, please contact [support@linkerhand.com](mailto:support@linkerhand.com).
 
 ---

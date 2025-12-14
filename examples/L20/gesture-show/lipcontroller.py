@@ -34,15 +34,15 @@ is_first_touch = True
 class LIPDController:
     def __init__(self, mode_, kp_, ki_, kd_, forcetarget_, tolerance_):
         self.mode = mode_
-        self.kp = kp_ #// 比例增益
-        self.ki = ki_ #// 微分增益
-        self.kd = kd_ #// 泄露因子
-        self.ft = forcetarget_ #// 目标值
-        self.tr = tolerance_ #// 误差范围
-        self.pre_error = 0 #// 前一个误差
-        self.yout = 0 #// 控制器输出
-        self.fb = 0 #// 力反馈
-        self.appro = 0 # 接近值
+        self.kp = kp_ #// Proportional gain
+        self.ki = ki_ #// Integral gain
+        self.kd = kd_ #// Derivative gain
+        self.ft = forcetarget_ #// Target value
+        self.tr = tolerance_ #// Tolerance range
+        self.pre_error = 0 #// Previous error
+        self.yout = 0 #// Controller output
+        self.fb = 0 #// Force feedback
+        self.appro = 0 # Proximity value
         self.error = 0
         self.sum = 0
         self.state = 0
@@ -53,7 +53,7 @@ class LIPDController:
         self.fb = fb
         self.appro = cap
         
-        if self.mode == 0:  # 接近模式
+        if self.mode == 0:  # Proximity mode
             self.error = self.fb - self.ft
             if(self.state==0):
                 if self.fb >= 0.01:
@@ -67,7 +67,7 @@ class LIPDController:
                      self.yout=self.FAST_STEP
             elif(self.state==1):
                 if(self.fb<=0):
-                    print(f"物品移动走了，继续抓握")
+                    print(f"Object moved away, continuing to grasp")
                     self.state=0
                     self.yout=0
                 else:
@@ -75,7 +75,7 @@ class LIPDController:
             else:
                 self.yout=0
         
-        elif self.mode == 1:  # 另一种接近模式
+        elif self.mode == 1:  # Another proximity mode
             self.error = (self.appro - self.ft) / 1000
             if self.appro < 250:
                 self.yout = self.FAST_STEP / 2
@@ -84,7 +84,7 @@ class LIPDController:
             else:
                 self.PID()
         
-        elif self.mode == 2:  # 接触模式
+        elif self.mode == 2:  # Contact mode
             self.error = self.fb - self.ft
             if self.fb <= 0.01:
                 self.yout = self.SLOW_STEP
@@ -94,7 +94,7 @@ class LIPDController:
         else:
             self.yout = 0
         
-        # 打印调试信息
+        # Print debug information
         # print(f"sum: {self.sum}==== yout: {self.yout}")
         return self.yout
     
@@ -106,11 +106,11 @@ class LIPDController:
             self.sum = max(-10, min(self.sum, 10))
             self.yout = self.kp * self.error + self.kd * (self.error - self.pre_error) + self.ki * self.sum
             self.yout = -self.yout
-            self.yout /= 80  # 调整输出值
+            self.yout /= 80  # Adjust output value
         self.pre_error = self.error
  
 
-# 初始化LIPD控制器
+# Initialize LIPD controller
 lipd_controller = LIPDController(0, 0.5, 0.001, 0.1, 0.35, 0.005)
 
 def lip_callback(data):
@@ -178,7 +178,7 @@ def hand_status(data):
     global hand_real_time
     hand_real_time[1]=data.position[1]
 
- # 初始化ROS节点
+ # Initialize ROS node
 rospy.init_node('grasp_force_control', anonymous=True)
 pub = rospy.Publisher('/cb_left_hand_control_cmd', JointState, queue_size=10)
 sub = rospy.Subscriber('/cb_left_hand_touch', Float32MultiArray, lip_callback)
@@ -186,7 +186,7 @@ hand_sub = rospy.Subscriber('/cb_left_hand_state', JointState, hand_status)
 
 
 
-# 初始化ROS节点
+# Initialize ROS node
 def main():
     global joint_state
     global pub
@@ -201,7 +201,7 @@ def main():
     joint_state.velocity = [0] * len(joint_state.position)  
     joint_state.effort = [0] * len(joint_state.position)  
     joint_state.position = list(hand.values())
-    print("开始演示")
+    print("Starting demo")
     rospy.sleep(1)
     pub.publish(joint_state)
 

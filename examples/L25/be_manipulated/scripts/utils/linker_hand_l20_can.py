@@ -15,7 +15,7 @@ class LinkerHandL20Can:
         self.can_id = can_id
         self.running = True
         self.x05, self.x06, self.x07 = [],[],[]
-        # 根据操作系统初始化 CAN 总线
+        # Initialize CAN bus based on the operating system
         if sys.platform == "linux":
             self.bus = can.interface.Bus(
                 channel=can_channel, interface="socketcan", bitrate=baudrate, 
@@ -29,24 +29,24 @@ class LinkerHandL20Can:
         else:
             raise EnvironmentError("Unsupported platform for CAN interface")
 
-        # 根据 can_id 初始化 publisher 和相关参数
-        if can_id == 0x28:  # 左手
+        # Initialize publisher and related parameters based on can_id
+        if can_id == 0x28:  # Left hand
             self.pub = rospy.Publisher("/cb_left_hand_state", JointState, queue_size=10)
             self.hand_exists = config['LINKER_HAND']['LEFT_HAND']['EXISTS']
             self.hand_joint = config['LINKER_HAND']['LEFT_HAND']['JOINT']
             self.hand_names = config['LINKER_HAND']['LEFT_HAND']['NAME']
-        elif can_id == 0x27:  # 右手
+        elif can_id == 0x27:  # Right hand
             self.pub = rospy.Publisher("/cb_right_hand_state", JointState, queue_size=10)
             self.hand_exists = config['LINKER_HAND']['RIGHT_HAND']['EXISTS']
             self.hand_joint = config['LINKER_HAND']['RIGHT_HAND']['JOINT']
             self.hand_names = config['LINKER_HAND']['RIGHT_HAND']['NAME']
 
-        # 初始化数据存储
+        # Initialize data storage
         self.x01, self.x02, self.x03, self.x04 = [[0.0] * 5 for _ in range(4)]
         self.normal_force, self.tangential_force, self.tangential_force_dir, self.approach_inc = \
             [[0.0] * 5 for _ in range(4)]
 
-        # 启动接收线程
+        # Start the receiving thread
         self.receive_thread = threading.Thread(target=self.receive_response)
         self.receive_thread.daemon = True
         self.receive_thread.start()
@@ -68,11 +68,11 @@ class LinkerHandL20Can:
 
     def receive_response(self):
         """
-        接收并处理 CAN 总线的响应消息
+        Receive and process response messages from the CAN bus
         """
         while self.running:
             try:
-                msg = self.bus.recv(timeout=1.0)  # 阻塞接收，1 秒超时
+                msg = self.bus.recv(timeout=1.0)  # Blocking receive with a 1-second timeout
                 if msg:
                     self.process_response(msg)
             except can.CanError as e:
@@ -169,29 +169,29 @@ class LinkerHandL20Can:
                 elif self.can_id == 0x27:
                     self.left_hand_info = response_data
             elif frame_type == 0x05:
-                #ColorMsg(msg=f"速度设置为：{list(response_data)}", color="yellow")
+                #ColorMsg(msg=f"Speed set to: {list(response_data)}", color="yellow")
                 self.x05 = list(response_data)
                 
             elif frame_type == 0x06:
-                #ColorMsg(msg=f"当前电流状态：{list(response_data)}")
+                #ColorMsg(msg=f"Current electrical status: {list(response_data)}")
                 self.x06 = list(response_data)
             elif frame_type == 0x07:
-                #ColorMsg(msg=f"电机故障状态反馈：{list(response_data)}", color="yellow")
+                #ColorMsg(msg=f"Motor fault status feedback: {list(response_data)}", color="yellow")
                 self.x07 = list(response_data)
             elif frame_type == 0x20:
-                #ColorMsg(msg=f"五指法向压力：{list(response_data)}")
+                #ColorMsg(msg=f"Five-finger normal pressure: {list(response_data)}")
                 d = list(response_data)
                 self.normal_force = [float(i) for i in d]
             elif frame_type == 0x21:
-                #ColorMsg(msg=f"五指切向压力：{list(response_data)}")
+                #ColorMsg(msg=f"Five-finger tangential pressure: {list(response_data)}")
                 d = list(response_data)
                 self.tangential_force = [float(i) for i in d]
             elif frame_type == 0x22:
-                #ColorMsg(msg=f"五指切向压力方向：{list(response_data)}")
+                #ColorMsg(msg=f"Five-finger tangential pressure direction: {list(response_data)}")
                 d = list(response_data)
                 self.tangential_force_dir = [float(i) for i in d]
             elif frame_type == 0x23:
-                #ColorMsg(msg=f"五指接近度：{list(response_data)}")
+                #ColorMsg(msg=f"Five-finger proximity: {list(response_data)}")
                 d = list(response_data)
                 self.approach_inc = [float(i) for i in d]
 
@@ -210,5 +210,4 @@ class LinkerHandL20Can:
         return self.x07
     def close_can_interface(self):
         if self.bus:
-            self.bus.shutdown()  # 关闭 CAN 总线
-
+            self.bus.shutdown()  # Close the CAN bus

@@ -25,7 +25,7 @@ def send_messages():
 
     pub = rospy.Publisher('/cb_left_hand_control_cmd', JointState, queue_size=10)
 
-    rate = rospy.Rate(30)  # 设置频率为30Hz
+    rate = rospy.Rate(30)  # Set frequency to 30Hz
     joint_state.header = std_msgs.msg.Header()
     joint_state.header.seq=0
     joint_state.header.stamp = rospy.Time.now() 
@@ -37,10 +37,10 @@ def send_messages():
                         'joint13', 'joint14', 'joint15', 'joint16', 'joint17', 'joint18',
 
                         'joint19', 'joint20']
-    joint_state.velocity = [0] * len(joint_state.position)  # 与position数组长度相同，全部填充为0
+    joint_state.velocity = [0] * len(joint_state.position)  # Same length as the position array, all filled with 0
     joint_state.effort = [0] * len(joint_state.position)  
     pub.publish(joint_state)
-    while not rospy.is_shutdown():  # 持续1秒
+    while not rospy.is_shutdown():  # Loop for 1 second
         position =show_left()
         if(position is not None):
             joint_state.position = position
@@ -58,19 +58,19 @@ def show_left():
             show_step=show_step+1
             show_count_obj = 40
             return[128, 250, 250, 250, 250, 250, 128, 128, 128, 128, 250, 0, 0, 0, 0, 250, 250, 250, 250, 250]
-        elif(show_step==1): #// 弯曲四指小节
+        elif(show_step==1): #// Bend the small joints of the four fingers
             show_step=show_step+1
             show_count_obj = 30
             return[128,250,250,250,250,250,128,128,128,128,250,  0,  0,  0,  0,250,  0,  0,  0,  0]
-        elif(show_step==2): #// 弯曲四指小节和大节
+        elif(show_step==2): #// Bend the small and large joints of the four fingers
             show_step=show_step+1
             show_count_obj = 33
             return[128,  0,  0,  0,  0,250,128,128,128,128,250,  0,  0,  0,  0,250,  0,  0,  0,  0]
-        elif(show_step==3): #// 舒展四指小节 弯曲大节
+        elif(show_step==3): #// Extend the small joints of the four fingers, bend the large joints
             show_step=show_step+1
             show_count_obj = 30
             return[128,  0,  0,  0,  0,250,128,128,128,128,250,  0,  0,  0,  0,250,250,250,250,250]
-        elif(show_step==4): #// 全部舒展 回归初始位置
+        elif(show_step==4): #// Fully extend and return to the initial position
             show_step=show_step+1
             show_count_obj = 30
             return[128,250,250,250,250,250,128,128,128,128,250,  0,  0,  0,  0,250,250,250,250,250]
@@ -81,13 +81,13 @@ def signal_handler(sig, frame):
 
     print('You pressed Ctrl+C!')
 
-    sys.exit(0)  # 0表示正常退出
+    sys.exit(0)  # 0 means normal exit
 signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
 
     try:
-        print("测试中")
+        print("Testing")
         send_messages()
     except KeyboardInterrupt:
          print("Caught KeyboardInterrupt, exiting gracefully.")

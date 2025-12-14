@@ -69,18 +69,18 @@ def create_joint_state_msg(position,vel=[]):
 
 if __name__ == "__main__":
     rospy.init_node("hand_range_arc_conversion", anonymous=True)
-    print("范围与弧度转换节点已启动")
-    '''------------------左手-----------------'''
-    # 接收到角度话题
+    print("Range and radian conversion node has been started")
+    '''------------------Left Hand-----------------'''
+    # Subscribe to the angle topic
     left_sub = rospy.Subscriber("/cb_left_hand_control_cmd_arc",JointState,left_hand,queue_size=10)
     right_sub = rospy.Subscriber("/cb_right_hand_control_cmd_arc",JointState,right_hand,queue_size=10)
-    # 将弧度转为范围后发布
+    # Publish after converting radians to range
     left_pub = rospy.Publisher("/cb_left_hand_control_cmd",JointState,queue_size=1)
     right_pub = rospy.Publisher("/cb_right_hand_control_cmd", JointState,queue_size=1)
-    # 接收到状态话题
+    # Subscribe to the state topic
     left_state_sub = rospy.Subscriber("/cb_left_hand_state",JointState,left_hand_state,queue_size=10)
     right_state_sub = rospy.Subscriber("/cb_right_hand_state",JointState,right_hand_state,queue_size=10)
-    # 将状态范围转为弧度后发布
+    # Publish after converting state range to radians
     left_state_pub = rospy.Publisher("/cb_left_hand_state_arc",JointState,queue_size=1)
     right_state_pub = rospy.Publisher("/cb_right_hand_state_arc",JointState,queue_size=1)
     

@@ -1,12 +1,8 @@
-<img  src="resource/logo.png" width="800">
-
 # 1. **Overview**
 
 Intelligent Dexterous Hands, Creating All Possibilities.
 
 The LinkerHand ROS SDK is a software tool developed by LinkerHand (Beijing) Technology Co., Ltd. used to drive its series of dexterous hand products and provide functional examples. It supports various devices (such as laptops, desktops, Raspberry Pi, Jetson, etc.) and primarily serves fields like humanoid robotics, industrial automation, and scientific research institutions. It is suitable for applications such as humanoid robots, flexible production lines, embodied AI model training, and data collection.
-
-[中文](README_CN.md)  |  [English](README.md)
 
 **WARNING**
 
@@ -18,9 +14,9 @@ The LinkerHand ROS SDK is a software tool developed by LinkerHand (Beijing) Tech
 
 | Name | Version | Link |
 | --- | --- | --- |
-| Python SDK | ![SDK Version](https://img.shields.io/badge/SDK%20Version-V3.0.1-brightgreen?style=flat-square) ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python&logoColor=white) ![Windows 11](https://img.shields.io/badge/OS-Windows%2011-0078D4?style=flat-square&logo=windows&logoColor=white) ![Ubuntu 20.04+](https://img.shields.io/badge/OS-Ubuntu%2020.04%2B-E95420?style=flat-square&logo=ubuntu&logoColor=white) | [![GitHub 仓库](https://img.shields.io/badge/GitHub-grey?logo=github&style=flat-square)](https://github.com/linker-bot/linkerhand-python-sdk) |
-| ROS SDK | ![SDK Version](https://img.shields.io/badge/SDK%20Version-V3.0.1-brightgreen?style=flat-square) ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python&logoColor=white) ![Ubuntu 20.04+](https://img.shields.io/badge/OS-Ubuntu%2020.04%2B-E95420?style=flat-square&logo=ubuntu&logoColor=white) ![ROS Noetic](https://img.shields.io/badge/ROS-Noetic-009624?style=flat-square&logo=ros) | [![GitHub 仓库](https://img.shields.io/badge/GitHub-grey?logo=github&style=flat-square)](https://github.com/linker-bot/linkerhand-ros-sdk) |
-| ROS2 SDK | ![SDK Version](https://img.shields.io/badge/SDK%20Version-V3.0.1-brightgreen?style=flat-square) ![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white) ![Ubuntu 24.04](https://img.shields.io/badge/OS-Ubuntu%2024.04-E95420?style=flat-square&logo=ubuntu&logoColor=white) ![ROS 2 Jazzy](https://img.shields.io/badge/ROS%202-Jazzy-00B3E6?style=flat-square&logo=ros) ![Windows 11](https://img.shields.io/badge/OS-Windows%2011-0078D4?style=flat-square&logo=windows&logoColor=white) | [![GitHub 仓库](https://img.shields.io/badge/GitHub-grey?logo=github&style=flat-square)](https://github.com/linker-bot/linkerhand-ros2-sdk) |
+| Python SDK | ![SDK Version](https://img.shields.io/badge/SDK%20Version-V3.0.1-brightgreen?style=flat-square) ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python&logoColor=white) ![Windows 11](https://img.shields.io/badge/OS-Windows%2011-0078D4?style=flat-square&logo=windows&logoColor=white) ![Ubuntu 20.04+](https://img.shields.io/badge/OS-Ubuntu%2020.04%2B-E95420?style=flat-square&logo=ubuntu&logoColor=white) | [![GitHub Repository](https://img.shields.io/badge/GitHub-grey?logo=github&style=flat-square)](TODO) |
+| ROS SDK | ![SDK Version](https://img.shields.io/badge/SDK%20Version-V3.0.1-brightgreen?style=flat-square) ![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue?style=flat-square&logo=python&logoColor=white) ![Ubuntu 20.04+](https://img.shields.io/badge/OS-Ubuntu%2020.04%2B-E95420?style=flat-square&logo=ubuntu&logoColor=white) ![ROS Noetic](https://img.shields.io/badge/ROS-Noetic-009624?style=flat-square&logo=ros) | [![GitHub Repository](https://img.shields.io/badge/GitHub-grey?logo=github&style=flat-square)](TODO) |
+| ROS2 SDK | ![SDK Version](https://img.shields.io/badge/SDK%20Version-V3.0.1-brightgreen?style=flat-square) ![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white) ![Ubuntu 24.04](https://img.shields.io/badge/OS-Ubuntu%2024.04-E95420?style=flat-square&logo=ubuntu&logoColor=white) ![ROS 2 Jazzy](https://img.shields.io/badge/ROS%202-Jazzy-00B3E6?style=flat-square&logo=ros) ![Windows 11](https://img.shields.io/badge/OS-Windows%2011-0078D4?style=flat-square&logo=windows&logoColor=white) | [![GitHub Repository](https://img.shields.io/badge/GitHub-grey?logo=github&style=flat-square)](TODO) |
 
 # 2. **Version History**
 V3.0.1
@@ -67,7 +63,8 @@ $ git clone https://github.com/linker-bot/linkerhand-ros-sdk.git    # Obtain t
 ```python
 $ sudo apt install python3-can
 $ cd Linker_Hand_SDK_ROS/src/linker_hand_sdk    # Navigate to the directory
-$ pip install -r requirements.txt    # Install required dependencies$ cd Linker_Hand_SDK_ROS # Return to the project root
+$ pip install -r requirements.txt    # Install required dependencies
+$ cd ../.. # Return to the project root
 $ catkin_make    # Compile and build the ROS package
 ```
 ## 3.4 Configure ROS Master-Slave Communication

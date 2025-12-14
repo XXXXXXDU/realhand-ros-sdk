@@ -27,10 +27,10 @@ class LinkerHandL10Can:
         self.x05 = [0] * 5
         self.can_id = can_id
         self.joint_angles = [0] * 10
-        self.pressures = [200] * 5  # 默认扭矩200
+        self.pressures = [200] * 5  # Default torque 200
         self.bus = self.init_can_bus(can_channel, baudrate)
         self.normal_force, self.tangential_force, self.tangential_force_dir, self.approach_inc = [[0.0] * 5 for _ in range(4)]
-        # 启动接收线程
+        # Start the receiving thread
         self.running = True
         self.receive_thread = threading.Thread(target=self.receive_response)
         self.receive_thread.daemon = True
@@ -45,7 +45,7 @@ class LinkerHandL10Can:
             raise EnvironmentError("Unsupported platform for CAN interface")
 
     def send_frame(self, frame_property, data_list):
-        """发送一个带有指定属性和数据的单个CAN帧。"""
+        """Sends a single CAN frame with specified properties and data."""
         frame_property_value = int(frame_property.value) if hasattr(frame_property, 'value') else frame_property
         data = [frame_property_value] + [int(val) for val in data_list]
         msg = can.Message(arbitration_id=self.can_id, data=data, is_extended_id=False)
@@ -56,16 +56,16 @@ class LinkerHandL10Can:
         time.sleep(0.002)
 
     def set_joint_positions(self, joint_angles):
-        """将10个关节的位置设置（joint_angles: 10个数值的列表）。"""
+        """Set the positions of 10 joints (joint_angles: a list of 10 values)."""
         self.joint_angles = joint_angles
-        # 分帧发送角度控制
+        # Send angle control in separate frames
         self.send_frame(FrameProperty.JOINT_POSITION2_RCO, self.joint_angles[6:])
         time.sleep(0.001)
         self.send_frame(FrameProperty.JOINT_POSITION_RCO, self.joint_angles[:6])
         
 
     def set_max_torque_limits(self, pressures,type="get"):
-        """设置最大扭矩限制"""
+        """Set maximum torque limits"""
         if type == "get":
             self.pressures = [0.0]
         else:
@@ -81,9 +81,9 @@ class LinkerHandL10Can:
             time.sleep(0.01)
             self.send_frame(0x05, speed)
     def request_all_status(self):
-        """获取所有关节位置和压力。"""
+        """Get all joint positions and pressures."""
         self.send_frame(FrameProperty.REQUEST_DATA_RETURN, [])
-    ''' -------------------压力传感器---------------------- '''
+    ''' -------------------Pressure Sensor---------------------- '''
     def get_normal_force(self):
         self.send_frame(FrameProperty.HAND_NORMAL_FORCE,[])
 
@@ -95,7 +95,7 @@ class LinkerHandL10Can:
     def get_approach_inc(self):
         self.send_frame(FrameProperty.HAND_APPROACH_INC,[])
     def receive_response(self):
-        """接收CAN响应并处理."""
+        """Receive and process CAN responses."""
         while self.running:
             try:
                 msg = self.bus.recv(timeout=1.0)
@@ -105,7 +105,7 @@ class LinkerHandL10Can:
                 print(f"Error receiving CAN message: {e}")
 
     def process_response(self, msg):
-        """处理接收到的CAN消息。"""
+        """Process received CAN messages."""
         if msg.arbitration_id == self.can_id:
             frame_type = msg.data[0]
             response_data = msg.data[1:]

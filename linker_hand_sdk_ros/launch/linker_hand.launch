@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <launch>
-    <!-- 参数定义（可外部传入） -->
+    <!-- Parameter definition (can be passed in from outside) -->
     <arg name="hand_type" default="left"/>
-    <arg name="hand_joint" default="L6"/>   <!--  O6\L6\L7\L10\L20\G20(工业版)\L21  -->
+    <arg name="hand_joint" default="L6"/>   <!--  O6\L6\L7\L10\L20\G20(Industrial version)\L21  -->
     <arg name="touch" default="true"/>
     <arg name="can" default="can0"/>
     <arg name="modbus" default="None"/> <!-- "None" or "/dev/ttyUSB*"  only O6 -->
 
-    <!-- linker_hand 节点 -->
+    <!-- linker_hand node -->
     <node pkg="linker_hand_sdk_ros" type="linker_hand.py" name="linker_hand_sdk" output="screen">
         <param name="hand_type" type="string" value="$(arg hand_type)"/>
         <param name="hand_joint" type="string" value="$(arg hand_joint)"/>

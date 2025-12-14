@@ -1,18 +1,18 @@
 CONFIG = {
-    # 默认值 (如果需要，但代码中默认值是 5 个元素，特殊值是 6、7、10、20、21/25 个元素)
+    # Default values (if needed, but the default in the code is 5 elements, special values are 6, 7, 10, 20, 21/25 elements)
     # "DEFAULT": {
     #     "pose": None,
     #     "torque": [200, 200, 200, 200, 200],
     #     "speed": [80, 200, 200, 200, 200]
     # },
     
-    # 6 轴/关节配置
+    # 6-axis/joint configuration
     "O6": {
         "pose": [255, 200, 255, 255, 255, 255],
         "torque": [250, 250, 250, 250, 250, 250],
         "speed": [255, 255, 255, 255, 255, 255]
     },
-    "L6": { # 与 O6 相同，可以直接用一个函数来处理重复的逻辑
+    "L6": { # Same as O6, a function can be used to handle the repetitive logic
         "pose": [255, 200, 255, 255, 255, 255],
         "torque": [250, 250, 250, 250, 250, 250],
         "speed": [255, 255, 255, 255, 255, 255]
@@ -23,21 +23,21 @@ CONFIG = {
         "speed": [255, 255, 255, 255, 255, 255]
     },
 
-    # 7 轴/关节配置
+    # 7-axis/joint configuration
     "L7": {
         "pose": [255, 200, 255, 255, 255, 255, 180],
         "torque": [250, 250, 250, 250, 250, 250, 250],
         "speed": [120, 180, 180, 180, 180, 180, 180]
     },
 
-    # 10 轴/关节配置
+    # 10-axis/joint configuration
     "L10": {
         "pose": [255, 200, 255, 255, 255, 255, 180, 180, 180, 41],
         "torque": [250, 250, 250, 250, 250, 250, 250, 250, 250, 250],
         "speed": [120, 180, 180, 180, 180, 180, 180, 180, 180, 180]
     },
 
-    # 20 轴/关节配置 (注意: L20 和 G20 的 torque 和 speed 未在原代码中显式定义，这里保持原代码的默认值)
+    # 20-axis/joint configuration (Note: torque and speed for L20 and G20 are not explicitly defined in the original code, the default values from the original code are kept here)
     "L20": {
         "pose": [255, 255, 255, 255, 255, 255, 10, 100, 180, 240, 245, 255, 255, 255, 255, 255, 255, 255, 255, 255],
     },
@@ -45,7 +45,7 @@ CONFIG = {
         "pose": [241, 255, 255, 255, 255, 255, 141, 134, 149, 137, 245, 255, 255, 255, 255, 255, 255, 255, 255, 255],
     },
 
-    # 21/25 轴/关节配置 (L21 和 L25 具有相同的 pose)
+    # 21/25-axis/joint configuration (L21 and L25 have the same pose)
     "L21": {
         "pose": [75, 255, 255, 255, 255, 176, 97, 81, 114, 147, 202, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255],
     },

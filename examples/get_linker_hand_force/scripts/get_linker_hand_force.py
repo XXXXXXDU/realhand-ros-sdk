@@ -8,9 +8,8 @@ from utils.color_msg import ColorMsg
 
 
 '''
-/cb_left_hand_force # 左手力传感器
-/cb_right_hand_force # 右手力传感器
-
+/cb_left_hand_force # Left hand force sensor
+/cb_right_hand_force # Right hand force sensor
 '''
 
 class GetLinkerHandPressure():
@@ -27,37 +26,37 @@ class GetLinkerHandPressure():
         rospy.Subscriber("/cb_right_hand_force", Float32MultiArray, self.right_hand_cb, queue_size=1)
     def left_hand_cb(self,msg):
         data = self.list_slice(data=msg.data)
-        # 五指法相力 数值越大法向力值越大
-        # [大拇指, 食指, 中指, 无名指, 小拇指]->[0.0, 26.0, 34.0, 255.0, 0.0]
+        # Five-finger normal force. The larger the value, the greater the normal force.
+        # [Thumb, Index, Middle, Ring, Little]->[0.0, 26.0, 34.0, 255.0, 0.0]
         hand_normal_force = data[0]
-        ColorMsg(msg=f"左手五指法相力: {list(hand_normal_force)}", color="green")
-        # 五指切向力 数值越大切向力值越大
-        # [大拇指, 食指, 中指, 无名指, 小拇指]->[0.0, 12.0, 3.0, 4.0, 0.0]
+        ColorMsg(msg=f"Left hand five-finger normal force: {list(hand_normal_force)}", color="green")
+        # Five-finger tangential force. The larger the value, the greater the tangential force.
+        # [Thumb, Index, Middle, Ring, Little]->[0.0, 12.0, 3.0, 4.0, 0.0]
         hand_tangential_force = data[1]
-        ColorMsg(msg=f"左手五指切向力: {list(hand_tangential_force)}", color="green")
-        # 五指切向力方向 数值0-127对应实际切向力角度0-359，注意在手指不受力即无法判断切向力方向时数值保持为255。
+        ColorMsg(msg=f"Left hand five-finger tangential force: {list(hand_tangential_force)}", color="green")
+        # Five-finger tangential force direction. Values 0-127 correspond to actual tangential force angles 0-359. Note that when the finger is not under force and the direction cannot be determined, the value remains 255.
         hand_tangential_force_dir = data[2]
-        ColorMsg(msg=f"左手五指切向力方向: {list(hand_tangential_force_dir)}", color="green")
-        # 五指接近感应
+        ColorMsg(msg=f"Left hand five-finger tangential force direction: {list(hand_tangential_force_dir)}", color="green")
+        # Five-finger proximity sensing
         hand_approach_inc = data[3]
-        ColorMsg(msg=f"左手五指接近感应: {list(hand_approach_inc)}", color="green")
+        ColorMsg(msg=f"Left hand five-finger proximity sensing: {list(hand_approach_inc)}", color="green")
     
     def right_hand_cb(self, msg):
         data = self.list_slice(data=msg.data)
-        # 五指法相力 数值越大法向力值越大
-        # [大拇指, 食指, 中指, 无名指, 小拇指]->[0.0, 26.0, 34.0, 255.0, 0.0]
+        # Five-finger normal force. The larger the value, the greater the normal force.
+        # [Thumb, Index, Middle, Ring, Little]->[0.0, 26.0, 34.0, 255.0, 0.0]
         hand_normal_force = data[0]
-        ColorMsg(msg=f"右手五指法相力: {list(hand_normal_force)}", color="green")
-        # 五指切向力 数值越大切向力值越大
-        # [大拇指, 食指, 中指, 无名指, 小拇指]->[0.0, 12.0, 3.0, 4.0, 0.0]
+        ColorMsg(msg=f"Right hand five-finger normal force: {list(hand_normal_force)}", color="green")
+        # Five-finger tangential force. The larger the value, the greater the tangential force.
+        # [Thumb, Index, Middle, Ring, Little]->[0.0, 12.0, 3.0, 4.0, 0.0]
         hand_tangential_force = data[1]
-        ColorMsg(msg=f"右手五指切向力: {list(hand_tangential_force)}", color="green")
-        # 五指切向力方向 数值0-127对应实际切向力角度0-359，注意在手指不受力即无法判断切向力方向时数值保持为255。
+        ColorMsg(msg=f"Right hand five-finger tangential force: {list(hand_tangential_force)}", color="green")
+        # Five-finger tangential force direction. Values 0-127 correspond to actual tangential force angles 0-359. Note that when the finger is not under force and the direction cannot be determined, the value remains 255.
         hand_tangential_force_dir = data[2]
-        ColorMsg(msg=f"右手五指切向力方向: {list(hand_tangential_force_dir)}", color="green")
-        # 五指接近感应
+        ColorMsg(msg=f"Right hand five-finger tangential force direction: {list(hand_tangential_force_dir)}", color="green")
+        # Five-finger proximity sensing
         hand_approach_inc = data[3]
-        ColorMsg(msg=f"右手五指接近感应: {list(hand_approach_inc)}", color="green")
+        ColorMsg(msg=f"Right hand five-finger proximity sensing: {list(hand_approach_inc)}", color="green")
 
 
     def single_acquisition(self):
@@ -66,51 +65,51 @@ class GetLinkerHandPressure():
         try:
             left_hand = rospy.wait_for_message("/cb_left_hand_force",Float32MultiArray,timeout=0.1)
         except:
-            ColorMsg(msg="左手没有数据", color="yellow")
+            ColorMsg(msg="No data for left hand", color="yellow")
         try:
             right_hand = rospy.wait_for_message("/cb_right_hand_force",Float32MultiArray,timeout=0.1)
         except:
-            ColorMsg(msg="右手没有数据", color="yellow")
+            ColorMsg(msg="No data for right hand", color="yellow")
         if left_hand != None:
             data = self.list_slice(data=left_hand.data)
-            # 五指法相力 数值越大法向力值越大
-            # [大拇指, 食指, 中指, 无名指, 小拇指]->[0.0, 26.0, 34.0, 255.0, 0.0]
+            # Five-finger normal force. The larger the value, the greater the normal force.
+            # [Thumb, Index, Middle, Ring, Little]->[0.0, 26.0, 34.0, 255.0, 0.0]
             left_hand_normal_force = data[0]
-            ColorMsg(msg=f"左手五指法相力: {list(left_hand_normal_force)}", color="green")
-            # 五指切向力 数值越大切向力值越大
-            # [大拇指, 食指, 中指, 无名指, 小拇指]->[0.0, 12.0, 3.0, 4.0, 0.0]
+            ColorMsg(msg=f"Left hand five-finger normal force: {list(left_hand_normal_force)}", color="green")
+            # Five-finger tangential force. The larger the value, the greater the tangential force.
+            # [Thumb, Index, Middle, Ring, Little]->[0.0, 12.0, 3.0, 4.0, 0.0]
             left_hand_tangential_force = data[1]
-            ColorMsg(msg=f"左手五指切向力: {list(left_hand_tangential_force)}", color="green")
-            # 五指切向力方向 数值0-127对应实际切向力角度0-359，注意在手指不受力即无法判断切向力方向时数值保持为255。
+            ColorMsg(msg=f"Left hand five-finger tangential force: {list(left_hand_tangential_force)}", color="green")
+            # Five-finger tangential force direction. Values 0-127 correspond to actual tangential force angles 0-359. Note that when the finger is not under force and the direction cannot be determined, the value remains 255.
             left_hand_tangential_force_dir = data[2]
-            ColorMsg(msg=f"左手五指切向力方向: {list(left_hand_tangential_force_dir)}", color="green")
-            # 五指接近感应
+            ColorMsg(msg=f"Left hand five-finger tangential force direction: {list(left_hand_tangential_force_dir)}", color="green")
+            # Five-finger proximity sensing
             left_hand_approach_inc = data[3]
-            ColorMsg(msg=f"左手五指接近感应: {list(left_hand_approach_inc)}", color="green")
+            ColorMsg(msg=f"Left hand five-finger proximity sensing: {list(left_hand_approach_inc)}", color="green")
         if right_hand != None:
             data = self.list_slice(data=right_hand.data)
-            # 五指法相力 数值越大法向力值越大
-            # [大拇指, 食指, 中指, 无名指, 小拇指]->[0.0, 26.0, 34.0, 255.0, 0.0]
+            # Five-finger normal force. The larger the value, the greater the normal force.
+            # [Thumb, Index, Middle, Ring, Little]->[0.0, 26.0, 34.0, 255.0, 0.0]
             right_hand_normal_force = data[0]
-            ColorMsg(msg=f"右手五指法相力: {list(right_hand_normal_force)}", color="green")
-            # 五指切向力 数值越大切向力值越大
-            # [大拇指, 食指, 中指, 无名指, 小拇指]->[0.0, 12.0, 3.0, 4.0, 0.0]
+            ColorMsg(msg=f"Right hand five-finger normal force: {list(right_hand_normal_force)}", color="green")
+            # Five-finger tangential force. The larger the value, the greater the tangential force.
+            # [Thumb, Index, Middle, Ring, Little]->[0.0, 12.0, 3.0, 4.0, 0.0]
             right_hand_tangential_force = data[1]
-            ColorMsg(msg=f"右手五指切向力: {list(right_hand_tangential_force)}", color="green")
-            # 五指切向力方向 数值0-127对应实际切向力角度0-359，注意在手指不受力即无法判断切向力方向时数值保持为255。
+            ColorMsg(msg=f"Right hand five-finger tangential force: {list(right_hand_tangential_force)}", color="green")
+            # Five-finger tangential force direction. Values 0-127 correspond to actual tangential force angles 0-359. Note that when the finger is not under force and the direction cannot be determined, the value remains 255.
             right_hand_tangential_force_dir = data[2]
-            ColorMsg(msg=f"右手五指切向力方向: {list(right_hand_tangential_force_dir)}", color="green")
-            # 五指接近感应
+            ColorMsg(msg=f"Right hand five-finger tangential force direction: {list(right_hand_tangential_force_dir)}", color="green")
+            # Five-finger proximity sensing
             right_hand_approach_inc = data[3]
-            ColorMsg(msg=f"右手五指接近感应: {list(right_hand_approach_inc)}", color="green")
+            ColorMsg(msg=f"Right hand five-finger proximity sensing: {list(right_hand_approach_inc)}", color="green")
     
     def list_slice(self,data,n=5):
-        n = 5  # 每个子列表的长度
+        n = 5  # Length of each sublist
         result = [data[i:i + n] for i in range(0, len(data), n)]
         return result
 
 if __name__ == '__main__':
     rospy.init_node('get_linker_hand_force', anonymous=True)
-    loop = rospy.get_param('~loop', default=True)  # 默认获取全局参数
+    loop = rospy.get_param('~loop', default=True)  # Get global parameter by default
     gh = GetLinkerHandPressure(loop=loop)
     

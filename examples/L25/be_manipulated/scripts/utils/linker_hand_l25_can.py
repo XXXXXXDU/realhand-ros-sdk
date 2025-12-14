@@ -10,104 +10,104 @@ sys.path.append(target_dir)
 from utils.color_msg import ColorMsg
 
 class FrameProperty(Enum):
-    INVALID_FRAME_PROPERTY = 0x00  # 无效的can帧属性 | 无返回
-    # 并行指令区域
-    ROLL_POS = 0x01  # 横滚关节位置 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    YAW_POS = 0x02  # 航向关节位置 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    ROOT1_POS = 0x03  # 指根1关节位置 | 最接近手掌的指根关节
-    ROOT2_POS = 0x04  # 指根2关节位置 | 最接近手掌的指根关节
-    ROOT3_POS = 0x05  # 指根3关节位置 | 最接近手掌的指根关节
-    TIP_POS = 0x06  # 指尖关节位置 | 最接近手掌的指根关节
+    INVALID_FRAME_PROPERTY = 0x00  # Invalid CAN frame property | No return
+    # Parallel instruction area
+    ROLL_POS = 0x01  # Roll joint position | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    YAW_POS = 0x02  # Yaw joint position | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    ROOT1_POS = 0x03  # Root 1 joint position | The finger root joint closest to the palm
+    ROOT2_POS = 0x04  # Root 2 joint position | The finger root joint closest to the palm
+    ROOT3_POS = 0x05  # Root 3 joint position | The finger root joint closest to the palm
+    TIP_POS = 0x06  # Tip joint position | The finger root joint closest to the palm
 
-    ROLL_SPEED = 0x09  # 横滚关节速度 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    YAW_SPEED = 0x0A  # 航向关节速度 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    ROOT1_SPEED = 0x0B  # 指根1关节速度 | 最接近手掌的指根关节
-    ROOT2_SPEED = 0x0C  # 指根2关节速度 | 最接近手掌的指根关节
-    ROOT3_SPEED = 0x0D  # 指根3关节速度 | 最接近手掌的指根关节
-    TIP_SPEED = 0x0E  # 指尖关节速度 | 最接近手掌的指根关节
+    ROLL_SPEED = 0x09  # Roll joint speed | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    YAW_SPEED = 0x0A  # Yaw joint speed | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    ROOT1_SPEED = 0x0B  # Root 1 joint speed | The finger root joint closest to the palm
+    ROOT2_SPEED = 0x0C  # Root 2 joint speed | The finger root joint closest to the palm
+    ROOT3_SPEED = 0x0D  # Root 3 joint speed | The finger root joint closest to the palm
+    TIP_SPEED = 0x0E  # Tip joint speed | The finger root joint closest to the palm
 
-    ROLL_TORQUE = 0x11  # 横滚关节扭矩 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    YAW_TORQUE = 0x12  # 航向关节扭矩 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    ROOT1_TORQUE = 0x13  # 指根1关节扭矩 | 最接近手掌的指根关节
-    ROOT2_TORQUE = 0x14  # 指根2关节扭矩 | 最接近手掌的指根关节
-    ROOT3_TORQUE = 0x15  # 指根3关节扭矩 | 最接近手掌的指根关节
-    TIP_TORQUE = 0x16  # 指尖关节扭矩 | 最接近手掌的指根关节
+    ROLL_TORQUE = 0x11  # Roll joint torque | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    YAW_TORQUE = 0x12  # Yaw joint torque | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    ROOT1_TORQUE = 0x13  # Root 1 joint torque | The finger root joint closest to the palm
+    ROOT2_TORQUE = 0x14  # Root 2 joint torque | The finger root joint closest to the palm
+    ROOT3_TORQUE = 0x15  # Root 3 joint torque | The finger root joint closest to the palm
+    TIP_TORQUE = 0x16  # Tip joint torque | The finger root joint closest to the palm
 
-    ROLL_FAULT = 0x19  # 横滚关节故障码 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    YAW_FAULT = 0x1A  # 航向关节故障码 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    ROOT1_FAULT = 0x1B  # 指根1关节故障码 | 最接近手掌的指根关节
-    ROOT2_FAULT = 0x1C  # 指根2关节故障码 | 最接近手掌的指根关节
-    ROOT3_FAULT = 0x1D  # 指根3关节故障码 | 最接近手掌的指根关节
-    TIP_FAULT = 0x1E  # 指尖关节故障码 | 最接近手掌的指根关节
+    ROLL_FAULT = 0x19  # Roll joint fault code | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    YAW_FAULT = 0x1A  # Yaw joint fault code | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    ROOT1_FAULT = 0x1B  # Root 1 joint fault code | The finger root joint closest to the palm
+    ROOT2_FAULT = 0x1C  # Root 2 joint fault code | The finger root joint closest to the palm
+    ROOT3_FAULT = 0x1D  # Root 3 joint fault code | The finger root joint closest to the palm
+    TIP_FAULT = 0x1E  # Tip joint fault code | The finger root joint closest to the palm
 
-    ROLL_TEMPERATURE = 0x21  # 横滚关节温度 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    YAW_TEMPERATURE = 0x22  # 航向关节温度 | 坐标系建在每个手指的指根部位，按手指伸直的状态去定义旋转角度
-    ROOT1_TEMPERATURE = 0x23  # 指根1关节温度 | 最接近手掌的指根关节
-    ROOT2_TEMPERATURE = 0x24  # 指根2关节温度 | 最接近手掌的指根关节
-    ROOT3_TEMPERATURE = 0x25  # 指根3关节温度 | 最接近手掌的指根关节
-    TIP_TEMPERATURE = 0x26  # 指尖关节温度 | 最接近手掌的指根关节
-    # 并行指令区域
+    ROLL_TEMPERATURE = 0x21  # Roll joint temperature | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    YAW_TEMPERATURE = 0x22  # Yaw joint temperature | Coordinate system is at the base of each finger, rotation angle defined by straight finger state
+    ROOT1_TEMPERATURE = 0x23  # Root 1 joint temperature | The finger root joint closest to the palm
+    ROOT2_TEMPERATURE = 0x24  # Root 2 joint temperature | The finger root joint closest to the palm
+    ROOT3_TEMPERATURE = 0x25  # Root 3 joint temperature | The finger root joint closest to the palm
+    TIP_TEMPERATURE = 0x26  # Tip joint temperature | The finger root joint closest to the palm
+    # End of parallel instruction area
 
-    # 串行指令区域
-    THUMB_POS = 0x41  # 大拇指指关节位置 | 返回本类型数据
-    INDEX_POS = 0x42  # 食指关节位置 | 返回本类型数据
-    MIDDLE_POS = 0x43  # 中指关节位置 | 返回本类型数据
-    RING_POS = 0x44  # 无名指关节位置 | 返回本类型数据
-    LITTLE_POS = 0x45  # 小拇指关节位置 | 返回本类型数据
+    # Serial instruction area
+    THUMB_POS = 0x41  # Thumb joint position | Returns this type of data
+    INDEX_POS = 0x42  # Index finger joint position | Returns this type of data
+    MIDDLE_POS = 0x43  # Middle finger joint position | Returns this type of data
+    RING_POS = 0x44  # Ring finger joint position | Returns this type of data
+    LITTLE_POS = 0x45  # Little finger joint position | Returns this type of data
 
-    THUMB_SPEED = 0x49  # 大拇指速度 | 返回本类型数据
-    INDEX_SPEED = 0x4A  # 食指速度 | 返回本类型数据
-    MIDDLE_SPEED = 0x4B  # 中指速度 | 返回本类型数据
-    RING_SPEED = 0x4C  # 无名指速度 | 返回本类型数据
-    LITTLE_SPEED = 0x4D  # 小拇指速度 | 返回本类型数据
+    THUMB_SPEED = 0x49  # Thumb speed | Returns this type of data
+    INDEX_SPEED = 0x4A  # Index finger speed | Returns this type of data
+    MIDDLE_SPEED = 0x4B  # Middle finger speed | Returns this type of data
+    RING_SPEED = 0x4C  # Ring finger speed | Returns this type of data
+    LITTLE_SPEED = 0x4D  # Little finger speed | Returns this type of data
 
-    THUMB_TORQUE = 0x51  # 大拇指扭矩 | 返回本类型数据
-    INDEX_TORQUE = 0x52  # 食指扭矩 | 返回本类型数据
-    MIDDLE_TORQUE = 0x53  # 中指扭矩 | 返回本类型数据
-    RING_TORQUE = 0x54  # 无名指扭矩 | 返回本类型数据
-    LITTLE_TORQUE = 0x55  # 小拇指扭矩 | 返回本类型数据
+    THUMB_TORQUE = 0x51  # Thumb torque | Returns this type of data
+    INDEX_TORQUE = 0x52  # Index finger torque | Returns this type of data
+    MIDDLE_TORQUE = 0x53  # Middle finger torque | Returns this type of data
+    RING_TORQUE = 0x54  # Ring finger torque | Returns this type of data
+    LITTLE_TORQUE = 0x55  # Little finger torque | Returns this type of data
 
-    THUMB_FAULT = 0x59  # 大拇指故障码 | 返回本类型数据
-    INDEX_FAULT = 0x5A  # 食指故障码 | 返回本类型数据
-    MIDDLE_FAULT = 0x5B  # 中指故障码 | 返回本类型数据
-    RING_FAULT = 0x5C  # 无名指故障码 | 返回本类型数据
-    LITTLE_FAULT = 0x5D  # 小拇指故障码 | 返回本类型数据
+    THUMB_FAULT = 0x59  # Thumb fault code | Returns this type of data
+    INDEX_FAULT = 0x5A  # Index finger fault code | Returns this type of data
+    MIDDLE_FAULT = 0x5B  # Middle finger fault code | Returns this type of data
+    RING_FAULT = 0x5C  # Ring finger fault code | Returns this type of data
+    LITTLE_FAULT = 0x5D  # Little finger fault code | Returns this type of data
 
-    THUMB_TEMPERATURE = 0x61  # 大拇指温度 | 返回本类型数据
-    INDEX_TEMPERATURE = 0x62  # 食指温度 | 返回本类型数据
-    MIDDLE_TEMPERATURE = 0x63  # 中指温度 | 返回本类型数据
-    RING_TEMPERATURE = 0x64  # 无名指温度 | 返回本类型数据
-    LITTLE_TEMPERATURE = 0x65  # 小拇指温度 | 返回本类型数据
-    # 串行指令区域
+    THUMB_TEMPERATURE = 0x61  # Thumb temperature | Returns this type of data
+    INDEX_TEMPERATURE = 0x62  # Index finger temperature | Returns this type of data
+    MIDDLE_TEMPERATURE = 0x63  # Middle finger temperature | Returns this type of data
+    RING_TEMPERATURE = 0x64  # Ring finger temperature | Returns this type of data
+    LITTLE_TEMPERATURE = 0x65  # Little finger temperature | Returns this type of data
+    # End of serial instruction area
 
-    # 合并指令区域，同一手指非必要单控数据合并
-    FINGER_SPEED = 0x81  # 手指速度 | 返回本类型数据
-    FINGER_TORQUE = 0x82  # 转矩 | 返回本类型数据
-    FINGER_FAULT = 0x83  # 手指故障码 | 返回本类型数据
+    # Combined instruction area, merging non-essential single-control data for the same finger
+    FINGER_SPEED = 0x81  # Finger speed | Returns this type of data
+    FINGER_TORQUE = 0x82  # Torque | Returns this type of data
+    FINGER_FAULT = 0x83  # Finger fault code | Returns this type of data
 
-    # 指尖传感器数据组
-    HAND_NORMAL_FORCE = 0x90  # 五指法向压力
-    HAND_TANGENTIAL_FORCE = 0x91  # 五指切向压力
-    HAND_TANGENTIAL_FORCE_DIR = 0x92  # 五指切向方向
-    HAND_APPROACH_INC = 0x93  # 五指接近感应
+    # Fingertip sensor data group
+    HAND_NORMAL_FORCE = 0x90  # Five-finger normal pressure
+    HAND_TANGENTIAL_FORCE = 0x91  # Five-finger tangential pressure
+    HAND_TANGENTIAL_FORCE_DIR = 0x92  # Five-finger tangential direction
+    HAND_APPROACH_INC = 0x93  # Five-finger proximity sensing
 
-    THUMB_ALL_DATA = 0x98  # 大拇指所有数据
-    INDEX_ALL_DATA = 0x99  # 食指所有数据
-    MIDDLE_ALL_DATA = 0x9A  # 中指所有数据
-    RING_ALL_DATA = 0x9B  # 无名指所有数据
-    LITTLE_ALL_DATA = 0x9C  # 小拇指所有数据
-    # 动作指令 ·ACTION
-    ACTION_PLAY = 0xA0  # 动作
+    THUMB_ALL_DATA = 0x98  # All data for the thumb
+    INDEX_ALL_DATA = 0x99  # All data for the index finger
+    MIDDLE_ALL_DATA = 0x9A  # All data for the middle finger
+    RING_ALL_DATA = 0x9B  # All data for the ring finger
+    LITTLE_ALL_DATA = 0x9C  # All data for the little finger
+    # Action instruction · ACTION
+    ACTION_PLAY = 0xA0  # Action
 
-    # 配置命令·CONFIG
-    HAND_UID = 0xC0  # 设备唯一标识码
-    HAND_HARDWARE_VERSION = 0xC1  # 硬件版本
-    HAND_SOFTWARE_VERSION = 0xC2  # 软件版本
-    HAND_COMM_ID = 0xC3  # 设备id
-    HAND_FACTORY_RESET = 0xCE  # 恢复出厂设置
-    HAND_SAVE_PARAMETER = 0xCF  # 保存参数
+    # Configuration command · CONFIG
+    HAND_UID = 0xC0  # Device unique identifier
+    HAND_HARDWARE_VERSION = 0xC1  # Hardware version
+    HAND_SOFTWARE_VERSION = 0xC2  # Software version
+    HAND_COMM_ID = 0xC3  # Device ID
+    HAND_FACTORY_RESET = 0xCE  # Factory reset
+    HAND_SAVE_PARAMETER = 0xCF  # Save parameters
 
-    WHOLE_FRAME = 0xF0  # 整帧传输 | 返回一字节帧属性+整个结构体485及网络传输专属
+    WHOLE_FRAME = 0xF0  # Full frame transmission | Returns one-byte frame property + entire struct, exclusive for 485 and network transmission
 
 class LinkerHandL25Can:
     def __init__(self, config, can_channel='can0', baudrate=1000000, can_id=0x28):
@@ -115,10 +115,10 @@ class LinkerHandL25Can:
         self.can_id = can_id
         self.running = True
         self.x01, self.x02, self.x03, self.x04,self.x05,self.x06,self.x07, self.x08,self.x09,self.x0A,self.x0B,self.x0C,self.x0D,self.x0E,self.speed = [],[],[],[],[],[],[],[],[],[],[],[],[],[],[]
-        # 速度
+        # Speed
         self.x49, self.x4a, self.x4b, self.x4c, self.x4d = [],[],[],[],[]
         self.x41,self.x42,self.x43,self.x44,self.x45 = [],[],[],[],[]
-        # 根据操作系统初始化 CAN 总线
+        # Initialize CAN bus based on the operating system
         if sys.platform == "linux":
             self.bus = can.interface.Bus(
                 channel=can_channel, interface="socketcan", bitrate=baudrate, 
@@ -132,28 +132,28 @@ class LinkerHandL25Can:
         else:
             raise EnvironmentError("Unsupported platform for CAN interface")
 
-        # 根据 can_id 初始化 publisher 和相关参数
-        if can_id == 0x28:  # 左手
+        # Initialize publisher and related parameters based on can_id
+        if can_id == 0x28:  # Left hand
             self.hand_exists = config['LINKER_HAND']['LEFT_HAND']['EXISTS']
             self.hand_joint = config['LINKER_HAND']['LEFT_HAND']['JOINT']
             self.hand_names = config['LINKER_HAND']['LEFT_HAND']['NAME']
-        elif can_id == 0x27:  # 右手
+        elif can_id == 0x27:  # Right hand
 
             self.hand_exists = config['LINKER_HAND']['RIGHT_HAND']['EXISTS']
             self.hand_joint = config['LINKER_HAND']['RIGHT_HAND']['JOINT']
             self.hand_names = config['LINKER_HAND']['RIGHT_HAND']['NAME']
 
 
-        # 启动接收线程
+        # Start the receiving thread
         self.receive_thread = threading.Thread(target=self.receive_response)
         self.receive_thread.daemon = True
         self.receive_thread.start()
 
     def send_command(self, frame_property, data_list):
         """
-        发送命令到 CAN 总线
-        :param frame_property: 数据帧属性
-        :param data_list: 数据载荷
+        Send a command to the CAN bus
+        :param frame_property: Data frame property
+        :param data_list: Data payload
         """
         frame_property_value = int(frame_property.value) if hasattr(frame_property, 'value') else frame_property
         data = [frame_property_value] + [int(val) for val in data_list]
@@ -167,11 +167,11 @@ class LinkerHandL25Can:
 
     def receive_response(self):
         """
-        接收并处理 CAN 总线的响应消息
+        Receive and process response messages from the CAN bus
         """
         while self.running:
             try:
-                msg = self.bus.recv(timeout=1.0)  # 阻塞接收，1 秒超时
+                msg = self.bus.recv(timeout=1.0)  # Blocking receive with a 1-second timeout
                 if msg:
                     self.process_response(msg)
             except can.CanError as e:
@@ -181,7 +181,7 @@ class LinkerHandL25Can:
     def set_joint_positions(self, joint_ranges):
         if len(joint_ranges) == 25:
             l24_pose = self.joint_map(joint_ranges)
-            # 使用列表推导式将列表每6个元素切成一个子数组
+            # Use a list comprehension to slice the list into sub-arrays of 6 elements each
             chunks = [l24_pose[i:i+6] for i in range(0, 30, 6)]
             self.send_command(FrameProperty.THUMB_POS, chunks[0])
             time.sleep(0.001)
@@ -196,50 +196,50 @@ class LinkerHandL25Can:
         #self.set_tip_positions(joint_ranges[:5])
         #print(l24_pose)
     
-    # 设置所有手指横滚关节位置
+    # Set roll positions for all fingers
     def set_roll_positions(self, joint_ranges):
         self.send_command(FrameProperty.ROLL_POS, joint_ranges)
-    # 设置所有手指航向关节位置
+    # Set yaw positions for all fingers
     def set_yaw_positions(self, joint_ranges):
         self.send_command(FrameProperty.YAW_POS, joint_ranges)
-    # 设置所有手指指根1关节位置
+    # Set root1 positions for all fingers
     def set_root1_positions(self, joint_ranges):
         self.send_command(FrameProperty.ROOT1_POS, joint_ranges)
-    # 设置所有手指指根2关节位置
+    # Set root2 positions for all fingers
     def set_root2_positions(self, joint_ranges):
         self.send_command(FrameProperty.ROOT2_POS, joint_ranges)
-    # 设置所有手指指根3关节位置
+    # Set root3 positions for all fingers
     def set_root3_positions(self, joint_ranges):
         self.send_command(FrameProperty.ROOT3_POS, joint_ranges)
-    # 设置所有手指指尖关节位置
+    # Set tip positions for all fingers
     def set_tip_positions(self, joint_ranges=[80]*5):
         self.send_command(FrameProperty.TIP_POS, joint_ranges)
-    # 获取大拇指指关节位置
+    # Get thumb joint positions
     def get_thumb_positions(self,j=[0]):
         self.send_command(FrameProperty.THUMB_POS, j)
-    # 获取食指关节位置
+    # Get index finger joint positions
     def get_index_positions(self, j=[0]):
         self.send_command(FrameProperty.INDEX_POS,j)
-    # 获取中指关节位置
+    # Get middle finger joint positions
     def get_middle_positions(self, j=[0]):
         self.send_command(FrameProperty.MIDDLE_POS,j)
-    # 获取无名指关节位置
+    # Get ring finger joint positions
     def get_ring_positions(self, j=[0]):
         self.send_command(FrameProperty.RING_POS,j)
-    # 获取小拇指关节位置
+    # Get little finger joint positions
     def get_little_positions(self, j=[0]):
         self.send_command(FrameProperty.LITTLE_POS, j)
-    # 失能01模式
+    # Disable mode 01
     def set_disability_mode(self, j=[1,1,1,1,1]):
         self.send_command(0x85,j)
-    # 使能00模式
+    # Enable mode 00
     def set_enable_mode(self, j=[00,00,00,00,00]):
         self.send_command(0x85,j)
 
     
     def set_speed(self, speed):
         self.speed = [speed]*6
-        ColorMsg(msg=f"L25设置速度为:{self.speed}", color="yellow")
+        ColorMsg(msg=f"L25 speed set to: {self.speed}", color="yellow")
         self.send_command(FrameProperty.THUMB_SPEED, self.speed)
         self.send_command(FrameProperty.INDEX_SPEED, self.speed)
         self.send_command(FrameProperty.MIDDLE_SPEED, self.speed)
@@ -293,42 +293,41 @@ class LinkerHandL25Can:
             elif frame_type == 0x0D:
                 self.x0D = list(response_data)
             elif frame_type == 0x22:
-                #ColorMsg(msg=f"五指切向压力方向：{list(response_data)}")
+                #ColorMsg(msg=f"Five-finger tangential pressure direction: {list(response_data)}")
                 d = list(response_data)
                 self.tangential_force_dir = [float(i) for i in d]
             elif frame_type == 0x23:
-                #ColorMsg(msg=f"五指接近度：{list(response_data)}")
+                #ColorMsg(msg=f"Five-finger proximity: {list(response_data)}")
                 d = list(response_data)
                 self.approach_inc = [float(i) for i in d]
-            elif frame_type == 0x41: # 拇指关节位置返回值
+            elif frame_type == 0x41: # Thumb joint position return value
                 self.x41 = list(response_data)
-            elif frame_type == 0x42: # 食指关节位置返回值
-                #print("食指所有关节状态",list(response_data))
+            elif frame_type == 0x42: # Index finger joint position return value
+                #print("Index finger all joint states",list(response_data))
                 self.x42 = list(response_data)
-            elif frame_type == 0x43: # 中指关节位置返回值
+            elif frame_type == 0x43: # Middle finger joint position return value
                 self.x43 = list(response_data)
-            elif frame_type == 0x44: # 无名指关节位置返回值
-                
+            elif frame_type == 0x44: # Ring finger joint position return value
                 self.x44 = list(response_data)
-            elif frame_type == 0x45: # 小拇指关节位置返回值
+            elif frame_type == 0x45: # Little finger joint position return value
                 self.x45 = list(response_data)
-            elif frame_type == 0x49: # 拇指速度返回值
+            elif frame_type == 0x49: # Thumb speed return value
                 self.x49 = list(response_data)
-            elif frame_type == 0x4a: # 食指速度返回值
+            elif frame_type == 0x4a: # Index finger speed return value
                 self.x4a = list(response_data)
-            elif frame_type == 0x4b: # 中指速度返回值
+            elif frame_type == 0x4b: # Middle finger speed return value
                 self.x4b = list(response_data)
-            elif frame_type == 0x4c: # 无名指速度返回值
+            elif frame_type == 0x4c: # Ring finger speed return value
                 self.x4c = list(response_data)
-            elif frame_type == 0x4d: # 小拇指速度返回值
+            elif frame_type == 0x4d: # Little finger speed return value
                 self.x4d = list(response_data)
 
-    # topic映射L24
+    # topic mapping to L24
     def joint_map(self, pose):
-        # L24 CAN数据默认接收30个数据
-        l24_pose = [0.0] * 30  # 初始化l24_pose为30个0.0
+        # L24 CAN data defaults to receiving 30 data points
+        l24_pose = [0.0] * 30  # Initialize l24_pose with 30 zeros
 
-        # 映射表，通过字典简化映射关系
+        # Mapping table, simplified with a dictionary
         mapping = {
             0: 10,  1: 5,   2: 0,   3: 15,  4: None,  5: 20,
             6: None, 7: 6,   8: 1,   9: 16,  10: None, 11: 21,
@@ -337,31 +336,31 @@ class LinkerHandL25Can:
             24: None, 25: 9,  26: 4,   27: 19, 28: None, 29: 24
         }
 
-        # 遍历映射字典，进行值的映射
+        # Iterate through the mapping dictionary to map values
         for l24_idx, pose_idx in mapping.items():
             if pose_idx is not None:
                 l24_pose[l24_idx] = pose[pose_idx]
 
         return l24_pose
 
-    # 将L24的状态值转换为CMD格式的状态值
+    # Convert L24 state values to CMD format state values
     def state_to_cmd(self, l24_state):
-        # L24 CAN默认接收30个数据，初始化pose为25个0.0
-        pose = [0.0] * 25  # 原来控制L24的指令数据为25个
+        # L24 CAN defaults to receiving 30 data points, initialize pose with 25 zeros
+        pose = [0.0] * 25  # The original command data for controlling L24 was 25 points
 
-        # 映射关系，字典中存储l24_state索引和pose索引之间的映射关系
+        # Mapping relationship, the dictionary stores the mapping between l24_state index and pose index
         mapping = {
             0: 10,  1: 5,   2: 0,   3: 15,  5: 20,  7: 6,
             8: 1,   9: 16,  11: 21, 14: 2,  15: 17, 17: 22,
             19: 8,  20: 3,  21: 18, 23: 23, 25: 9,   26: 4,
             27: 19, 29: 24
         }
-        # 遍历映射字典，更新pose的值
+        # Iterate through the mapping dictionary to update pose values
         for l24_idx, pose_idx in mapping.items():
             pose[pose_idx] = l24_state[l24_idx]
         return pose
 
-    # 获取所有关节数据
+    # Get all joint data
     def get_current_status(self, j=''):
         time.sleep(0.01)
         self.send_command(FrameProperty.THUMB_POS, j)
@@ -378,11 +377,11 @@ class LinkerHandL25Can:
     
     def get_speed(self,j=''):
         time.sleep(0.1)
-        self.send_command(FrameProperty.THUMB_SPEED, j) # 大拇指速度
-        self.send_command(FrameProperty.INDEX_SPEED, j) # 食指速度
-        self.send_command(FrameProperty.MIDDLE_SPEED, j) # 中指速度
-        self.send_command(FrameProperty.RING_SPEED, j) # 无名指速度
-        self.send_command(FrameProperty.LITTLE_SPEED, j) # 小拇指速度
+        self.send_command(FrameProperty.THUMB_SPEED, j) # Thumb speed
+        self.send_command(FrameProperty.INDEX_SPEED, j) # Index finger speed
+        self.send_command(FrameProperty.MIDDLE_SPEED, j) # Middle finger speed
+        self.send_command(FrameProperty.RING_SPEED, j) # Ring finger speed
+        self.send_command(FrameProperty.LITTLE_SPEED, j) # Little finger speed
         speed = self.x49+ self.x4a+ self.x4b+ self.x4c+ self.x4d
         if len(speed) == 30:
             l24_speed = self.state_to_cmd(l24_state=speed)
@@ -396,19 +395,19 @@ class LinkerHandL25Can:
     #     return self.x07
     def close_can_interface(self):
         if self.bus:
-            self.bus.shutdown()  # 关闭 CAN 总线
+            self.bus.shutdown()  # Close the CAN bus
 
     '''
-    这个方法只用于展示数据关系映射，使用的话最好使用上面的方法
+    This method is only for demonstrating data relationship mapping. It's better to use the method above for actual use.
     '''
     def joint_map_2(self, pose):
-        l24_pose = [0.0]*30 #L24 CAN默认接收30个数据 pose控制L24发送的指令数据默认25个，这里进行映射
+        l24_pose = [0.0]*30 # L24 CAN defaults to receiving 30 data points. The pose command for L24 sends 25 data points by default, so mapping is needed here.
         '''
-        需要进行映射
-        # L24 CAN数据格式
-        #["拇指横摆0-10", "拇指侧摆1-5", "拇指根部2-0", "拇指中部3-15", "预留4-", "拇指指尖5-20", "预留6-", "食指侧摆7-6", "食指根部8-1", "食指中部9-16", "预留10-", "食指指尖11-21", "预留12-", "预留13-", "中指根部14-2", "中指中部15-17", "预留16-", "中指指尖17-22", "预留18-", "无名指侧摆19-8", "无名指根部20-3", "无名指中部21-18", "预留22-", "无名指指尖23-23", "预留24-", "小指侧摆25-9", "小指根部26-4", "小指中部27-19", "预留28-", "小指指尖29-24"]
-        # CMD 接收到的数据格式
-        #["拇指根部0", "食指根部1", "中指根部2", "无名指根部3","小指根部4","拇指侧摆5","食指侧摆6","中指侧摆","无名指侧摆8","小指侧摆9","拇指横摆10","预留","预留","预留","预留","拇指中部15","食指中部16","中指中部17","无名指中部18","小指中部19","拇指指尖20","食指指尖21","中指指尖22","无名指指尖23","小指指尖24"]
+        Mapping is required
+        # L24 CAN data format
+        #["Thumb Yaw 0-10", "Thumb Side 1-5", "Thumb Root 2-0", "Thumb Middle 3-15", "Reserved 4-", "Thumb Tip 5-20", "Reserved 6-", "Index Side 7-6", "Index Root 8-1", "Index Middle 9-16", "Reserved 10-", "Index Tip 11-21", "Reserved 12-", "Reserved 13-", "Middle Root 14-2", "Middle Middle 15-17", "Reserved 16-", "Middle Tip 17-22", "Reserved 18-", "Ring Side 19-8", "Ring Root 20-3", "Ring Middle 21-18", "Reserved 22-", "Ring Tip 23-23", "Reserved 24-", "Little Side 25-9", "Little Root 26-4", "Little Middle 27-19", "Reserved 28-", "Little Tip 29-24"]
+        # CMD received data format
+        #["Thumb Root 0", "Index Root 1", "Middle Root 2", "Ring Root 3", "Little Root 4", "Thumb Side 5", "Index Side 6", "Middle Side", "Ring Side 8", "Little Side 9", "Thumb Yaw 10", "Reserved", "Reserved", "Reserved", "Reserved", "Thumb Middle 15", "Index Middle 16", "Middle Middle 17", "Ring Middle 18", "Little Middle 19", "Thumb Tip 20", "Index Tip 21", "Middle Tip 22", "Ring Tip 23", "Little Tip 24"]
         '''
         l24_pose[0] = pose[10]
         l24_pose[1] = pose[5]
