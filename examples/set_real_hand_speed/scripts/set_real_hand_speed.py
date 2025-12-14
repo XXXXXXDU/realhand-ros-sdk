@@ -5,12 +5,12 @@ from std_msgs.msg import String
 if __name__ == '__main__':
     '''
     L7:
-    rosrun set_linker_hand_speed set_linker_hand_speed.py _hand_type:=right _speed:="[255,255,255,255,255,255,255]"
+    rosrun set_real_hand_speed set_real_hand_speed.py _hand_type:=right _speed:="[255,255,255,255,255,255,255]"
 
     other:
-    rosrun set_linker_hand_speed set_linker_hand_speed.py _hand_type:=right _speed:="[100,100,100,100,100]"
+    rosrun set_real_hand_speed set_real_hand_speed.py _hand_type:=right _speed:="[100,100,100,100,100]"
     '''
-    rospy.init_node('get_linker_hand_speed', anonymous=True)
+    rospy.init_node('get_real_hand_speed', anonymous=True)
     hand_type = rospy.get_param("~hand_type",default="left") # Set which hand's speed
     speed = rospy.get_param('~speed', default=[255,255,255,255,255])  # Get global parameters by default. O6 has 6 values, L7 has 7 values, others have 5 values.
 

@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>l20_get_linker_hand_state</name>
+  <name>l20_get_real_hand_state</name>
   <version>0.0.0</version>
-  <description>The l20_get_linker_hand_state package</description>
+  <description>The l20_get_real_hand_state package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="linkerhand@todo.todo">linkerhand</maintainer>
+  <maintainer email="realhand@todo.todo">realhand</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/l20_get_linker_hand_state</url> -->
+  <!-- <url type="website">http://wiki.ros.org/l20_get_real_hand_state</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->

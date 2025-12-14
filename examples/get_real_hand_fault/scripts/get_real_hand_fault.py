@@ -14,7 +14,7 @@ from utils.color_msg import ColorMsg
 
 '''
 
-class GetLinkerHandFault():
+class GetRealHandFault():
     def __init__(self,loop=False):
         self.loop = loop
         if self.loop == True:
@@ -97,6 +97,6 @@ class GetLinkerHandFault():
         return [i for i, bit in enumerate(bit_list) if bit == 1]
 
 if __name__ == '__main__':
-    rospy.init_node('get_linker_hand_fault', anonymous=True)
+    rospy.init_node('get_real_hand_fault', anonymous=True)
     loop = rospy.get_param('~loop', default=True)  # Default to getting the global parameter
-    gh = GetLinkerHandFault(loop=loop)
+    gh = GetRealHandFault(loop=loop)

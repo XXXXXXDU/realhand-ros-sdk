@@ -6,7 +6,7 @@ global package_path
 # Create rospkg.RosPack object
 rospack = rospkg.RosPack()
 # Get the path of the specified package
-package_sdk = "linker_hand_sdk_ros"
+package_sdk = "real_hand_sdk_ros"
 package_gui = "gui_control"
 sdk_path = rospack.get_path(package_sdk)
 gui_path = rospack.get_path(package_gui)
@@ -23,14 +23,14 @@ class LoadWriteYaml():
             with open(self.setting_yaml_path, 'r', encoding='utf-8') as file:
                 setting = yaml.safe_load(file)
                 self.sdk_version = setting["VERSION"]
-                self.left_hand_exists = setting['LINKER_HAND']['LEFT_HAND']['EXISTS']
-                self.left_hand_names = setting['LINKER_HAND']['LEFT_HAND']['NAME']
-                self.left_hand_joint = setting['LINKER_HAND']['LEFT_HAND']['JOINT']
-                self.left_hand_force = setting['LINKER_HAND']['LEFT_HAND']['TOUCH']
-                self.right_hand_exists = setting['LINKER_HAND']['RIGHT_HAND']['EXISTS']
-                self.right_hand_names = setting['LINKER_HAND']['RIGHT_HAND']['NAME']
-                self.right_hand_joint = setting['LINKER_HAND']['RIGHT_HAND']['JOINT']
-                self.right_hand_force = setting['LINKER_HAND']['RIGHT_HAND']['TOUCH']
+                self.left_hand_exists = setting['REAL_HAND']['LEFT_HAND']['EXISTS']
+                self.left_hand_names = setting['REAL_HAND']['LEFT_HAND']['NAME']
+                self.left_hand_joint = setting['REAL_HAND']['LEFT_HAND']['JOINT']
+                self.left_hand_force = setting['REAL_HAND']['LEFT_HAND']['TOUCH']
+                self.right_hand_exists = setting['REAL_HAND']['RIGHT_HAND']['EXISTS']
+                self.right_hand_names = setting['REAL_HAND']['RIGHT_HAND']['NAME']
+                self.right_hand_joint = setting['REAL_HAND']['RIGHT_HAND']['JOINT']
+                self.right_hand_force = setting['REAL_HAND']['RIGHT_HAND']['TOUCH']
                 self.password = setting['PASSWORD']
         except Exception as e:
             setting = None

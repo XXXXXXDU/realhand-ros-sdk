@@ -12,7 +12,7 @@ from utils.color_msg import ColorMsg
 /cb_right_hand_force # Right hand force sensor
 '''
 
-class GetLinkerHandPressure():
+class GetRealHandPressure():
     def __init__(self,loop=False):
         self.loop = loop
         if self.loop == True:
@@ -109,7 +109,7 @@ class GetLinkerHandPressure():
         return result
 
 if __name__ == '__main__':
-    rospy.init_node('get_linker_hand_force', anonymous=True)
+    rospy.init_node('get_real_hand_force', anonymous=True)
     loop = rospy.get_param('~loop', default=True)  # Get global parameter by default
-    gh = GetLinkerHandPressure(loop=loop)
+    gh = GetRealHandPressure(loop=loop)
     

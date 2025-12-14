@@ -7,7 +7,7 @@ from utils.color_msg import ColorMsg
 from utils.load_write_yaml import LoadWriteYaml
 from utils.open_can import OpenCan
 
-class LinkerHandApi:
+class RealHandApi:
     def __init__(self, hand_type="left", hand_joint="L10", modbus = "None",can="can0"):  # Ubuntu:can0   win:PCAN_USBBUS1
         self.last_position = []
         self.yaml = LoadWriteYaml()
@@ -23,44 +23,44 @@ class LinkerHandApi:
             self.hand_id = 0x27  # Right hand
         if self.hand_joint.upper() == "O6":
             if modbus != "None":
-                from core.rs485.linker_hand_o6_rs485 import LinkerHandO6RS485
-                self.hand = LinkerHandO6RS485(hand_id=self.hand_id,modbus_port=modbus,baudrate=115200)
+                from core.rs485.real_hand_o6_rs485 import RealHandO6RS485
+                self.hand = RealHandO6RS485(hand_id=self.hand_id,modbus_port=modbus,baudrate=115200)
             else:
-                from core.can.linker_hand_o6_can import LinkerHandO6Can
-                self.hand = LinkerHandO6Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
+                from core.can.real_hand_o6_can import RealHandO6Can
+                self.hand = RealHandO6Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
         if self.hand_joint == "L6":
             if modbus != "None":
-                from core.rs485.linker_hand_l6_rs485 import LinkerHandL6RS485
-                self.hand = LinkerHandL6RS485(hand_id=self.hand_id,modbus_port=modbus,baudrate=115200)
+                from core.rs485.real_hand_l6_rs485 import RealHandL6RS485
+                self.hand = RealHandL6RS485(hand_id=self.hand_id,modbus_port=modbus,baudrate=115200)
             else:
-                from core.can.linker_hand_o6_can import LinkerHandO6Can
-                self.hand = LinkerHandO6Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
+                from core.can.real_hand_o6_can import RealHandO6Can
+                self.hand = RealHandO6Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
         if self.hand_joint == "L7":
             if modbus != "None":
-                from core.rs485.linker_hand_l7_rs485 import LinkerHandL7RS485
-                self.hand = LinkerHandL7RS485(hand_id=self.hand_id,modbus_port=modbus,baudrate=115200)
+                from core.rs485.real_hand_l7_rs485 import RealHandL7RS485
+                self.hand = RealHandL7RS485(hand_id=self.hand_id,modbus_port=modbus,baudrate=115200)
             else:
-                from core.can.linker_hand_l7_can import LinkerHandL7Can
-                self.hand = LinkerHandL7Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
+                from core.can.real_hand_l7_can import RealHandL7Can
+                self.hand = RealHandL7Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
         if self.hand_joint == "L10":
             if modbus != "None":
-                from core.rs485.linker_hand_l10_rs485 import LinkerHandL10RS485
-                self.hand = LinkerHandL10RS485(hand_id=self.hand_id,modbus_port=modbus,baudrate=115200)
+                from core.rs485.real_hand_l10_rs485 import RealHandL10RS485
+                self.hand = RealHandL10RS485(hand_id=self.hand_id,modbus_port=modbus,baudrate=115200)
             else:
-                from core.can.linker_hand_l10_can import LinkerHandL10Can
-                self.hand = LinkerHandL10Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
+                from core.can.real_hand_l10_can import RealHandL10Can
+                self.hand = RealHandL10Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
         if self.hand_joint == "L20":
-            from core.can.linker_hand_l20_can import LinkerHandL20Can
-            self.hand = LinkerHandL20Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
+            from core.can.real_hand_l20_can import RealHandL20Can
+            self.hand = RealHandL20Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
         if self.hand_joint == "G20":
-            from core.can.linker_hand_g20_can import LinkerHandG20Can
-            self.hand = LinkerHandG20Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
+            from core.can.real_hand_g20_can import RealHandG20Can
+            self.hand = RealHandG20Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
         if self.hand_joint == "L21":
-            from core.can.linker_hand_l21_can import LinkerHandL21Can
-            self.hand = LinkerHandL21Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
+            from core.can.real_hand_l21_can import RealHandL21Can
+            self.hand = RealHandL21Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
         if self.hand_joint == "L25":
-            from core.can.linker_hand_l25_can import LinkerHandL25Can
-            self.hand = LinkerHandL25Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
+            from core.can.real_hand_l25_can import RealHandL25Can
+            self.hand = RealHandL25Can(can_id=self.hand_id,can_channel=self.can, yaml=self.yaml)
         # Open can0
         if sys.platform == "linux" and modbus=="None":
             self.open_can = OpenCan(load_yaml=self.yaml)
@@ -75,7 +75,7 @@ class LinkerHandApi:
             ColorMsg(msg="Warning: Hardware version number not recognized, it is recommended to terminate the program and re insert USB to CAN conversion", color="yellow")
         else:
             ColorMsg(msg=f"Embedded:{version}", color="green")
-        ColorMsg(msg=f"Linker Hand Serial Number: {self.serial_number}", color="green")
+        ColorMsg(msg=f"Real Hand Serial Number: {self.serial_number}", color="green")
     
     # Five-finger movement
     def finger_move(self, pose=[]):
@@ -105,7 +105,7 @@ class LinkerHandApi:
         elif self.hand_joint == "L25" and len(pose) == 25:
             self.hand.set_joint_positions(pose)
         else:
-            ColorMsg(msg=f"Current LinkerHand is {self.hand_type}{self.hand_joint}, action sequence is {pose}, does not match", color="red")
+            ColorMsg(msg=f"Current RealHand is {self.hand_type}{self.hand_joint}, action sequence is {pose}, does not match", color="red")
         self.last_position = pose
 
     def _get_normal_force(self):
@@ -333,4 +333,4 @@ class LinkerHandApi:
         self.open_can.close_can0()                         
 
 if __name__ == "__main__":
-    hand = LinkerHandApi(hand_type="right", hand_joint="L10")
+    hand = RealHandApi(hand_type="right", hand_joint="L10")

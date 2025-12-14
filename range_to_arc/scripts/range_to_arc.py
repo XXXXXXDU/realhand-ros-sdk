@@ -4,7 +4,7 @@ import rospy,sys,os
 from std_msgs.msg import String, Header
 from sensor_msgs.msg import JointState
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from utils.linker_range_arc import *
+from utils.real_range_arc import *
 
 def left_hand(msg):
     p = list(msg.position)

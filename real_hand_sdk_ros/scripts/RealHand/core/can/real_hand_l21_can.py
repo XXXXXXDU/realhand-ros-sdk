@@ -106,7 +106,7 @@ class FrameProperty(Enum):
     FINGER_FAULT = 0x83  # Clear finger faults and fault codes
     FINGER_TEMPERATURE = 0x84  # Finger joint temperatures
 
-class LinkerHandL21Can:
+class RealHandL21Can:
     def __init__(self, can_channel='can0', baudrate=1000000, can_id=0x28,yaml=""):
         self.can_id = can_id
         self.can_channel = can_channel

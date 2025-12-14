@@ -15,13 +15,13 @@ from std_msgs.msg import Header, Float32MultiArray
 import cv2
 import mediapipe as mp
 rospack = rospkg.RosPack()
-ros_linker_hand_sdk_path = rospack.get_path('linker_hand_sdk_ros')
-sys.path.append(ros_linker_hand_sdk_path + '/scripts')
-from LinkerHand.utils.init_linker_hand import InitLinkerHand
+ros_real_hand_sdk_path = rospack.get_path('real_hand_sdk_ros')
+sys.path.append(ros_real_hand_sdk_path + '/scripts')
+from RealHand.utils.init_real_hand import InitRealHand
 
 class FingerGuessing:
     def __init__(self):
-        self.check_hand = InitLinkerHand()
+        self.check_hand = InitRealHand()
         self.left_hand_exist,self.right_hand_exist,self.left_hand_joint,self.right_hand_joint,self.left_hand_type,self.right_hand_type = self.check_hand.current_hand()
         self.set_pub = rospy.Publisher('/cb_hand_setting_cmd', String, queue_size=1)
         # Can only be used with a single hand

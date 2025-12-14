@@ -6,9 +6,9 @@ import pybullet_data
 from urdf_parser_py.urdf import URDF
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-class LinkerL25Pybullet:
+class RealL25Pybullet:
     def __init__(self):
-        rospy.init_node('linker_L25_pybullet', anonymous=True)
+        rospy.init_node('real_L25_pybullet', anonymous=True)
         rospack = rospkg.RosPack()
         self.rate = rospy.Rate(100)
 
@@ -16,7 +16,7 @@ class LinkerL25Pybullet:
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0, 0, -9.8)
         plane_id = p.loadURDF("plane.urdf")
-        package_path = rospack.get_path('linker_L25_pybullet')
+        package_path = rospack.get_path('real_L25_pybullet')
         urdf_path = os.path.join(package_path, 'urdf', 'steering_1_1.urdf')
         self.robot = URDF.from_xml_file(urdf_path)
         orientation = p.getQuaternionFromEuler([0, 0, -1.0708])
@@ -38,7 +38,7 @@ class LinkerL25Pybullet:
 
 if __name__ == '__main__':
     try:
-        LinkerL25Pybullet().run()
+        RealL25Pybullet().run()
     except rospy.ROSInterruptException:
         pass
     finally:

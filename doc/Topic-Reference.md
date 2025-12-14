@@ -1,14 +1,14 @@
 ---
 
-# Linker Hand ROS SDK Topic Documentation
+# Real Hand ROS SDK Topic Documentation
 
 ## Topic Overview
 
-This document provides a detailed overview of the ROS Topic for the Linker Hand, including functions for controlling the hand's movements, retrieving sensor data, and setting operational parameters.
+This document provides a detailed overview of the ROS Topic for the Real Hand, including functions for controlling the hand's movements, retrieving sensor data, and setting operational parameters.
 
 ## Topic List
 ```bash
-/cb_hand_setting_cmd # Topic for setting Linker Hand commands
+/cb_hand_setting_cmd # Topic for setting Real Hand commands
 /cb_left_hand_control_cmd # Topic for controlling left hand motion by range 0~255
 /cb_left_hand_control_cmd_arc # Topic for controlling left hand motion by arc -3.14~3.14 (radians)
 /cb_left_hand_force # Topic for left hand pressure data display
@@ -75,9 +75,9 @@ Clear faults. Data format: std_msgs/msg/String. Currently only supported for L20
 
 ---
 
-### Control LinkerHand Topic /cb_left_hand_control_cmd or /cb_right_hand_control_cmd
+### Control RealHand Topic /cb_left_hand_control_cmd or /cb_right_hand_control_cmd
 
-### LinkerHand finger motion to specified position
+### RealHand finger motion to specified position
 
 # L10
 ```bash
@@ -233,7 +233,7 @@ def pc2_to_6x12x5(msg):
 
 ---
 
-### Get LinkerHand Configuration Info Topic /cb_left_hand_info or /cb_right_hand_info
+### Get RealHand Configuration Info Topic /cb_left_hand_info or /cb_right_hand_info
 ```bash
 rostopic echo /cb_right_hand_info
 data: "{\"version\": [7, 0, 0, 0], \"hand_joint\": \"L21\", \"speed\": [1, 0, 0, 0, 0, 0,\
@@ -252,7 +252,7 @@ data: "{\"version\": [7, 0, 0, 0], \"hand_joint\": \"L21\", \"speed\": [1, 0, 0,
   , \"middle_finger_tip\", \"ring_finger_tip\", \"little_finger_tip\"]}"
 ```
 **Description**:  
-Get LinkerHand configuration information. Data format: std_msgs/String containing JSON  
+Get RealHand configuration information. Data format: std_msgs/String containing JSON  
 **Parameters**:
 - `version`: hand version info.  
   - version[0]: hand type (e.g. L10)  
@@ -279,9 +279,9 @@ Get LinkerHand configuration information. Data format: std_msgs/String containin
 
 Obtain and send radian values for L10 and L20.
 
-topic: /cb_left_hand_state_arc and /cb_right_hand_state_arc get LinkerHand state with position in radians.
+topic: /cb_left_hand_state_arc and /cb_right_hand_state_arc get RealHand state with position in radians.
 
-topic: /cb_left_hand_control_cmd_arc and /cb_right_hand_control_cmd_arc publish position in radians to control LinkerHand finger motion.
+topic: /cb_left_hand_control_cmd_arc and /cb_right_hand_control_cmd_arc publish position in radians to control RealHand finger motion.
 
 ## Radian and Range Correspondence Table
 
@@ -476,16 +476,16 @@ The following is a complete example showing how to use the above APIs:
 
 ```python
 
-from LinkerHand.linker_hand_api import LinkerHandApi
+from RealHand.real_hand_api import RealHandApi
 def main():
     # Initialize API hand_type: left or right   hand_joint: L7 or L10 or L20 or L25
-    linker_hand = LinkerHandApi(hand_type="left", hand_joint="L10")
+    real_hand = RealHandApi(hand_type="left", hand_joint="L10")
     # Set finger speed
-    linker_hand.set_speed(speed=[120,200,200,200,200])
+    real_hand.set_speed(speed=[120,200,200,200,200])
     # Set finger torque
-    linker_hand.set_torque(torque=[200,200,200,200,200])
+    real_hand.set_torque(torque=[200,200,200,200,200])
     # Get current hand state
-    hand_state = linker_hand.get_state()
+    hand_state = real_hand.get_state()
     # Print state values
     print(hand_state)
 
@@ -500,6 +500,6 @@ def main():
 ---
 
 ## Contact
-- If you have any questions or need further support, please contact [support@linkerhand.com](mailto:support@linkerhand.com).
+- If you have any questions or need further support, please contact [support@realhand.com](mailto:support@realhand.com).
 
 ---

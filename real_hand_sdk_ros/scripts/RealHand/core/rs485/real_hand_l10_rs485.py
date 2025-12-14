@@ -6,7 +6,7 @@ from typing import Dict, List
 import numpy as np
 from pymodbus.client import ModbusSerialClient
 _INTERVAL = 0.005  # 8 ms
-class LinkerHandL10RS485:
+class RealHandL10RS485:
     KEYS = ["thumb_cmc_pitch", "thumb_cmc_roll", "index_mcp_pitch", "middle_mcp_pitch",
             "ring_mcp_pitch", "pinky_mcp_pitch", "index_mcp_roll", "ring_mcp_roll",
             "pinky_mcp_roll", "thumb_cmc_yaw"]
@@ -319,12 +319,12 @@ class LinkerHandL10RS485:
 # ------------------- demo -------------------
 if __name__ == "__main__":
     try:
-        with LinkerHandL10RS485(hand_id=0x27, modbus_port="/dev/ttyUSB0", baudrate=115200) as hand:
+        with RealHandL10RS485(hand_id=0x27, modbus_port="/dev/ttyUSB0", baudrate=115200) as hand:
             print("Connection successful!")
             
             # Test reading angles
             angles = hand.read_angles()
-            print("Angles:", dict(zip(LinkerHandL10RS485.KEYS, angles)))
+            print("Angles:", dict(zip(RealHandL10RS485.KEYS, angles)))
             
             # Test reading version information
             ver = hand.get_version()

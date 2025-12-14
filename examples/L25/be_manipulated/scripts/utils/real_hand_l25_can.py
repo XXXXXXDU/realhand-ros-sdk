@@ -109,7 +109,7 @@ class FrameProperty(Enum):
 
     WHOLE_FRAME = 0xF0  # Full frame transmission | Returns one-byte frame property + entire struct, exclusive for 485 and network transmission
 
-class LinkerHandL25Can:
+class RealHandL25Can:
     def __init__(self, config, can_channel='can0', baudrate=1000000, can_id=0x28):
         self.config = config
         self.can_id = can_id
@@ -134,14 +134,14 @@ class LinkerHandL25Can:
 
         # Initialize publisher and related parameters based on can_id
         if can_id == 0x28:  # Left hand
-            self.hand_exists = config['LINKER_HAND']['LEFT_HAND']['EXISTS']
-            self.hand_joint = config['LINKER_HAND']['LEFT_HAND']['JOINT']
-            self.hand_names = config['LINKER_HAND']['LEFT_HAND']['NAME']
+            self.hand_exists = config['REAL_HAND']['LEFT_HAND']['EXISTS']
+            self.hand_joint = config['REAL_HAND']['LEFT_HAND']['JOINT']
+            self.hand_names = config['REAL_HAND']['LEFT_HAND']['NAME']
         elif can_id == 0x27:  # Right hand
 
-            self.hand_exists = config['LINKER_HAND']['RIGHT_HAND']['EXISTS']
-            self.hand_joint = config['LINKER_HAND']['RIGHT_HAND']['JOINT']
-            self.hand_names = config['LINKER_HAND']['RIGHT_HAND']['NAME']
+            self.hand_exists = config['REAL_HAND']['RIGHT_HAND']['EXISTS']
+            self.hand_joint = config['REAL_HAND']['RIGHT_HAND']['JOINT']
+            self.hand_names = config['REAL_HAND']['RIGHT_HAND']['NAME']
 
 
         # Start the receiving thread

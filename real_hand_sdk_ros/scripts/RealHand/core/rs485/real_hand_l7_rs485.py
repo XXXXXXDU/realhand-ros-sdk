@@ -51,7 +51,7 @@ _PRESSURE_HEADER_SKIP = 10 # 假设跳过 10 个头部/校验字节
 _INTERVAL = 0.005 
 
 
-class LinkerHandL7RS485:
+class RealHandL7RS485:
     """
     O7机械手 Modbus RTU (RS485) 控制类。
     使用 pymodbus 3.5.1 版本和 O7 机械手协议。
@@ -372,7 +372,7 @@ if __name__ == "__main__":
     
     try:
         # 使用上下文管理器，确保连接自动关闭
-        with LinkerHandL7RS485(hand_id=TARGET_HAND_ID, modbus_port=PORT) as hand:
+        with RealHandL7RS485(hand_id=TARGET_HAND_ID, modbus_port=PORT) as hand:
             print("\n--- 1. 读取当前状态 ---")
             
             # 读取当前关节位置、速度、转矩

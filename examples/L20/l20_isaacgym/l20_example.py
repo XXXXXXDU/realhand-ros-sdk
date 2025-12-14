@@ -122,14 +122,14 @@ class AssetDesc:
 
 
 asset_descriptors = [
-    AssetDesc("urdf/linker_hand_l20_8_right_2.urdf", False),#/home/moning/HHHHand/l20_8_urdf/mjcf/l20_8_urdf.xml
+    AssetDesc("urdf/real_hand_l20_8_right_2.urdf", False),#/home/moning/HHHHand/l20_8_urdf/mjcf/l20_8_urdf.xml
 
 ]
 
 # How to provide the path
 # parse arguments
 args = gymutil.parse_arguments(
-    description="Linker Hand : Simulation for Gym",
+    description="Real Hand : Simulation for Gym",
     custom_parameters=[
         {"name": "--asset_id", "type": int, "default": 0, "help": "Asset id (0 - %d)" % (len(asset_descriptors) - 1)},
         {"name": "--speed_scale", "type": float, "default": 1.0, "help": "Animation speed scale"},

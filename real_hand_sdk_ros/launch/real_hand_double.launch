@@ -10,7 +10,7 @@
 
     <!-- Left hand -->
     <group ns="left_hand">
-        <node pkg="linker_hand_sdk_ros" type="linker_hand.py" name="linker_hand_sdk" output="screen">
+        <node pkg="real_hand_sdk_ros" type="real_hand.py" name="real_hand_sdk" output="screen">
             <param name="hand_type" type="string" value="left"/>
             <param name="hand_joint" type="string" value="$(arg left_hand_joint)"/>
             <param name="touch" type="bool" value="$(arg left_touch)"/>
@@ -20,7 +20,7 @@
 
     <!-- Right hand -->
     <group ns="right_hand">
-        <node pkg="linker_hand_sdk_ros" type="linker_hand.py" name="linker_hand_sdk" output="screen">
+        <node pkg="real_hand_sdk_ros" type="real_hand.py" name="real_hand_sdk" output="screen">
             <param name="hand_type" type="string" value="right"/>
             <param name="hand_joint" type="string" value="$(arg right_hand_joint)"/>
             <param name="touch" type="bool" value="$(arg right_touch)"/>

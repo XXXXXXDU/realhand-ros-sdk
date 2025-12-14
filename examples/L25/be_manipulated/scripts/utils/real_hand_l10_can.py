@@ -19,7 +19,7 @@ class FrameProperty(Enum):
     HAND_TANGENTIAL_FORCE_DIR = 0X22
     HAND_APPROACH_INC = 0X23
 
-class LinkerHandL10Can:
+class RealHandL10Can:
     def __init__(self, config,can_id, can_channel='can0', baudrate=1000000, ):
         self.x01 = [0] * 5
         self.x02 = [0] * 5

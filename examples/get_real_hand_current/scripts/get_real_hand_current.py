@@ -13,7 +13,7 @@ from utils.color_msg import ColorMsg
 /cb_right_hand_info # Right hand topic
 '''
 
-class GetLinkerHandCurrent():
+class GetRealHandCurrent():
     def __init__(self,loop=False):
         self.loop = loop
         if self.loop == True:
@@ -64,7 +64,7 @@ class GetLinkerHandCurrent():
 
 
 if __name__ == '__main__':
-    rospy.init_node('get_linker_hand_current', anonymous=True)
+    rospy.init_node('get_real_hand_current', anonymous=True)
     loop = rospy.get_param('~loop', default=True)  # Get global parameter by default
-    gh = GetLinkerHandCurrent(loop=loop)
+    gh = GetRealHandCurrent(loop=loop)
     

@@ -84,7 +84,7 @@ REG_WR_RING_SPEED       = 16  # Ring finger speed
 REG_WR_LITTLE_SPEED     = 17  # Little finger speed
 
 
-class LinkerHandO6RS485:
+class RealHandO6RS485:
     """O6 Mechanical Hand Modbus-RTU Control Class, using pymodbus 3.5.1"""
 
     TTL_TIMEOUT = 0.15     # 串口超时
@@ -487,7 +487,7 @@ if __name__ == "__main__":
 
     try:
         # Use a with statement to ensure the connection is closed, which is the recommended practice for pymodbus
-        with LinkerHandO6RS485(hand_id=args.hand_id, modbus_port=args.port, baudrate=115200) as hand:
+        with RealHandO6RS485(hand_id=args.hand_id, modbus_port=args.port, baudrate=115200) as hand:
             hand.dump_status()
             print("Executing relax -> Extend")
             hand.relax()

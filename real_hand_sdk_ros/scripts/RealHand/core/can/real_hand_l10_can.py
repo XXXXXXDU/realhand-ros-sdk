@@ -28,7 +28,7 @@ class FrameProperty(Enum):
     MOTOR_TEMPERATURE_1 = 0x33
     MOTOR_TEMPERATURE_2 = 0x34
 
-class LinkerHandL10Can:
+class RealHandL10Can:
     def __init__(self,can_id, can_channel='can0', baudrate=1000000, yaml=""):
         self.can_id = can_id
         self.can_channel = can_channel

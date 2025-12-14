@@ -109,7 +109,7 @@ class FrameProperty(Enum):
 
     WHOLE_FRAME = 0xF0  # Whole frame transmission | Returns one byte frame property + the entire structure for 485 and network transmission only
 
-class LinkerHandL25Can:
+class RealHandL25Can:
     def __init__(self, can_channel='can0', baudrate=1000000, can_id=0x28,yaml=""):
         self.can_id = can_id
         self.can_channel = can_channel

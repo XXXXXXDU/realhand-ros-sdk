@@ -2,7 +2,7 @@
 
 Intelligent Dexterous Hands, Creating All Possibilities.
 
-The LinkerHand ROS SDK is a software tool developed by LinkerHand (Beijing) Technology Co., Ltd. used to drive its series of dexterous hand products and provide functional examples. It supports various devices (such as laptops, desktops, Raspberry Pi, Jetson, etc.) and primarily serves fields like humanoid robotics, industrial automation, and scientific research institutions. It is suitable for applications such as humanoid robots, flexible production lines, embodied AI model training, and data collection.
+The RealHand ROS SDK is a software tool developed by RealHand (Beijing) Technology Co., Ltd. used to drive its series of dexterous hand products and provide functional examples. It supports various devices (such as laptops, desktops, Raspberry Pi, Jetson, etc.) and primarily serves fields like humanoid robotics, industrial automation, and scientific research institutions. It is suitable for applications such as humanoid robots, flexible production lines, embodied AI model training, and data collection.
 
 **WARNING**
 
@@ -24,7 +24,7 @@ V3.0.1
 2. Refactored ROS-layer logic to improve performance.
 
 V2.2.4
-1. Added support for the G20 Industrial version LinkerHand.
+1. Added support for the G20 Industrial version RealHand.
 2. Supports RS485 communication protocol for L10.
 
 
@@ -53,16 +53,16 @@ V2.1.8
 ## 3.2 Download
 
 ```python
-$ mkdir -p Linker_Hand_SDK_ROS/src    # Create directory
-$ cd Linker_Hand_SDK_ROS/src    # Navigate to the directory
-$ git clone https://github.com/linker-bot/linkerhand-ros-sdk.git    # Obtain the SDK
+$ mkdir -p Real_Hand_SDK_ROS/src    # Create directory
+$ cd Real_Hand_SDK_ROS/src    # Navigate to the directory
+$ git clone https://github.com/real-bot/realhand-ros-sdk.git    # Obtain the SDK
 ```
 
 ## 3.3 Install Dependencies and Compilation
 
 ```python
 $ sudo apt install python3-can
-$ cd Linker_Hand_SDK_ROS/src/linker_hand_sdk    # Navigate to the directory
+$ cd Real_Hand_SDK_ROS/src/real_hand_sdk    # Navigate to the directory
 $ pip install -r requirements.txt    # Install required dependencies
 $ cd ../.. # Return to the project root
 $ catkin_make    # Compile and build the ROS package
@@ -84,10 +84,10 @@ $ export ROS_HOSTNAME=<本机IP>
 
 Whether running on real hardware or simulation, the configuration parameter file must be modified first.
 
-Currently, the ROS graphical interface control example can only control a single LinkerHand dexterous hand.
+Currently, the ROS graphical interface control example can only control a single RealHand dexterous hand.
 
 ```shell
-$ cd Linker_Hand_SDK_ROS/src/linker_hand_sdk/linker_hand_sdk_ros/scripts/LinkerHand/config
+$ cd Real_Hand_SDK_ROS/src/real_hand_sdk/real_hand_sdk_ros/scripts/RealHand/config
 $ sudo vim setting.yaml    # Edit the configuration file
 ```
 
@@ -95,7 +95,7 @@ $ sudo vim setting.yaml    # Edit the configuration file
 
 ```yaml
 VERSION: 2.0.2 # Refactored core source code, supports motion capture glove speed
-LINKER_HAND:  # Hand configuration information
+REAL_HAND:  # Hand configuration information
   LEFT_HAND:
     EXISTS: True # Whether the left hand exists. Change to False if it doesn't.
     TOUCH: True  # Whether the pressure sensor is present. Change to False if it's not.
@@ -151,20 +151,20 @@ PASSWORD: "12345678" # System administrator password required to activate the CA
 
 ## Modify the launch file for parameter configuration
 ```shell
-$ cd /Linker_Hand_SDK_ROS/src/linker_hand_sdk_ros/launch/
-$ sudo vim linker_hand.launch    # Launch left OR right single hand (edit config based on comments)
-$ sudo vim linker_hand_double.launch    # Launch both left and right hands (edit config based on comments)
+$ cd /Real_Hand_SDK_ROS/src/real_hand_sdk_ros/launch/
+$ sudo vim real_hand.launch    # Launch left OR right single hand (edit config based on comments)
+$ sudo vim real_hand_double.launch    # Launch both left and right hands (edit config based on comments)
 # If an error occurs:
-ERROR: cannot launch node of type [linker_hand_sdk_ros/linker_hand.py]: Cannot locate node of type [linker_hand.py] in package [linker_hand_sdk_ros]. Make sure file exists in package path and permission is set to executable (chmod +x)
+ERROR: cannot launch node of type [real_hand_sdk_ros/real_hand.py]: Cannot locate node of type [real_hand.py] in package [real_hand_sdk_ros]. Make sure file exists in package path and permission is set to executable (chmod +x)
 # You need to grant execution permission:
-$ sudo chmod a+x src/linkerhand-ros-sdk/linker_hand_sdk_ros/scripts/linker_hand.py
-$ roslaunch linker_hand_sdk_ros linker_hand.launch
+$ sudo chmod a+x src/realhand-ros-sdk/real_hand_sdk_ros/scripts/real_hand.py
+$ roslaunch real_hand_sdk_ros real_hand.launch
 ```
-- linker_hand.launch
+- real_hand.launch
 ```html
 <?xml version="1.0" encoding="utf-8"?>
 <launch>
-    <node pkg="linker_hand_sdk_ros" type="linker_hand.py" name="linker_hand_sdk" output="screen" >  <!--  Start the SDK  -->
+    <node pkg="real_hand_sdk_ros" type="real_hand.py" name="real_hand_sdk" output="screen" >  <!--  Start the SDK  -->
         <param name="hand_type" type="string" value="right"/> <!--left or right-->
         <param name="hand_joint" type="string" value="L10"/> <!--O6/L6/L7/L10/L20/G20/L21-->
         <param name="touch" type="bool" value="true"/> <!--Is there a pressure sensor-->
@@ -172,8 +172,8 @@ $ roslaunch linker_hand_sdk_ros linker_hand.launch
 </launch>
 ```
 
-### Single USB-to-CAN Control for Dual Hands Note: First, ensure no other CAN devices are connected to the control PC. Connect the USB-to-CAN cables of the same color together. Supports all Linker Hand models with CAN communication.
-- Modify linker_hand_double.launch
+### Single USB-to-CAN Control for Dual Hands Note: First, ensure no other CAN devices are connected to the control PC. Connect the USB-to-CAN cables of the same color together. Supports all Real Hand models with CAN communication.
+- Modify real_hand_double.launch
 ```html
     <arg name="left_hand_joint" default="L10"/> <!-- left-hand model  O6/L6/L7/L10/L20/G20/L21-->
     <arg name="right_hand_joint" default="L10"/> <!-- right-hand model  O6/L6/L7/L10/L20/G20/L21-->
@@ -183,8 +183,8 @@ $ roslaunch linker_hand_sdk_ros linker_hand.launch
     <arg name="right_can" default="can0"/> <!-- Right-hand USB to CAN converter serial number can0-->
 ```
 
-### Dual USB to CAN control with two-hand operation Note: First, ensure that no other CAN devices are connected to the control computer. Insert the left USB to CAN adapter as can0, and then insert the right USB to CAN adapter as can1. Supports CAN communication for all Linker Hand models
-- Modify `linker_hand_double.launch`
+### Dual USB to CAN control with two-hand operation Note: First, ensure that no other CAN devices are connected to the control computer. Insert the left USB to CAN adapter as can0, and then insert the right USB to CAN adapter as can1. Supports CAN communication for all Real Hand models
+- Modify `real_hand_double.launch`
 ```html
     <arg name="left_hand_joint" default="L10"/> <!-- left-hand model O6/L6/L7/L10/L20/G20/L21-->
     <arg name="right_hand_joint" default="L10"/> <!-- right-hand model O6/L6/L7/L10/L20/G20/L21-->
@@ -193,9 +193,9 @@ $ roslaunch linker_hand_sdk_ros linker_hand.launch
     <arg name="left_can" default="can0"/> <!-- Left-hand USB to CAN converter serial number can0-->
     <arg name="right_can" default="can1"/> <!-- Right-hand USB to CAN converter serial number can0-->
 ```
-## 4.2 LinkerHand Dexterous Hand and PC Hardware Connection
+## 4.2 RealHand Dexterous Hand and PC Hardware Connection
 
-### 4.2.1 Insert the LinkerHand's USB-to-CAN adapter into the Ubuntu device. The blue light should illuminate.
+### 4.2.1 Insert the RealHand's USB-to-CAN adapter into the Ubuntu device. The blue light should illuminate.
 
 ![](https://lkaeimso7m.feishu.cn/space/api/box/stream/download/asynccode/?code=YzkzNzI4YmE1MzdmMzMzOGFhNmUyMDQ4YjViMDk0N2JfZGxnTHZMaU9Ec2dqdkZKOERBeTcxU3BScDN1QTdPcXJfVG9rZW46RkNZYWIxNWllb0NlMW94SkR5aGNhcEs0bm9oXzE3NDM1ODU1MDk6MTc0MzU4OTEwOV9WNA)
 
@@ -205,26 +205,26 @@ $ roslaunch linker_hand_sdk_ros linker_hand.launch
 
 ## 4.3 Starting the SDK
 
-Start the LinkerHand L10, L20 dexterous hand SDK. Upon successful launch, there will be prompt information regarding the SDK version, CAN interface status, dexterous hand configuration, and current joint speeds.&#x20;
+Start the RealHand L10, L20 dexterous hand SDK. Upon successful launch, there will be prompt information regarding the SDK version, CAN interface status, dexterous hand configuration, and current joint speeds.&#x20;
 
 ```shell
 # Open the CAN port
 $ sudo /usr/sbin/ip link set can0 up type can bitrate 1000000 # USB-to-CAN device blue light stays solid. This step can be skipped on Ubuntu systems after modifying setting.ymal as required.
-$ cd ~/Linker_Hand_SDK_ROS/
+$ cd ~/Real_Hand_SDK_ROS/
 $ source ./devel/setup.bash
-$ roslaunch linker_hand_sdk_ros linker_hand.launch # Launch left OR right single hand
+$ roslaunch real_hand_sdk_ros real_hand.launch # Launch left OR right single hand
 or
-$ roslaunch linker_hand_sdk_ros linker_hand_double.launch # Launch both left and right hands
+$ roslaunch real_hand_sdk_ros real_hand_double.launch # Launch both left and right hands
 # If an error occurs:
-ERROR: cannot launch node of type [linker_hand_sdk_ros/linker_hand.py]: Cannot locate node of type [linker_hand.py] in package [linker_hand_sdk_ros]. Make sure file exists in package path and permission is set to executable (chmod +x)
+ERROR: cannot launch node of type [real_hand_sdk_ros/real_hand.py]: Cannot locate node of type [real_hand.py] in package [real_hand_sdk_ros]. Make sure file exists in package path and permission is set to executable (chmod +x)
 # You need to grant execution permission:
-$ sudo chmod a+x src/linker_hand_sdk/linker_hand_sdk_ros/scripts/linker_hand.py
-$ roslaunch linker_hand_sdk_ros linker_hand.launch
+$ sudo chmod a+x src/real_hand_sdk/real_hand_sdk_ros/scripts/real_hand.py
+$ roslaunch real_hand_sdk_ros real_hand.launch
 ```
 
 ### 4.4 RS485 Protocol Switching (Currently supports O6/L6; refer to the MODBUS RS485 protocol document for other models)
 
-Edit the configuration file at [scripts/LinkerHand/config/setting.yaml](https://github.com/linker-bot/linkerhand-ros-sdk/blob/main/linker_hand_sdk_ros/scripts/LinkerHand/config/setting.yaml) and modify the parameters according to the comments within the file, setting MODBUS: "/dev/ttyUSB0", and setting the modbus parameter in [linker_hand.launch.py](https://github.com/linker-bot/linkerhand-ros-sdk/blob/main/linker_hand_sdk_ros/launch/linker_hand.launch) to "/dev/ttyUSB0". The USB-RS485 converter typically appears as /dev/ttyUSB* or /dev/ttyACM* on Ubuntu. modbus: "None" or "/dev/ttyUSB0" Note: The modbus parameter is a string type; if it is not "None", the can parameter will be ignored.
+Edit the configuration file at [scripts/RealHand/config/setting.yaml](https://github.com/real-bot/realhand-ros-sdk/blob/main/real_hand_sdk_ros/scripts/RealHand/config/setting.yaml) and modify the parameters according to the comments within the file, setting MODBUS: "/dev/ttyUSB0", and setting the modbus parameter in [real_hand.launch.py](https://github.com/real-bot/realhand-ros-sdk/blob/main/real_hand_sdk_ros/launch/real_hand.launch) to "/dev/ttyUSB0". The USB-RS485 converter typically appears as /dev/ttyUSB* or /dev/ttyACM* on Ubuntu. modbus: "None" or "/dev/ttyUSB0" Note: The modbus parameter is a string type; if it is not "None", the can parameter will be ignored.
 ```bash
 # Ensure requirements.txt dependencies are installed
 # Install system-level drivers
@@ -268,7 +268,7 @@ $ sudo chmod 777 /dev/ttyUSB0
 
 # 5. **Package Introduction**
 
-## 5.1 linker_hand_sdk_ros
+## 5.1 real_hand_sdk_ros
 
 Controls the dexterous hand joint angles and retrieves various status information from the dexterous hand.
 

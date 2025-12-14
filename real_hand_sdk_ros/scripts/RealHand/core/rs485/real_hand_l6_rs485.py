@@ -7,7 +7,7 @@ import numpy as np
 
 _INTERVAL = 0.006  # 8 ms
 
-class LinkerHandL6RS485:
+class RealHandL6RS485:
     """L6机械手 Modbus-RTU 控制类"""
     
     # 6个关节名称
@@ -410,7 +410,7 @@ class LinkerHandL6RS485:
 if __name__ == "__main__":
     # 使用示例
     try:
-        with LinkerHandL6RS485(hand_id=0x27, modbus_port="/dev/ttyUSB0", baudrate=115200) as hand:
+        with RealHandL6RS485(hand_id=0x27, modbus_port="/dev/ttyUSB0", baudrate=115200) as hand:
             print("连接成功!")
             
             # 打印状态信息

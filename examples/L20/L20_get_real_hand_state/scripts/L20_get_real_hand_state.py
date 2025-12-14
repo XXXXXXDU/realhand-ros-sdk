@@ -12,7 +12,7 @@ from utils.color_msg import ColorMsg
 /cb_right_hand_state
 /cb_right_hand_state_arc
 '''
-class L20GetLinkerHandState():
+class L20GetRealHandState():
     def __init__(self,loop=False):
         self.loop = loop # Used to determine whether to loop to get status data
         if self.loop == True:
@@ -176,7 +176,7 @@ class L20GetLinkerHandState():
 
 
 if __name__ == '__main__':
-    rospy.init_node('L20_get_linker_hand_state', anonymous=True)
+    rospy.init_node('L20_get_real_hand_state', anonymous=True)
     loop = rospy.get_param('~loop', default="False")  # Get global parameter by default
-    lh = L20GetLinkerHandState(loop=loop)
+    lh = L20GetRealHandState(loop=loop)
     

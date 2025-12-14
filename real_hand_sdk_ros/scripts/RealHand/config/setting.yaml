@@ -1,5 +1,5 @@
 VERSION: 3.0.1 # 新增L6、O6、L10 RS485支持
-LINKER_HAND:  # 手部配置信息
+REAL_HAND:  # 手部配置信息
   LEFT_HAND:
     EXISTS: True # 是否存在左手
     TOUCH: True # 是否有压力传感器

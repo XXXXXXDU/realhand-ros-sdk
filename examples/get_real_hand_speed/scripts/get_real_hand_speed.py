@@ -12,7 +12,7 @@ from utils.color_msg import ColorMsg
 /cb_right_hand_info # Right hand topic
 '''
 
-class GetLinkerHandSpeed():
+class GetRealHandSpeed():
     def __init__(self,loop=False):
         self.loop = loop
         if self.loop == True:
@@ -63,7 +63,7 @@ class GetLinkerHandSpeed():
 
 
 if __name__ == '__main__':
-    rospy.init_node('get_linker_hand_speed', anonymous=True)
+    rospy.init_node('get_real_hand_speed', anonymous=True)
     loop = rospy.get_param('~loop', default=True)  # Get global parameter by default
-    gh = GetLinkerHandSpeed(loop=loop)
+    gh = GetRealHandSpeed(loop=loop)
     

@@ -13,20 +13,20 @@ import os
 import subprocess
 from std_msgs.msg import Header, Float32MultiArray
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from utils.linker_hand_l25_can import LinkerHandL25Can
+from utils.real_hand_l25_can import RealHandL25Can
 from utils.color_msg import ColorMsg
 from utils.open_can import OpenCan
 global package_path
 # Create rospkg.RosPack object
 rospack = rospkg.RosPack()
 # Get the path of the specified package
-package_name = "linker_hand_sdk_ros"
+package_name = "real_hand_sdk_ros"
 package_path = rospack.get_path(package_name)
 
 '''
 Note: The L25 dual right-hand remote control mode is for internal testing, try not to use it.
-This is the L25 dexterous hand 'be manipulated' module. Do not use this module on the same machine as linker_hand_sdk_ros.
-The ROS master starts linker_hand_sdk_ros and `python set_remote_control.py --hand_type=right` in the examples/L25 directory.
+This is the L25 dexterous hand 'be manipulated' module. Do not use this module on the same machine as real_hand_sdk_ros.
+The ROS master starts real_hand_sdk_ros and `python set_remote_control.py --hand_type=right` in the examples/L25 directory.
 The ROS slave starts this ROS module.
 rosrun be_manipulated be_manipulated.py
 '''
@@ -44,7 +44,7 @@ class BeManipulated:
         self.is_can_up_sysfs()
         self.manipulated_right()
     def manipulated_right(self):
-        self.right_hand=LinkerHandL25Can(config=self.config, can_channel="can0",baudrate=1000000,can_id=0x27)
+        self.right_hand=RealHandL25Can(config=self.config, can_channel="can0",baudrate=1000000,can_id=0x27)
         self.right_hand.set_enable_mode()
         # Set finger speed 0~255
         self.right_hand.set_speed(speed=255)
@@ -149,8 +149,8 @@ if __name__ == '__main__':
                 time.sleep(3)
             else:
                 break
-        linker_hand = BeManipulated()
+        real_hand = BeManipulated()
         rospy.spin()
     except rospy.ROSInterruptException:
-        linker_hand.shutdown()
+        real_hand.shutdown()
         rospy.loginfo("Node shutdown complete.")

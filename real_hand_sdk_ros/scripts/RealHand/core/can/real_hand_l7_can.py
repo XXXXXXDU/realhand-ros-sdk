@@ -6,7 +6,7 @@ from utils.open_can import OpenCan
 from utils.color_msg import ColorMsg
 
 
-class LinkerHandL7Can:
+class RealHandL7Can:
     def __init__(self, can_id, can_channel='can0', baudrate=1000000,yaml=""):
         self.can_id = can_id
         self.can_channel = can_channel

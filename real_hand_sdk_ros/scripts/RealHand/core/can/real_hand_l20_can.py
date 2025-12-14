@@ -30,7 +30,7 @@ class FrameProperty(Enum):
     HAND_SAVE_PARAMETER = 0xCF     # Save parameters Write only --------
 
 
-class LinkerHandL20Can:
+class RealHandL20Can:
     def __init__(self, can_channel='can0', baudrate=1000000, can_id=0x28,yaml=""):
         self.can_id = can_id
         self.can_channel = can_channel

@@ -154,7 +154,7 @@ class FrameProperty(Enum):
     HAND_COMM_ID_SET = 0xD1  # Communication ID setting
     HAND_UID_SET = 0xF0  # Unique identifier setting
 
-class LinkerHandG20Can:
+class RealHandG20Can:
     def __init__(self, can_channel='can0', baudrate=1000000, can_id=0x28, yaml=""):
         self.can_id = can_id
         self.can_channel = can_channel

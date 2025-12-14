@@ -1,28 +1,28 @@
-# Using the LinkerHand Dexterous Hand ROS SDK on Desktop (Laptop), Raspberry Pi, or Jetson Devices
+# Using the RealHand Dexterous Hand ROS SDK on Desktop (Laptop), Raspberry Pi, or Jetson Devices
 
 ## Description
-The LinkerHand dexterous hand hardware and ROS SDK software can be used on most x86 and arm64 devices.
+The RealHand dexterous hand hardware and ROS SDK software can be used on most x86 and arm64 devices.
 
 - __The device must be running Ubuntu 20.04 with ROS Noetic and Python 3.8__
 - __The device must have a standard 5V USB port__
 
 ## Usage
 
-  __Before use, please modify the [setting.yaml](../linker_hand_sdk_ros/config/setting.yaml) configuration file according to your actual needs.__  
+  __Before use, please modify the [setting.yaml](../real_hand_sdk_ros/config/setting.yaml) configuration file according to your actual needs.__  
 
-  __Insert the LinkerHand dexterous hand USB-to-CAN device into the Ubuntu machine.__  
+  __Insert the RealHand dexterous hand USB-to-CAN device into the Ubuntu machine.__  
 
   Make sure the current system environment is Ubuntu 20.04, ROS Noetic, Python 3.8.10.
 
 - Download
 
-    $ mkdir -p Linker_Hand_SDK_ROS/src  
-    $ cd Linker_Hand_SDK_ROS/src  
-    $ git clone https://github.com/linkerbotai/linker_hand_sdk.git  
+    $ mkdir -p Real_Hand_SDK_ROS/src  
+    $ cd Real_Hand_SDK_ROS/src  
+    $ git clone https://github.com/realbotai/real_hand_sdk.git  
 
 - Build
 
-    $ cd Linker_Hand_SDK_ROS  
+    $ cd Real_Hand_SDK_ROS  
     $ pip install -r requirements.txt  
     $ catkin_make  
 
@@ -48,9 +48,9 @@ The LinkerHand dexterous hand hardware and ROS SDK software can be used on most 
 
     # Enable CAN port  
     $ sudo /usr/sbin/ip link set can0 up type can bitrate 1000000  # USB-to-CAN device blue LED stays on  
-    $ cd ~/Linker_Hand_SDK_ROS/  
+    $ cd ~/Real_Hand_SDK_ROS/  
     $ source ./devel/setup.bash  
-    $ roslaunch linker_hand_sdk_ros linker_hand.launch  
+    $ roslaunch real_hand_sdk_ros real_hand.launch  
 
 ## Motion Capture Glove Teleoperation
 

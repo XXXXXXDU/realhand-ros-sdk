@@ -9,7 +9,7 @@ from .enum import FrameProperty
 from .color_msg import ColorMsg
 
 
-class LinkerHandL20Can:
+class RealHandL20Can:
     def __init__(self, config, can_channel='can0', baudrate=1000000, can_id=0x28):
         self.config = config
         self.can_id = can_id
@@ -32,14 +32,14 @@ class LinkerHandL20Can:
         # Initialize publisher and related parameters based on can_id
         if can_id == 0x28:  # Left hand
             self.pub = rospy.Publisher("/cb_left_hand_state", JointState, queue_size=10)
-            self.hand_exists = config['LINKER_HAND']['LEFT_HAND']['EXISTS']
-            self.hand_joint = config['LINKER_HAND']['LEFT_HAND']['JOINT']
-            self.hand_names = config['LINKER_HAND']['LEFT_HAND']['NAME']
+            self.hand_exists = config['REAL_HAND']['LEFT_HAND']['EXISTS']
+            self.hand_joint = config['REAL_HAND']['LEFT_HAND']['JOINT']
+            self.hand_names = config['REAL_HAND']['LEFT_HAND']['NAME']
         elif can_id == 0x27:  # Right hand
             self.pub = rospy.Publisher("/cb_right_hand_state", JointState, queue_size=10)
-            self.hand_exists = config['LINKER_HAND']['RIGHT_HAND']['EXISTS']
-            self.hand_joint = config['LINKER_HAND']['RIGHT_HAND']['JOINT']
-            self.hand_names = config['LINKER_HAND']['RIGHT_HAND']['NAME']
+            self.hand_exists = config['REAL_HAND']['RIGHT_HAND']['EXISTS']
+            self.hand_joint = config['REAL_HAND']['RIGHT_HAND']['JOINT']
+            self.hand_names = config['REAL_HAND']['RIGHT_HAND']['NAME']
 
         # Initialize data storage
         self.x01, self.x02, self.x03, self.x04 = [[0.0] * 5 for _ in range(4)]

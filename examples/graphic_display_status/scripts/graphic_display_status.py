@@ -16,10 +16,10 @@ from PyQt5.QtCore import Qt, QTimer
 from std_msgs.msg import Header, Float32MultiArray
 
 rospack = rospkg.RosPack()
-ros_linker_hand_sdk_path = rospack.get_path('linker_hand_sdk_ros')
-sys.path.append(ros_linker_hand_sdk_path + '/scripts')
-from LinkerHand.utils.load_write_yaml import LoadWriteYaml
-from LinkerHand.utils.color_msg import ColorMsg
+ros_real_hand_sdk_path = rospack.get_path('real_hand_sdk_ros')
+sys.path.append(ros_real_hand_sdk_path + '/scripts')
+from RealHand.utils.load_write_yaml import LoadWriteYaml
+from RealHand.utils.color_msg import ColorMsg
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from views.temperature_plot import TemperaturePlot

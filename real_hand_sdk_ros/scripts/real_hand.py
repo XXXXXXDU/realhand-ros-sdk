@@ -6,14 +6,14 @@ import numpy as np
 from std_msgs.msg import String, Header, Float32MultiArray, Float64MultiArray
 from sensor_msgs.msg import JointState,PointCloud2, PointField
 from common.init_position import CONFIG
-from LinkerHand.utils.mapping import *
-from LinkerHand.linker_hand_api import LinkerHandApi
-from LinkerHand.utils.init_linker_hand import InitLinkerHand
-from LinkerHand.utils.load_write_yaml import LoadWriteYaml
-from LinkerHand.utils.color_msg import ColorMsg
-from LinkerHand.utils.open_can import OpenCan
+from RealHand.utils.mapping import *
+from RealHand.real_hand_api import RealHandApi
+from RealHand.utils.init_real_hand import InitRealHand
+from RealHand.utils.load_write_yaml import LoadWriteYaml
+from RealHand.utils.color_msg import ColorMsg
+from RealHand.utils.open_can import OpenCan
 
-class LinkerHand:
+class RealHand:
     def __init__(self):
         self.hand_type = rospy.get_param('~hand_type', "right")
         self.hand_joint = rospy.get_param('~hand_joint', "L10")
@@ -65,8 +65,8 @@ class LinkerHand:
 
     def _init_hand(self):
         self.hand_setting_sub = rospy.Subscriber("/cb_hand_setting_cmd", String, self._hand_setting_cb)
-        self.api = LinkerHandApi(hand_type=self.hand_type, hand_joint=self.hand_joint,can=self.can,modbus=self.modbus)
-        # Get Linker Hand version number
+        self.api = RealHandApi(hand_type=self.hand_type, hand_joint=self.hand_joint,can=self.can,modbus=self.modbus)
+        # Get Real Hand version number
         self.embedded_version = self.api.get_embedded_version()
         # Get fingertip pressure sensor type
         self.touch_type = self.api.get_touch_type()
@@ -78,12 +78,12 @@ class LinkerHand:
             if self.touch_type == 2:
                 self.matrix_touch_pub = rospy.Publisher(f"/cb_{self.hand_type}_hand_matrix_touch" ,String, queue_size=10)
                 self.matrix_touch_pub_pc = rospy.Publisher(f"/cb_{self.hand_type}_hand_matrix_touch_pc2" ,PointCloud2, queue_size=10)
-                ColorMsg(msg=f"Linker Hand {self.hand_type} {self.hand_joint} It features a matrix pressure sensor and has been enabled in the configuration",color="green")
+                ColorMsg(msg=f"Real Hand {self.hand_type} {self.hand_joint} It features a matrix pressure sensor and has been enabled in the configuration",color="green")
             elif self.touch_type != -1:
                 self.touch_pub = rospy.Publisher(f"/cb_{self.hand_type}_hand_touch", Float32MultiArray, queue_size=10)
-                ColorMsg(msg=f"Linker Hand {self.hand_type} {self.hand_joint} It features a matrix pressure sensor and has been enabled in the configuration",color="green")
+                ColorMsg(msg=f"Real Hand {self.hand_type} {self.hand_joint} It features a matrix pressure sensor and has been enabled in the configuration",color="green")
         else:
-            ColorMsg(msg=f"Linker Hand {self.hand_type} {self.hand_joint} Pressure sensor not enabled or not equipped",color="yellow")
+            ColorMsg(msg=f"Real Hand {self.hand_type} {self.hand_joint} Pressure sensor not enabled or not equipped",color="yellow")
         # 1. Initialize default values
         pose = None
         torque = [200, 200, 200, 200, 200]
@@ -171,7 +171,7 @@ class LinkerHand:
     def get_state(self):
         count = 0
         while True:
-            if self.sdk_v == 2: # New firmware Linker Hand uses default wait threshold
+            if self.sdk_v == 2: # New firmware Real Hand uses default wait threshold
                 sleep_time = 0
             else:
                 sleep_time = 0.009
@@ -330,24 +330,24 @@ class LinkerHand:
         sys.exit(0)  # Exit the program normally
 
 if __name__ == '__main__':
-    rospy.init_node('linker_hand_sdk', anonymous=True)
-    linker_hand = LinkerHand()
-    signal.signal(signal.SIGINT, linker_hand.signal_handler)  # Ctrl+C
-    signal.signal(signal.SIGTERM, linker_hand.signal_handler)  # kill command
-    embedded_version = linker_hand.embedded_version
+    rospy.init_node('real_hand_sdk', anonymous=True)
+    real_hand = RealHand()
+    signal.signal(signal.SIGINT, real_hand.signal_handler)  # Ctrl+C
+    signal.signal(signal.SIGTERM, real_hand.signal_handler)  # kill command
+    embedded_version = real_hand.embedded_version
     if embedded_version == None:
         ColorMsg(msg=f"No Hand Connected", color="red")
-    if linker_hand.hand_joint.upper() == "O6" or linker_hand.hand_joint.upper() == "L6" or linker_hand.hand_joint.upper() == "G20":
+    if real_hand.hand_joint.upper() == "O6" or real_hand.hand_joint.upper() == "L6" or real_hand.hand_joint.upper() == "G20":
         ColorMsg(msg=f"New Matrix Touch For SDK V2", color="green")
-        linker_hand.sdk_v=2
+        real_hand.sdk_v=2
     elif len(embedded_version) == 3 or len(embedded_version) == 6:
         ColorMsg(msg=f"New Matrix Touch For SDK V2", color="green")
-        linker_hand.sdk_v=2
+        real_hand.sdk_v=2
     elif len(embedded_version) > 4 and ((embedded_version[0]==10 and embedded_version[4]>35) or (embedded_version[0]==7 and embedded_version[4]>50) or (embedded_version[0] == 6)):
         ColorMsg(msg=f"New Matrix Touch For SDK V2", color="green")
-        linker_hand.sdk_v=2
+        real_hand.sdk_v=2
     else:
         ColorMsg(msg=f"SDK V1", color="green")
-        linker_hand.sdk_v=1
+        real_hand.sdk_v=1
     rospy.spin()
         
