@@ -34,12 +34,12 @@ if __name__ == "__main__":
     parser.add_argument("--hand_type", type=str, default="left")
     args = parser.parse_args()
     hand_type = args.hand_type
-    #2.初始化 ROS 节点:命名(唯一)
+    # 2. Initialize ROS node: naming (unique)
     rospy.init_node("set_remote_control")
-    rate = rospy.Rate(60)  # 设置频率为30Hz
-    # 首先设置为失能模式
+    rate = rospy.Rate(60)  # Set frequency to 60Hz
+    # First, set to disabled mode
     set_disability()
-    rospy.loginfo(f"开始T24版本{hand_type}遥操模式")
+    rospy.loginfo(f"Starting L25 version {hand_type} remote control mode")
     if hand_type == "left":
         sub = rospy.Subscriber("/cb_left_hand_state",JointState,doMsg,queue_size=10)
     elif hand_type == "right":

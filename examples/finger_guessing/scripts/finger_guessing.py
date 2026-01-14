@@ -15,16 +15,16 @@ from std_msgs.msg import Header, Float32MultiArray
 import cv2
 import mediapipe as mp
 rospack = rospkg.RosPack()
-ros_linker_hand_sdk_path = rospack.get_path('linker_hand_sdk_ros')
-sys.path.append(ros_linker_hand_sdk_path + '/scripts')
-from LinkerHand.utils.init_linker_hand import InitLinkerHand
+ros_real_hand_sdk_path = rospack.get_path('real_hand_sdk_ros')
+sys.path.append(ros_real_hand_sdk_path + '/scripts')
+from RealHand.utils.init_real_hand import InitRealHand
 
 class FingerGuessing:
     def __init__(self):
-        self.check_hand = InitLinkerHand()
+        self.check_hand = InitRealHand()
         self.left_hand_exist,self.right_hand_exist,self.left_hand_joint,self.right_hand_joint,self.left_hand_type,self.right_hand_type = self.check_hand.current_hand()
         self.set_pub = rospy.Publisher('/cb_hand_setting_cmd', String, queue_size=1)
-        # 只能单手使用
+        # Can only be used with a single hand
         if self.left_hand_exist == True and self.right_hand_exist == True:
             self.right_hand_exist = False
             self.right_hand_joint = None
@@ -40,34 +40,34 @@ class FingerGuessing:
         if self.hand_joint == "L25":
             self.set_speed(speed=[80, 250, 250, 250, 250])
         print(f"{self.hand_type} -- {self.hand_joint}")
-        self.hand_landmarks = None # 手部关键点
+        self.hand_landmarks = None # Hand landmarks
         self.shared_resource = 'NONE'
         self.isrunning = True
         self.mp_hands = mp.solutions.hands
         self.hands = self.mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5)
         self.mp_drawing = mp.solutions.drawing_utils
-        self.labels = ['Rock', 'Paper', 'Scissors','NONE']  # 石头、布、剪刀
+        self.labels = ['Rock', 'Paper', 'Scissors','NONE']  # Rock, Paper, Scissors
         if self.hand_joint == 'L10':
-            self.rock_pose = [120, 60, 5, 5, 5, 5, 250, 250, 250, 40] # 石头
+            self.rock_pose = [120, 60, 5, 5, 5, 5, 250, 250, 250, 40] # Rock
             self.rock_pose_msg = self.create_joint_state_msg(self.rock_pose,[])
-            self.paper_pose = [250, 230, 250, 250, 250, 250, 250, 250, 250, 70] # 布
+            self.paper_pose = [250, 230, 250, 250, 250, 250, 250, 250, 250, 70] # Paper
             self.paper_pose_msg = self.create_joint_state_msg(self.paper_pose,[])
-            self.scissors_pose = [120, 60, 250, 250, 0, 0,250, 250, 250, 40] # 剪刀
+            self.scissors_pose = [120, 60, 250, 250, 0, 0,250, 250, 250, 40] # Scissors
             self.scissors_pose_msg = self.create_joint_state_msg(self.scissors_pose,[])
         if self.hand_joint == 'L25':
-            self.rock_pose = [250, 0, 0, 15, 5, 250, 55, 0, 75, 95, 85, 0, 0, 0, 0, 85, 0, 40, 35, 5, 70, 0, 5, 25, 0] # 石头
-            self.rock_pose_1 = [250, 0, 0, 15, 5, 30, 55, 0, 75, 95, 85, 0, 0, 0, 0, 85, 0, 40, 35, 5, 70, 0, 5, 25, 0] # 石头
+            self.rock_pose = [250, 0, 0, 15, 5, 250, 55, 0, 75, 95, 85, 0, 0, 0, 0, 85, 0, 40, 35, 5, 70, 0, 5, 25, 0] # Rock
+            self.rock_pose_1 = [250, 0, 0, 15, 5, 30, 55, 0, 75, 95, 85, 0, 0, 0, 0, 85, 0, 40, 35, 5, 70, 0, 5, 25, 0] # Rock
             self.rock_pose_msg = self.create_joint_state_msg(self.rock_pose,[])
             self.rock_pose_1_msg = self.create_joint_state_msg(self.rock_pose_1,[])
-            self.paper_pose = [75, 250, 250, 250, 250, 175, 50, 50, 70, 200, 200, 0, 0, 0, 0, 250, 250, 250, 250, 250, 250, 0, 250, 250, 250] # 布
+            self.paper_pose = [75, 250, 250, 250, 250, 175, 50, 50, 70, 200, 200, 0, 0, 0, 0, 250, 250, 250, 250, 250, 250, 0, 250, 250, 250] # Paper
             self.paper_pose_msg = self.create_joint_state_msg(self.paper_pose,[])
-            self.scissors_pose = [120, 60, 250, 250, 0, 0,250, 250, 250, 40] # 剪刀
+            self.scissors_pose = [120, 60, 250, 250, 0, 0,250, 250, 250, 40] # Scissors
             self.scissors_pose_msg = self.create_joint_state_msg(self.scissors_pose,[])
         if self.hand_type == 'left':
             self.hand_pub = rospy.Publisher(f"/cb_left_hand_control_cmd", JointState, queue_size=1)
         else:
             self.hand_pub = rospy.Publisher(f"/cb_right_hand_control_cmd", JointState, queue_size=1)
-        self.stop_event = threading.Event()  # 创建一个事件对象
+        self.stop_event = threading.Event()  # Create an event object
         self.camera_thread = threading.Thread(target=self.main)
         self.camera_thread.daemon = True
         self.camera_thread.start()
@@ -131,19 +131,19 @@ class FingerGuessing:
             print(self.shared_resource)
             gesture_label = self.shared_resource
             #print('ok')
-            if gesture_label == 'Rock': # 石头
+            if gesture_label == 'Rock': # Rock
                 time.sleep(0.1)
                 #print(self.paper_pose_msg.position)
                 self.hand_pub.publish(self.paper_pose_msg)
                 time.sleep(0.1)
                 #self.shared_resource = 'NONE'
-            elif gesture_label == 'Paper': # 布
+            elif gesture_label == 'Paper': # Paper
                 time.sleep(0.1)
                 #print(self.scissors_pose_msg.position)
                 self.hand_pub.publish(self.scissors_pose_msg)
                 time.sleep(0.1)
                 #self.shared_resource = 'NONE'
-            elif gesture_label == 'Scissors': # 剪刀
+            elif gesture_label == 'Scissors': # Scissors
                 time.sleep(0.1)
                 #print(self.rock_pose_msg.position)
                 self.hand_pub.publish(self.rock_pose_msg)
@@ -173,7 +173,7 @@ class FingerGuessing:
                     self.shared_resource = gesture_label
             cv2.imshow('Hand Gesture Recognition', frame)
 
-            if cv2.waitKey(5) & 0xFF == 27:  # 按 'ESC' 键退出
+            if cv2.waitKey(5) & 0xFF == 27:  # Press 'ESC' to exit
                 break
         cap.release()
         cv2.destroyAllWindows()
@@ -196,6 +196,6 @@ if __name__ == '__main__':
     rospy.Rate(60)
     fg = FingerGuessing()
     signal.signal(signal.SIGINT, signal_handler)  # Ctrl+C
-    signal.signal(signal.SIGTERM, signal_handler)  # kill 命令
+    signal.signal(signal.SIGTERM, signal_handler)  # kill command
     #fg.main()
     rospy.spin()

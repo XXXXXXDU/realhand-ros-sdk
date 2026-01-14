@@ -7,7 +7,7 @@ class OpenCan:
 
     def open_can0(self):
         try:
-            # 检查 can0 接口是否已存在并处于 up 状态
+            # Check if the can0 interface already exists and is in the 'up' state
             result = subprocess.run(
                 ["ip", "link", "show", "can0"],
                 check=True,
@@ -16,7 +16,7 @@ class OpenCan:
             )
             if "state UP" in result.stdout:
                 return 
-            # 如果没有处于 UP 状态，则配置接口
+            # If not in UP state, configure the interface
             subprocess.run(
                 ["sudo", "-S", "ip", "link", "set", "can0", "up", "type", "can", "bitrate", "1000000"],
                 input=f"{self.password}\n",
@@ -32,10 +32,10 @@ class OpenCan:
             
 
     def is_can_up_sysfs(self, interface="can0"):
-    # 检查接口目录是否存在
+    # Check if the interface directory exists
         if not os.path.exists(f"/sys/class/net/{interface}"):
             return False
-        # 读取接口状态
+        # Read interface status
         try:
             with open(f"/sys/class/net/{interface}/operstate", "r") as f:
                 state = f.read().strip()

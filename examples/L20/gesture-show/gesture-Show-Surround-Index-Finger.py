@@ -25,7 +25,7 @@ def send_messages():
 
     pub = rospy.Publisher('/cb_left_hand_control_cmd', JointState, queue_size=10)
 
-    rate = rospy.Rate(30)  # 设置频率为30Hz
+    rate = rospy.Rate(30)  # Set frequency to 30Hz
     joint_state.header = std_msgs.msg.Header()
     joint_state.header.seq=0
     joint_state.header.stamp = rospy.Time.now() 
@@ -40,7 +40,7 @@ def send_messages():
     joint_state.velocity = [0] * len(joint_state.position)  
     joint_state.effort = [0] * len(joint_state.position)  
     pub.publish(joint_state)
-    while not rospy.is_shutdown():  # 持续1秒
+    while not rospy.is_shutdown():  # Loop for 1 second
         position =show_left()
         if(position is not None):
             joint_state.position = position
@@ -86,13 +86,13 @@ def signal_handler(sig, frame):
 
     print('You pressed Ctrl+C!')
 
-    sys.exit(0)  # 0表示正常退出
+    sys.exit(0)  # 0 means normal exit
 signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
 
     try:
-        print("测试中")
+        print("Testing")
         send_messages()
     except KeyboardInterrupt:
          print("Caught KeyboardInterrupt, exiting gracefully.")

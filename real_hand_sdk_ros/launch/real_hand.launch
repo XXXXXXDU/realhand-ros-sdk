@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+    <!-- Parameter definition (can be passed in from outside) -->
+    <arg name="hand_type" default="left"/>
+    <arg name="hand_joint" default="L6"/>   <!--  O6\L6\L7\L10\L20\G20(Industrial version)\L21  -->
+    <arg name="touch" default="true"/>
+    <arg name="can" default="can0"/>
+    <arg name="modbus" default="None"/> <!-- "None" or "/dev/ttyUSB*"  only O6 -->
+
+    <!-- real_hand node -->
+    <node pkg="real_hand_sdk_ros" type="real_hand.py" name="real_hand_sdk" output="screen">
+        <param name="hand_type" type="string" value="$(arg hand_type)"/>
+        <param name="hand_joint" type="string" value="$(arg hand_joint)"/>
+        <param name="can" type="string" value="$(arg can)"/>
+        <param name="touch" type="bool" value="$(arg touch)"/>
+        <param name="modbus" type="string" value="$(arg modbus)"/>
+    </node>
+
+</launch>

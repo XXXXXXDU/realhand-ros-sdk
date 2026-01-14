@@ -1,0 +1,66 @@
+'''
+Author: HJX
+Date: 2025-04-08 13:28:18
+LastEditors: Please set LastEditors
+LastEditTime: 2025-04-09 11:38:23
+FilePath: /Real_Hand_SDK_ROS/src/examples/set_real_hand_current/scripts/set_real_hand_current.py
+Description: 
+symbol_custom_string_obkorol_copyright: 
+'''
+#!/usr/bin/env python3
+import rospy,rospkg
+import time,os,sys,json
+from std_msgs.msg import String,Header, Float32MultiArray
+from sensor_msgs.msg import JointState
+rospack = rospkg.RosPack()
+ros_real_hand_sdk_path = rospack.get_path('real_hand_sdk_ros')
+sys.path.append(ros_real_hand_sdk_path + '/scripts')
+from RealHand.core.real_hand_l20_can import RealHandL20Can
+from RealHand.utils.load_write_yaml import LoadWriteYaml
+from RealHand.utils.color_msg import ColorMsg
+'''
+Example test command
+rosrun set_real_hand_current set_real_hand_current.py _hand_type:=right _current:=80
+'''
+class SetRealHandCurrent():
+    def __init__(self,hand_type="left",current=200):
+        self.current = [current] * 5
+        self.hand_type = hand_type
+        self.yaml = LoadWriteYaml()
+        self.config = self.yaml.load_setting_yaml()
+        self.set_hand_current()
+
+    def set_hand_current(self):
+        if self.hand_type == "left" and self.config['REAL_HAND']['LEFT_HAND']['EXISTS']== True:
+            # Set left hand speed
+            if self.config['REAL_HAND']['LEFT_HAND']['JOINT'] == "L20":
+                self.left_hand_can = RealHandL20Can(can_channel="can0", baudrate=1000000, can_id=0x28)
+                # Set hand speed
+                self.left_hand_can.set_electric_current(self.current)
+                self.left_hand_current = self.left_hand_can.get_current()
+                ColorMsg(msg=f"Left hand L20 current threshold set successfully: {self.left_hand_current}", color="green")
+            elif self.config['REAL_HAND']['LEFT_HAND']['JOINT'] == "L10":
+                ColorMsg(msg=f"L10 cannot set current threshold for now", color="red")
+            
+        if self.hand_type == "right" and self.config['REAL_HAND']['RIGHT_HAND']['EXISTS'] == True:
+            # Set right hand speed
+            if self.config['REAL_HAND']['RIGHT_HAND']['JOINT'] == "L20":
+                self.right_hand_can = RealHandL20Can(can_channel="can0", baudrate=1000000, can_id=0x27)
+                # Set hand speed
+                self.right_hand_can.set_electric_current(self.current)
+                self.right_hand_current = self.right_hand_can.get_current()
+                ColorMsg(msg=f"Right hand L20 current threshold set successfully: {self.right_hand_current}", color="green")
+            elif self.config['REAL_HAND']['RIGHT_HAND']['JOINT'] == "L10":
+                ColorMsg(msg=f"L10 cannot set current threshold for now", color="red")
+
+
+if __name__ == '__main__':
+    '''
+    rosrun set_real_hand_current set_real_hand_current.py _current:=60
+    '''
+    rospy.init_node('get_real_hand_current', anonymous=True)
+    ColorMsg(msg=f"Do not set the current threshold too high to avoid damaging the motor. Default value is: 42", color="yellow")
+    hand_type = rospy.get_param("~hand_type",default="left") # Set which hand's speed
+    current = rospy.get_param('~current', default=42)  # Get global parameter by default
+
+    lhc = SetRealHandCurrent(hand_type=hand_type,current=current)
